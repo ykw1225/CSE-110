@@ -1,0 +1,28 @@
+{
+  "name": "course-scraper",
+  "version": "1.0.0",
+  "description": "Used to scrape UCSD course catalog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GRAD",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cheerio": "^0.17.31",
+    "@types/request": "latest",
+    "@types/underscore": "^1.7.36",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-typescript": "^3.1.4",
+    "gulp-using": "^0.1.1",
+    "gulp-watch": "^4.3.11",
+    "typescript": "^2.1.5"
+  },
+  "dependencies": {
+    "cheerio": "latest",
+    "request": "latest",
+    "underscore": "^1.8.3",
+    "web-request": "^1.0.7"
+  }
+}

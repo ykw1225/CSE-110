@@ -1,0 +1,10 @@
+{
+    "include": [
+        "**/*.ts",
+        "**/*.d.ts"
+    ],
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs"
+    }
+}
