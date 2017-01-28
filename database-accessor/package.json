@@ -1,0 +1,18 @@
+{
+  "name": "database-accessor",
+  "version": "1.0.0",
+  "description": "all database interaction done through this",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GRAD (Raghav)",
+  "license": "ISC",
+  "devDependencies": {
+
+  },
+  "dependencies": {
+    "cassandra-driver" : "3.2.0",
+    "async" : "2.1.4"
+  }
+}
