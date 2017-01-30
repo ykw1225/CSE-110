@@ -22,6 +22,9 @@ else console.log("inserted");
 var getAllPrereqs = function(currCourse, callback) {
     const params = currCourse.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
+        //TODO handle no prereqs
+
+        //TODO handle errors
         if(err) console.log("Error getting course info");
         else if(!result) console.log("Data not fetched");
         else if(!result['rows'].length) console.log("result null");

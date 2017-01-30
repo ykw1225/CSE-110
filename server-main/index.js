@@ -16,7 +16,10 @@ app.listen(3000, function() {
 app.post("/getCourseInfo", function(req, res) {
     console.log("Finding Course Info For " + req.body['course']);
 
+    //TODO incorrect request format
+
     var courseInfoCallback = function(result) {
+        //TODO handle different results
         res.send(result);
     };
     database_accessor.getCourseInfo(req.body['course'], courseInfoCallback);
