@@ -1,0 +1,19 @@
+{
+  "name": "server-main",
+  "version": "1.0.0",
+  "description": "main server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GRAD (Raghav)",
+  "license": "ISC",
+  "devDependencies": {
+
+  },
+  "dependencies": {
+    "express" : "4.14.0",
+    "body-parser": "1.16.0",
+    "database-accessor": "../database-accessor"
+  }
+}
