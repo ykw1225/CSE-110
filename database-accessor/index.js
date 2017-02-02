@@ -4,6 +4,8 @@ var async = require('async');
 var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'grad'});
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
+const getAllDepartmentsQuery = "SELECT DISTINCT department FROM courses";
+const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
 //global variables for synchronization
 var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
@@ -92,3 +94,21 @@ exports.getCourseMap = function(course, callback) {
     findingCourses = 1;
     getAllPrereqs(course, courseMapCallback);
 };
+
+exports.getAllDepartments = function(callback) {
+    client.execute(getAllDepartmentsQuery, function(err, result) {
+        if(err) console.log(err);
+        console.log(result);
+        callback(result['rows']);
+    });
+};
+
+exports.getAllClassesInDepartment = function(department, callback) {
+    console.log("getting " + department + " courses");
+    var params = [department];
+    client.execute(getAllClassesInDepartment, params, function(err, result) {
+        if(err) console.log(err);
+        console.log(result);
+        callback(result['rows']);
+    });
+}

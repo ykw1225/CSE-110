@@ -14,7 +14,16 @@ const params = [
     ["CSE", "20", "stuffs", []],
 ];
 
-for(var param of params) {
+const param2 = [
+    ["MATH", "20B", "stuffs", [["MATH 20A"]]],
+    ["MATH", "20A", "stuffs", []],
+    ["PHYS", "4A", "stuffs", []],
+    ["PHYS", "4B", "stuffs", [["PHYS 4A"]]],
+    ["ECE", "35", "stuffs", []],
+    ["MUS", "15", "stuffs", []],
+];
+
+for(var param of param2) {
     console.log(param);
   client.execute(query, param, function(err) {
     //assert.ifError(err);

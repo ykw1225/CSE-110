@@ -4,7 +4,7 @@ var database_accessor = require('database-accessor');
 exports.init = function (app) {
     app.get('/api/course/info/:department/:coursenumber', function (request, response) {
         // TODO: Handle incorrect request format.
-        
+
         console.log("Finding Course Info For " + request.params.department + " " +
             request.params.coursenumber);
 
@@ -28,6 +28,20 @@ exports.init = function (app) {
 
                 response.send(result);
             });
+    });
+
+    app.get('/api/departments', function (request, response) {
+        console.log("Finding all course departments");
+        database_accessor.getAllDepartments(function(result) {
+            response.send(result);
+        });
+    });
+
+    app.get('/api/:department/courses', function (request, response) {
+        console.log("Finding All courses in " + request.params.department);
+        database_accessor.getAllClassesInDepartment(request.params.department.toUpperCase(), function(result) {
+            response.send(result);
+        });
     });
 
     // Deprecated.  Refactored API to make it more angular friendly.
