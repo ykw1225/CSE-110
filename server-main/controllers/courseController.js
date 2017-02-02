@@ -1,10 +1,33 @@
 var database_accessor = require('database-accessor');
 
+//check if a string contains number
+var letters = /^[A-Za-z]+$/;
+var numCheck = /^[0-9]+$/;
+
 // This function should contain all of the course related RESTful APIs
 exports.init = function (app) {
     app.get('/api/course/info/:department/:coursenumber', function (request, response) {
-        // TODO: Handle incorrect request format.
+        // Handle incorrect request format.
 
+        //checking deapartment params, report error if it contains not only letters
+        if (!request.params.department.match(letters)) {
+            var errorNode = {
+                errorCode: 401,
+                errorMessage: "incorrect request format: department"
+            };
+            response.send(errorNode);
+        }
+
+        //checking coursenumber params, report error if it contains not only numbers
+        else if (!request.params.coursenumber.match(numCheck)) {
+            var errorNode = {
+                errorCode: 402,
+                errorMessage: "incorrect_request_format: coursenumber"
+            };
+            response.send(errorNode);
+        }
+        
+        else {
         console.log("Finding Course Info For " + request.params.department + " " +
             request.params.coursenumber);
 
@@ -14,11 +37,31 @@ exports.init = function (app) {
 
                 response.send(result);
             });
+        }
     });
 
     app.get('/api/course/map/:department/:coursenumber', function (request, response) {
-        // TODO: Handle incorrect request format.
+        // Handle incorrect request format.
 
+        //checking deapartment params, report error if it contains not only letters
+        if (!request.params.department.match(letters)) {
+            var errorNode = {
+                errorCode: 401,
+                errorMessage: "incorrect request format: department"
+            };
+            response.send(errorNode);
+        }
+
+        //checking coursenumber params, report error if it contains not only numbers
+        else if (!request.params.coursenumber.match(numCheck)) {
+            var errorNode = {
+                errorCode: 402,
+                errorMessage: "incorrect request format: coursenumber"
+            };
+            response.send(errorNode);
+        }
+
+        else {
         console.log("Finding Course Map For " + request.params.department + " " +
             request.params.coursenumber);
 
@@ -28,6 +71,7 @@ exports.init = function (app) {
 
                 response.send(result);
             });
+        }
     });
 
     app.get('/api/departments', function (request, response) {
