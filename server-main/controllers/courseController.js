@@ -19,7 +19,7 @@ exports.init = function (app) {
     app.get('/api/course/map/:department/:coursenumber', function (request, response) {
         // TODO: Handle incorrect request format.
 
-        console.log("Finding Course Map For " + request.params.department + " " +
+        console.log("Finding Course Map For " + request.params.department.toUpperCase() + " " +
             request.params.coursenumber);
 
         database_accessor.getCourseMap(request.params.department.toUpperCase() + ' '
