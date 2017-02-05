@@ -10,16 +10,16 @@ exports.init = function (app) {
         // Handle incorrect request format.
 
         //checking deapartment params, report error if it contains not only letters
-        if (!request.params.department.match(letters)) {
+        if (!(request.params.department.match(letters) )|| request.params.department.length <=0 ) {
             var errorNode = {
                 errorCode: 401,
-                errorMessage: "incorrect request format: department"
+                errorMessage: "incorrect request formatsssss: department"
             };
             response.send(errorNode);
         }
 
         //checking coursenumber params, report error if it contains not only numbers
-        else if (!request.params.coursenumber.match(numCheck)) {
+        else if (!(request.params.coursenumber.match(numCheck)) || request.params.coursenumber.length <=0 ) {
             var errorNode = {
                 errorCode: 402,
                 errorMessage: "incorrect_request_format: coursenumber"
@@ -44,7 +44,7 @@ exports.init = function (app) {
         // Handle incorrect request format.
 
         //checking deapartment params, report error if it contains not only letters
-        if (!request.params.department.match(letters)) {
+        if (!request.params.department.match(letters) || !request.params.department) {
             var errorNode = {
                 errorCode: 401,
                 errorMessage: "incorrect request format: department"

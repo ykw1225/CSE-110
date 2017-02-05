@@ -9,7 +9,14 @@ const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
 //global variables for synchronization
 var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
-
+/*
+introduce errorType. 
+0 for no errors; 
+1 for err getting info; 
+2 for Data not fetched; 
+3 for result null;
+*/
+var errorType = 0; 
 /*
 const query = 'INSERT INTO courses (department, number, description, prereqs) VALUES (?,?,?,?)';
 const params = ["CSE", "100", "stuffs", [["CSE 30"], ["CSE 21"]]];
@@ -25,11 +32,38 @@ var getAllPrereqs = function(currCourse, callback) {
     const params = currCourse.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
         //TODO handle no prereqs
-
+        console.log("into getAllPrereqs");
         //TODO handle errors
-        if(err) console.log("Error getting course info");
-        else if(!result) console.log("Data not fetched");
-        else if(!result['rows'].length) console.log("result null");
+        if(err) {
+            //console.log("Error getting course info");
+            errorType = 1;
+            var errorNode = {
+                errorCode: 403,
+                errorMessage: "Error getting course info"
+            };
+            courseMapNodes.push(errorNode);
+            callback();
+        }
+        else if(!result) {
+            //console.log("Data not fetched");
+            errorType = 2;
+            var errorNode = {
+                errorCode: 404,
+                errorMessage: "Data not fetched"
+            };
+            courseMapNodes.push(errorNode);
+            callback();
+        }
+        else if(!result['rows'].length) {
+            //console.log("result null");
+            errorType = 3;
+            var errorNode = {
+                errorCode: 405,
+                errorMessage: "Result null"
+            };
+            courseMapNodes.push(errorNode);
+            callback();
+        }
         else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
             //console.log(name);
@@ -83,7 +117,10 @@ exports.getCourseInfo = function(course, callback) {
 
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
-        if(foundCourses==findingCourses) {
+        if (errorType != 0){
+            callback(courseMapNodes);
+        }
+        else if(foundCourses==findingCourses) {
             callback(courseMapNodes);
         }
     };
