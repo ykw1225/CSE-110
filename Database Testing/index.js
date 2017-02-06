@@ -23,7 +23,7 @@ const param2 = [
     ["MUS", "15", "stuffs", []],
 ];
 
-for(var param of param2) {
+for(var param of params) {
     console.log(param);
   client.execute(query, param, function(err) {
     //assert.ifError(err);

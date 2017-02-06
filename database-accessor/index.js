@@ -31,35 +31,31 @@ else console.log("inserted");
 var getAllPrereqs = function(currCourse, callback) {
     const params = currCourse.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
-        //TODO handle no prereqs
-        console.log("into getAllPrereqs");
-        //TODO handle errors
+
+        //handle errors
         if(err) {
-            //console.log("Error getting course info");
             errorType = 1;
             var errorNode = {
-                errorCode: 403,
-                errorMessage: "Error getting course info"
+                Code: 400,
+                Message: "Error getting course info\n"
             };
             courseMapNodes.push(errorNode);
             callback();
         }
         else if(!result) {
-            //console.log("Data not fetched");
             errorType = 2;
             var errorNode = {
-                errorCode: 404,
-                errorMessage: "Data not fetched"
+                Code: 400,
+                Message: "Data not fetched\n"
             };
             courseMapNodes.push(errorNode);
             callback();
         }
         else if(!result['rows'].length) {
-            //console.log("result null");
             errorType = 3;
             var errorNode = {
-                errorCode: 405,
-                errorMessage: "Result null"
+                Code: 404,
+                Message: "Result null\n"
             };
             courseMapNodes.push(errorNode);
             callback();
@@ -75,9 +71,10 @@ var getAllPrereqs = function(currCourse, callback) {
                 //console.log("not in array");
                 courseMapNames.push(name);
                 var courseNode = {
-                    name : name,
-                    description : result['rows'][0]['description'],
-                    prereqs : result['rows'][0]['prereqs']
+                        name : name,
+                        description : result['rows'][0]['description'],
+                        prereqs : result['rows'][0]['prereqs']
+                    
                 }
                 courseMapNodes.push(courseNode);
                 if(courseNode.prereqs) {
@@ -101,14 +98,39 @@ var getAllPrereqs = function(currCourse, callback) {
 exports.getCourseInfo = function(course, callback) {
     const params = course.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
-        if(err) console.log("Error getting course info");
-        else if(!result) console.log("Data not fetched");
-        else if(!result['rows'].length) console.log("result null");
+
+        if(err) {
+            errorType = 1;
+            var errorNode = {
+                Code: 403,
+                Message: "Error getting course info\n"
+            };
+            callback(errorNode);
+        }
+        else if(!result) {
+            errorType = 2;
+            var errorNode = {
+                Code: 404,
+                Message: "Data not fetched\n"
+            };
+            callback(errorNode);
+        }
+        else if(!result['rows'].length) {
+            errorType = 3;
+            var errorNode = {
+                Code: 405,
+                Message: "Result null\n"
+            };
+            callback(errorNode);
+        }
         else {
             var courseNode = {
-                name : result['rows'][0]['department'] + " " + result['rows'][0]['number'],
-                description : result['rows'][0]['description'],
-                prereqs : result['rows'][0]['prereqs']
+                Code: 200,
+                body: {
+                    name : result['rows'][0]['department'] + " " + result['rows'][0]['number'],
+                    description : result['rows'][0]['description'],
+                    prereqs : result['rows'][0]['prereqs']
+                }
             }
             callback(courseNode);
         }
@@ -116,6 +138,7 @@ exports.getCourseInfo = function(course, callback) {
 };
 
 exports.getCourseMap = function(course, callback) {
+    //console.log("Into getCourseMap...");
     var courseMapCallback = function() {
         if (errorType != 0){
             callback(courseMapNodes);

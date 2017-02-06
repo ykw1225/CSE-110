@@ -2,7 +2,7 @@ var database_accessor = require('database-accessor');
 
 //check if a string contains number
 var letters = /^[A-Za-z]+$/;
-var numCheck = /^[0-9]+$/;
+var numCheck = /^[0-9A-Za-z]+$/; //coursenumber can contain letters and numbers
 
 // This function should contain all of the course related RESTful APIs
 exports.init = function (app) {
@@ -12,19 +12,19 @@ exports.init = function (app) {
         //checking deapartment params, report error if it contains not only letters
         if (!(request.params.department.match(letters) )|| request.params.department.length <=0 ) {
             var errorNode = {
-                errorCode: 401,
-                errorMessage: "incorrect request formatsssss: department"
+                Code: 400,
+                Message: "incorrect request format: department\n"
             };
-            response.send(errorNode);
+            response.status(errorNode.Code).send(errorNode.Message);
         }
 
         //checking coursenumber params, report error if it contains not only numbers
         else if (!(request.params.coursenumber.match(numCheck)) || request.params.coursenumber.length <=0 ) {
             var errorNode = {
-                errorCode: 402,
-                errorMessage: "incorrect_request_format: coursenumber"
+                Code: 400,
+                Message: "incorrect_request_format: coursenumber\n"
             };
-            response.send(errorNode);
+            response.status(errorNode.Code).send(errorNode.Message);
         }
         
         else {
@@ -34,8 +34,14 @@ exports.init = function (app) {
         database_accessor.getCourseInfo(request.params.department.toUpperCase() + ' '
             + request.params.coursenumber, function (result) {
                 // Handle results
-
-                response.send(result);
+                if (result.Code != 200){
+                    //error occurred
+                    response.status(result.Code).send(result.Message);
+                }
+                else {
+                    //return response 
+                    response.status(result.Code).send(result.body);
+                }
             });
         }
     });
@@ -46,19 +52,19 @@ exports.init = function (app) {
         //checking deapartment params, report error if it contains not only letters
         if (!request.params.department.match(letters) || !request.params.department) {
             var errorNode = {
-                errorCode: 401,
-                errorMessage: "incorrect request format: department"
+                Code: 400,
+                Message: "incorrect request format: department\n"
             };
-            response.send(errorNode);
+            response.status(errorNode.Code).send(errorNode.Message);
         }
 
         //checking coursenumber params, report error if it contains not only numbers
         else if (!request.params.coursenumber.match(numCheck)) {
             var errorNode = {
-                errorCode: 402,
-                errorMessage: "incorrect request format: coursenumber"
+                Code: 400,
+                Message: "incorrect request format: coursenumber\n"
             };
-            response.send(errorNode);
+            response.status(errorNode.Code).send(errorNode.Message);
         }
 
         else {
@@ -68,8 +74,13 @@ exports.init = function (app) {
         database_accessor.getCourseMap(request.params.department.toUpperCase() + ' '
             + request.params.coursenumber, function (result) {
                 // Handle results
-
-                response.send(result);
+                if (result[0].hasOwnProperty('Code')){
+                    //error occurred
+                    response.status(result[0].Code).send(result[0].Message);
+                }
+                else {
+                    response.status(200).send(result);
+                }
             });
         }
     });
