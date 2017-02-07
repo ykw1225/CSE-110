@@ -1,6 +1,11 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "system"
-    }
+        "module": "commonjs",
+        "experimentalDecorators": true
+    },
+    "include": [
+        "frontend-src/**/*.ts",
+        "node_modules/@angular/**/*.d.ts"
+    ]
 }

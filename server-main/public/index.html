@@ -7,7 +7,9 @@
     </head>
 
     <body>
-        This is the entry point for our application.
+        <p>This is the entry point for our application.</p>
+
+        <app-root><p style="color:red">If this remains on the page, then we are broken</p></app-root>
 
         <script src="systemjs/dist/system.js"></script>
         <script>
@@ -15,9 +17,22 @@
                 baseURL: '.',
                 packages: {
                     '.': { main: 'main.js', defaultExtension: 'js' },
-                    'app': { defaultExtension: 'js' },
+                    '@angular/common': {
+                        main: 'bundles/common.umd.min.js',
+                    },
+                    '@angular/compiler': {
+                        main: 'bundles/compiler.umd.min.js',
+                    },
+                    '@angular/core': {
+                        main: 'bundles/core.umd.min.js',
+                    },
+                    '@angular/platform-browser': {
+                        main: 'bundles/platform-browser.umd.min.js',
+                    },
+                    '@angular/platform-browser-dynamic': {
+                        main: 'bundles/platform-browser-dynamic.umd.min.js',
+                    },
                     'core-js': { defaultExtension: 'js', format: 'cjs' },
-                    'zone.js': { defaultExtension: 'js' }
                 }
             });
             System.defaultJSExtensions = true;
