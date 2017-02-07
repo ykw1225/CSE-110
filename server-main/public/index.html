@@ -14,13 +14,14 @@
             System.config({
                 baseURL: '.',
                 packages: {
-                    'app': { main: 'main.js',  defaultExtension: 'js' },
-                    'core-js': { defaultExtension: 'js' },
+                    '.': { main: 'main.js', defaultExtension: 'js' },
+                    'app': { defaultExtension: 'js' },
+                    'core-js': { defaultExtension: 'js', format: 'cjs' },
                     'zone.js': { defaultExtension: 'js' }
                 }
             });
             System.defaultJSExtensions = true;
-            System.import('/app');
+            System.import('/');
         </script>
     </body>
 </html>
