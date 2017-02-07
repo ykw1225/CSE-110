@@ -1,0 +1,26 @@
+<!--http://localhost:3000-->
+
+<!-- This is the base view.  All other pages will filter through here. -->
+<html>
+    <head>
+        <title>Test Title</title>
+    </head>
+
+    <body>
+        This is the entry point for our application.
+
+        <script src="systemjs/dist/system.js"></script>
+        <script>
+            System.config({
+                baseURL: '.',
+                packages: {
+                    'app': { main: 'main.js',  defaultExtension: 'js' },
+                    'core-js': { defaultExtension: 'js' },
+                    'zone.js': { defaultExtension: 'js' }
+                }
+            });
+            System.defaultJSExtensions = true;
+            System.import('/app');
+        </script>
+    </body>
+</html>
