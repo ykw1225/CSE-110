@@ -21,10 +21,6 @@ app.listen(3000, function() {
 var courseController = require('./controllers/courseController');
 courseController.init(app);
 
-var callback = function(result) {
-    console.log(result['prereqs']);
-};
-
 
 
 //console.log(res);

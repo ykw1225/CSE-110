@@ -28,11 +28,10 @@ exports.init = function (app) {
         }
 
         else {
-        console.log("Finding Course Info For " + request.params.department + " " +
-            request.params.coursenumber);
+            console.log("Finding Course Info For " + request.params.department + " " + request.params.coursenumber);
 
-        //calling database
-        database_accessor.getCourseInfo(request.params.department.toUpperCase() + ' ' + request.params.coursenumber.toUpperCase(), function (result) {
+            //calling database
+            database_accessor.getCourseInfo(request.params.department.toUpperCase() + ' ' + request.params.coursenumber.toUpperCase(), function (result) {
                 // Handle results
                 if (result.Code != 200){
                     //error occurred
@@ -68,9 +67,9 @@ exports.init = function (app) {
         }
 
         else {
-        console.log("Finding Course Map For " + request.params.department + " " + request.params.coursenumber);
+            console.log("Finding Course Map For " + request.params.department + " " + request.params.coursenumber);
 
-        database_accessor.getCourseMap(request.params.department.toUpperCase() + ' ' + request.params.coursenumber.toUpperCase(), function (result) {
+            database_accessor.getCourseMap(request.params.department.toUpperCase() + ' ' + request.params.coursenumber.toUpperCase(), function (result) {
                 // Handle results
                 if (result[0].hasOwnProperty('Code')){
                     //error occurred
