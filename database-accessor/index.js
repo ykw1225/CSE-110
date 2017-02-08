@@ -10,13 +10,13 @@ const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 //global variables for synchronization
 var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
 /*
-introduce errorType. 
-0 for no errors; 
-1 for err getting info; 
-2 for Data not fetched; 
-3 for result null;
+introduce errorType.
+0 for no errors;
+1 for err getting info;
+2 for data not fetched;
+3 for No results found;
 */
-var errorType = 0; 
+var errorType = 0;
 /*
 const query = 'INSERT INTO courses (department, number, description, prereqs) VALUES (?,?,?,?)';
 const params = ["CSE", "100", "stuffs", [["CSE 30"], ["CSE 21"]]];
@@ -55,32 +55,26 @@ var getAllPrereqs = function(currCourse, callback) {
             errorType = 3;
             var errorNode = {
                 Code: 404,
-                Message: "Result null\n"
+                Message: "No results found\n"
             };
             courseMapNodes.push(errorNode);
             callback();
         }
         else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
-            //console.log(name);
-            //console.log("finding " + findingCourses);
-            //console.log("found " + foundCourses);
+
             //checking if not already found node
-            //console.log(courseMapNames.indexOf(name));
             if(courseMapNames.indexOf(name)<0) {
-                //console.log("not in array");
                 courseMapNames.push(name);
                 var courseNode = {
                         name : name,
                         description : result['rows'][0]['description'],
                         prereqs : result['rows'][0]['prereqs']
-                    
+
                 }
                 courseMapNodes.push(courseNode);
                 if(courseNode.prereqs) {
                     for(var prereq of courseNode.prereqs) {
-                        //console.log("prereq " + prereq);
-
                         //not dealing with co-reqs yet, so just accesssing index 0
                         if(courseMapNames.indexOf(prereq[0])<0){
                             findingCourses++;
@@ -119,7 +113,7 @@ exports.getCourseInfo = function(course, callback) {
             errorType = 3;
             var errorNode = {
                 Code: 405,
-                Message: "Result null\n"
+                Message: "No results found\n"
             };
             callback(errorNode);
         }
@@ -138,12 +132,10 @@ exports.getCourseInfo = function(course, callback) {
 };
 
 exports.getCourseMap = function(course, callback) {
-    //console.log("Into getCourseMap...");
     var courseMapCallback = function() {
         if (errorType != 0){
             callback(courseMapNodes);
-        }
-        else if(foundCourses==findingCourses) {
+        } else if(foundCourses==findingCourses) {
             callback(courseMapNodes);
         }
     };
