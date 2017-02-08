@@ -1,3 +1,5 @@
+"use strict";
+
 let gulp = require('gulp');
 
 let typescript = require('gulp-typescript');
