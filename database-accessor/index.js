@@ -92,7 +92,6 @@ var getAllPrereqs = function(currCourse, callback) {
 exports.getCourseInfo = function(course, callback) {
     const params = course.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
-
         if(err) {
             errorType = 1;
             var errorNode = {
