@@ -1,4 +1,4 @@
-DROP KEYSPACE grad;
+//DROP KEYSPACE grad;
 
 CREATE KEYSPACE grad WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
 

@@ -1,0 +1,303 @@
+[
+    {
+        "courseName": "Academic Internship Program",
+        "courseLink": "ucsd.edu/catalog/courses/AIP.html"
+    },
+    {
+        "courseName": "African American Studies Minor",
+        "courseLink": "ucsd.edu/catalog/courses/AAS.html"
+    },
+    {
+        "courseName": "Anthropology",
+        "courseLink": "ucsd.edu/catalog/courses/ANTH.html"
+    },
+    {
+        "courseName": "Audiology",
+        "courseLink": "ucsd.edu/catalog/courses/AUDL.html"
+    },
+    {
+        "courseLink": "ucsd.edu/catalog/courses/BIOI.html"
+    },
+    {
+        "courseName": "Biological Sciences, Division of",
+        "courseLink": "ucsd.edu/catalog/courses/BIOL.html"
+    },
+    {
+        "courseName": "Biomedical Sciences",
+        "courseLink": "ucsd.edu/catalog/courses/BIOM.html"
+    },
+    {
+        "courseName": "Chemistry and Biochemistry",
+        "courseLink": "ucsd.edu/catalog/courses/CHEM.html"
+    },
+    {
+        "courseName": "Chinese Studies",
+        "courseLink": "ucsd.edu/catalog/courses/CHIN.html"
+    },
+    {
+        "courseName": "Classical Studies",
+        "courseLink": "ucsd.edu/catalog/courses/CLAS.html"
+    },
+    {
+        "courseName": "Clinical Psychology",
+        "courseLink": "ucsd.edu/catalog/courses/CSP.html"
+    },
+    {
+        "courseName": "Clinical Psychology",
+        "courseLink": "ucsd.edu/catalog/courses/CLIN.html"
+    },
+    {
+        "courseName": "Clinical Research",
+        "courseLink": "ucsd.edu/catalog/courses/CLRE.html"
+    },
+    {
+        "courseName": "Cognitive Science",
+        "courseLink": "ucsd.edu/catalog/courses/COGS.html"
+    },
+    {
+        "courseName": "Communication",
+        "courseLink": "ucsd.edu/catalog/courses/COMM.html"
+    },
+    {
+        "courseLink": "ucsd.edu/catalog/courses/CGS.html"
+    },
+    {
+        "courseName": "Culture, Art, and Technology",
+        "courseLink": "ucsd.edu/catalog/courses/CAT.html"
+    },
+    {
+        "courseName": "Critical Gender Studies",
+        "courseLink": "ucsd.edu/catalog/courses/DSGN.html"
+    },
+    {
+        "courseName": "Dimensions of Culture",
+        "courseLink": "ucsd.edu/catalog/courses/DOC.html"
+    },
+    {
+        "courseName": "Economics",
+        "courseLink": "ucsd.edu/catalog/courses/ECON.html"
+    },
+    {
+        "courseName": "Education Studies",
+        "courseLink": "ucsd.edu/catalog/courses/EDS.html"
+    },
+    {
+        "courseName": "Engineering, Jacobs School of",
+        "courseLink": "ucsd.edu/catalog/courses/SOE.html"
+    },
+    {
+        "courseName": "Bioengineering",
+        "courseLink": "ucsd.edu/catalog/courses/BENG.html"
+    },
+    {
+        "courseName": "Computer Science and Engineering",
+        "courseLink": "ucsd.edu/catalog/courses/CSE.html"
+    },
+    {
+        "courseName": "Computer Science and Engineering",
+        "courseLink": "ucsd.edu/catalog/courses/CSE-AESE.html"
+    },
+    {
+        "courseName": "Electrical and Computer Engineering",
+        "courseLink": "ucsd.edu/catalog/courses/ECE.html"
+    },
+    {
+        "courseName": "Mechanical and Aerospace Engineering",
+        "courseLink": "ucsd.edu/catalog/courses/MAE.html"
+    },
+    {
+        "courseName": "NanoEngineering",
+        "courseLink": "ucsd.edu/catalog/courses/NANO.html"
+    },
+    {
+        "courseName": "Structural Engineering",
+        "courseLink": "ucsd.edu/catalog/courses/SE.html"
+    },
+    {
+        "courseName": "Environmental Studies",
+        "courseLink": "ucsd.edu/catalog/courses/ENVR.html"
+    },
+    {
+        "courseName": "Environmental Systems",
+        "courseLink": "ucsd.edu/catalog/courses/ESYS.html"
+    },
+    {
+        "courseName": "Ethnic Studies",
+        "courseLink": "ucsd.edu/catalog/courses/ETHN.html"
+    },
+    {
+        "courseName": "Film Studies",
+        "courseLink": "ucsd.edu/catalog/courses/FMPH.html"
+    },
+    {
+        "courseName": "Film Studies",
+        "courseLink": "ucsd.edu/catalog/courses/FILM.html"
+    },
+    {
+        "courseName": "Film Studies",
+        "courseLink": "ucsd.edu/catalog/courses/GHP.html"
+    },
+    {
+        "courseName": "International Relations and Pacific Studies (IR/PS)",
+        "courseLink": "ucsd.edu/catalog/courses/GPS.html"
+    },
+    {
+        "courseName": "Health Care—Leadership of Healthcare Organizations",
+        "courseLink": "ucsd.edu/catalog/courses/LHCO.html"
+    },
+    {
+        "courseName": "Health Law",
+        "courseLink": "ucsd.edu/catalog/courses/HLAW.html"
+    },
+    {
+        "courseName": "History",
+        "courseLink": "ucsd.edu/catalog/courses/HIST.html"
+    },
+    {
+        "courseName": "Human Development Program",
+        "courseLink": "ucsd.edu/catalog/courses/HDP.html"
+    },
+    {
+        "courseName": "Human Development Program",
+        "courseLink": "ucsd.edu/catalog/courses/HR.html"
+    },
+    {
+        "courseName": "Humanities",
+        "courseLink": "ucsd.edu/catalog/courses/HUM.html"
+    },
+    {
+        "courseName": "International Migration Studies Minor",
+        "courseLink": "ucsd.edu/catalog/courses/IMSM.html"
+    },
+    {
+        "courseName": "International Studies",
+        "courseLink": "ucsd.edu/catalog/courses/INTL.html"
+    },
+    {
+        "courseName": "Japanese Studies",
+        "courseLink": "ucsd.edu/catalog/courses/JAPN.html"
+    },
+    {
+        "courseName": "Jewish Studies",
+        "courseLink": "ucsd.edu/catalog/courses/JUDA.html"
+    },
+    {
+        "courseName": "Latin American Studies",
+        "courseLink": "ucsd.edu/catalog/courses/LATI.html"
+    },
+    {
+        "courseName": "Law and Society",
+        "courseLink": "ucsd.edu/catalog/courses/LAWS.html"
+    },
+    {
+        "courseName": "Linguistics",
+        "courseLink": "ucsd.edu/catalog/courses/LING.html"
+    },
+    {
+        "courseName": "Literature",
+        "courseLink": "ucsd.edu/catalog/courses/LIT.html"
+    },
+    {
+        "courseName": "Making of the Modern World",
+        "courseLink": "ucsd.edu/catalog/courses/MMW.html"
+    },
+    {
+        "courseName": "Management, Rady School of",
+        "courseLink": "ucsd.edu/catalog/courses/RSM.html"
+    },
+    {
+        "courseName": "Marine Biodiversity and Conservation",
+        "courseLink": "ucsd.edu/catalog/courses/MBC.html"
+    },
+    {
+        "courseName": "Thurgood Marshall College",
+        "courseLink": "ucsd.edu/catalog/courses/TMC.html"
+    },
+    {
+        "courseName": "Materials Science and Engineering Program",
+        "courseLink": "ucsd.edu/catalog/courses/MATS.html"
+    },
+    {
+        "courseName": "Mathematics",
+        "courseLink": "ucsd.edu/catalog/courses/MATH.html"
+    },
+    {
+        "courseName": "Mathematics and Science Education",
+        "courseLink": "ucsd.edu/catalog/courses/MSED.html"
+    },
+    {
+        "courseName": "Muir College Writing Program",
+        "courseLink": "ucsd.edu/catalog/courses/MCWP.html"
+    },
+    {
+        "courseName": "Music",
+        "courseLink": "ucsd.edu/catalog/courses/MUS.html"
+    },
+    {
+        "courseName": "Neurosciences",
+        "courseLink": "ucsd.edu/catalog/courses/NEU.html"
+    },
+    {
+        "courseName": "Philosophy",
+        "courseLink": "ucsd.edu/catalog/courses/PHIL.html"
+    },
+    {
+        "courseName": "Physics",
+        "courseLink": "ucsd.edu/catalog/courses/PHYS.html"
+    },
+    {
+        "courseName": "Political Science",
+        "courseLink": "ucsd.edu/catalog/courses/POLI.html"
+    },
+    {
+        "courseName": "Psychology",
+        "courseLink": "ucsd.edu/catalog/courses/PSYC.html"
+    },
+    {
+        "courseName": "Religion, Study of",
+        "courseLink": "ucsd.edu/catalog/courses/RELI.html"
+    },
+    {
+        "courseName": "Religion, Study of",
+        "courseLink": "ucsd.edu/catalog/courses/REV.html"
+    },
+    {
+        "courseName": "Eleanor Roosevelt College",
+        "courseLink": "ucsd.edu/catalog/courses/ERC.html"
+    },
+    {
+        "courseName": "Science Studies",
+        "courseLink": "ucsd.edu/catalog/courses/SCIS.html"
+    },
+    {
+        "courseLink": "ucsd.edu/catalog/courses/SIO.html"
+    },
+    {
+        "courseName": "Sixth College",
+        "courseLink": "ucsd.edu/catalog/courses/SXTH.html"
+    },
+    {
+        "courseName": "Sociology",
+        "courseLink": "ucsd.edu/catalog/courses/SOC.html"
+    },
+    {
+        "courseName": "Theatre and Dance",
+        "courseLink": "ucsd.edu/catalog/courses/THEA.html"
+    },
+    {
+        "courseName": "Third World Studies",
+        "courseLink": "ucsd.edu/catalog/courses/TWS.html"
+    },
+    {
+        "courseName": "Urban Studies and Planning",
+        "courseLink": "ucsd.edu/catalog/courses/USP.html"
+    },
+    {
+        "courseName": "Visual Arts",
+        "courseLink": "ucsd.edu/catalog/courses/VIS.html"
+    },
+    {
+        "courseName": "Warren College",
+        "courseLink": "ucsd.edu/catalog/courses/WARR.html"
+    }
+]
