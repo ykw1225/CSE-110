@@ -1,54 +1,41 @@
-#leftMenu {
-  background-color: #A0A0A0;
-  border-right: 1px solid;
+html, body {
   height: 100%;
-  min-height: 350px;
-  position: fixed;
-  width: 250px;
-  z-index: 6;
 }
 
-.welcome {
-    font-size: 16pt !important;
-    text-align: center;
-}
-.about {
-    font-size: 8pt !important;
-    padding-bottom: 5px;
-    text-align: center;
+.graph{
+  border: 2px solid black;
+  height: 100%;
+  margin: 10px;
 }
 
-body {
-  background-color: #DDD;
-  font-family: Arial;
-  font-size: 10pt;
-  margin: 0;
-  min-width: 950px;
-  padding: 0;
-  position: relative;
+.sidebar{
+  padding-bottom: 20px;
 }
 
-select {
-    position: fixed;
-    z-index: 100;
-    align-self: center;
-    top: 100px;
-
+.sidebar-left{
+  height: 580px;
 }
 
-.chooseMajor{
-  color: #0000FF;
+.info{
+  width: 100%;
+  height: 460px;
+  border: 2px solid black;
+  margin-top: 10px;
+  background: white;
 }
 
-#chooseMajor {
-  left: 100px;
+.content {
+  min-height: 100%;
+  height: auto;
+  padding: 0 0 40px;
 }
 
-.chooseMinor{
-  color: #0000FF;
+footer{
+  height: 40px;
+  background: grey;
+  color: white;
+  padding-top: 10px;
 }
 
-#chooseMinor {
-  top:  150px;
-  left: 100px;
-}
+
+
