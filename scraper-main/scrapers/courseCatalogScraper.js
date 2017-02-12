@@ -31,7 +31,6 @@ function parse(header, description) {
     var headerSplit = header.split('.');
     //console.log("header split " + headerSplit);
 
-
     var courseNameSplit = headerSplit[0].match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/);
     //in case null
     if(!courseNameSplit) {
