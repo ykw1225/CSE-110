@@ -11,14 +11,25 @@ app.listen("3001");
 console.log("Scraping Host Started on Port 3001");
 
 app.get('/scrapeAllCourses', function(req, res){
-    var i = 0;
+    var courses[];
+    var coursesToFind = 0;
+    var coursesFound = 0;
+
     var databaseCallback = function(message) {
-        i++;
-        console.log("inserted " + i + " " + message);
+        console.log("inserted " + coursesFound);
+    }
+
+    var prereqCallback = function(courseArray) {
+        courses.push(courseArray);
+        coursesFound++;
+        if(coursesToFind==coursesFound) {
+            database_accessor.insertCourses(courses, databaseCallback);
+        }
     }
 
     var coursesCallback = function(courses) {
         database_accessor.insertCourses(courses, databaseCallback);
+        coursesToFind += courses.length;
     };
 
     var courseLinksCallback = function(courseLinks) {

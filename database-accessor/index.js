@@ -9,7 +9,7 @@ const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND numbe
 const getAllDepartmentsQuery = "SELECT DISTINCT department FROM courses";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
-const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs) VALUES (?,?,?,?,?,?)";
+const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
 //global variables for synchronization
 var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
 /*

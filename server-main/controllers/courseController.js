@@ -6,6 +6,7 @@ var letterNumCheck = /^[0-9A-Za-z]+$/; //coursenumber can contain letters and nu
 
 // This function should contain all of the course related RESTful APIs
 exports.init = function (app) {
+
     app.get('/api/course/info/:department/:coursenumber', function (request, response) {
         // Handle incorrect request format.
 
@@ -95,8 +96,6 @@ exports.init = function (app) {
             response.send(result);
         });
     });
-
-
 
     // Deprecated.  Refactored API to make it more angular friendly.
     app.post("/getCourseInfo", function(req, res) {

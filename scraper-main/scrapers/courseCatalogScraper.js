@@ -72,8 +72,10 @@ function parse(header, description) {
     //split into department and numer
     var nameSplit = courseName.split(' ');
 
+
+    //[department, number, title, description, credits, prereqs, coreqs, quarter]
     //array for database insertion ease
-    return [nameSplit[0], nameSplit[1], courseTitle, description, credits, prereqs];
+    return [nameSplit[0], nameSplit[1], courseTitle, description, credits, null, null, null];
 }
 
 function parsePrereqs(preReqString) {
