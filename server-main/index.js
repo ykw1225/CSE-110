@@ -18,6 +18,9 @@ app.listen(3000, function() {
     console.log("Server started on port 3000");
 });
 
+var collegeController = require('./controllers/collegeController');
+collegeController.init(app);
+
 var courseController = require('./controllers/courseController');
 courseController.init(app);
 

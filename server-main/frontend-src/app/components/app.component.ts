@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-root',
-    template: '<p>Angular is working</p>'
+    templateUrl: '/templates/appRoot.html'
 })
 export class AppComponent {
-
 }

@@ -11,7 +11,7 @@ app.listen("3001");
 console.log("Scraping Host Started on Port 3001");
 
 app.get('/scrapeAllCourses', function(req, res){
-    var courses[];
+    var courses = [];
     var coursesToFind = 0;
     var coursesFound = 0;
 
