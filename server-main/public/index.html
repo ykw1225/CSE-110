@@ -11,10 +11,6 @@
         <!-- bootstrap-select cdn -->
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/css/bootstrap-select.min.css">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
-
         <link rel="stylesheet" type="text/css" href="./css/mainstyle.css">
 </head>
 
@@ -29,35 +25,12 @@
     </app-root>
 
     <script src="systemjs/dist/system.js"></script>
-    <script>
-        System.config({
-            baseURL: '.',
-            packages: {
-                '.': { main: 'main.js', defaultExtension: 'js' },
-                '@angular/common': {
-                    main: 'bundles/common.umd.min.js',
-                },
-                '@angular/compiler': {
-                    main: 'bundles/compiler.umd.min.js',
-                },
-                '@angular/core': {
-                    main: 'bundles/core.umd.min.js',
-                },
-                '@angular/platform-browser': {
-                    main: 'bundles/platform-browser.umd.min.js',
-                },
-                '@angular/platform-browser-dynamic': {
-                    main: 'bundles/platform-browser-dynamic.umd.min.js',
-                },
-                '@angular/http': {
-                    main: 'bundles/http.umd.min.js',
-                },
-                'core-js': { defaultExtension: 'js', format: 'cjs' },
-            }
-        });
-        System.defaultJSExtensions = true;
-        System.import('/');
-    </script>
+    <!-- We think this is calling [angularPackImport.js] -->
+    <script type="text/javascript" src="angularPackImport.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.3/js/bootstrap-select.min.js"></script>
 </body>
 
 </html>
