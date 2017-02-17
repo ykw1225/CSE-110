@@ -120,6 +120,8 @@ exports.getCourseInfo = function(course, callback) {
             callback(errorNode);
         }
         else {
+            var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
+            
             var courseNode = {
                 Code: 200,
                 body: {
