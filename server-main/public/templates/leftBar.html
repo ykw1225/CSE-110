@@ -8,9 +8,8 @@
     <h5>Select Major</h5>
     <!-- Read from array of departments -->
     <select class="selectpicker" data-width="100%" title="Nothing Selected">
-        <option>CSE</option>
-        <option>Applied Mathematics</option>
-        </select>
+        <option *ngFor="let degree of undergradDegrees" [value]="degree">{{ degree }}</option>
+    </select>
     <br /><br />
     <h5>Select Minor</h5>
     <!-- Read from array of departments -->

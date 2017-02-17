@@ -13,8 +13,11 @@ export class CollegeService {
     public getCollegesAsync(): Promise<string[]> {
         return this.http.get('/api/college')
             .map(response => response.json() as string[])
-            //.map(json => JSON.parse(json) as string[])
             .map(data => data.sort())
             .toPromise();
     }
+
+    /*
+    getCollegeRequirementsAsync
+    */
 }

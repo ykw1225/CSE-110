@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 
 import { CollegeService } from '../services/college.service';
+import { UndergradDegreeService } from '../services/undergraddegree.service';
 
 import { AppComponent } from '../components/app.component';
 import { LeftBarComponent } from '../components/app.leftbar';
@@ -20,7 +21,8 @@ import { LeftBarComponent } from '../components/app.leftbar';
         AppComponent
     ],
     providers: [
-        CollegeService
+        CollegeService,
+        UndergradDegreeService
     ]
 })
 export class AppModule {    

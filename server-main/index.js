@@ -24,6 +24,9 @@ collegeController.init(app);
 var courseController = require('./controllers/courseController');
 courseController.init(app);
 
+var undergradDegreeController = require('./controllers/undergradDegreeController');
+undergradDegreeController.init(app);
+
 
 
 //console.log(res);

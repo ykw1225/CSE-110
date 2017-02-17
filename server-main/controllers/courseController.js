@@ -1,3 +1,5 @@
+"use strict";
+
 var database_accessor = require('database-accessor');
 
 //check if a string contains number
