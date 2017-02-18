@@ -21,7 +21,7 @@ import { footerComponent } from '../components/app.footer';
         AppComponent,
         LeftBarComponent,
         RightBarComponent,
-        graphDisplayComponent
+        graphDisplayComponent,
         headerComponent,
         footerComponent
     ],
