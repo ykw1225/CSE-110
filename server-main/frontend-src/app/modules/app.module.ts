@@ -7,6 +7,10 @@ import { UndergradDegreeService } from '../services/undergraddegree.service';
 
 import { AppComponent } from '../components/app.component';
 import { LeftBarComponent } from '../components/app.leftbar';
+import { RightBarComponent } from '../components/app.rightbar';
+import { graphDisplayComponent } from '../components/app.graphDisplay';
+import { headerComponent } from '../components/app.header';
+import { footerComponent } from '../components/app.footer';
 
 @NgModule({
     imports: [
@@ -15,7 +19,11 @@ import { LeftBarComponent } from '../components/app.leftbar';
     ],
     declarations: [
         AppComponent,
-        LeftBarComponent
+        LeftBarComponent,
+        RightBarComponent,
+        graphDisplayComponent
+        headerComponent,
+        footerComponent
     ],
     bootstrap: [
         AppComponent
@@ -25,5 +33,5 @@ import { LeftBarComponent } from '../components/app.leftbar';
         UndergradDegreeService
     ]
 })
-export class AppModule {    
+export class AppModule {
 }
