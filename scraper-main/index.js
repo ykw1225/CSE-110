@@ -39,11 +39,11 @@ app.get('/scrapeAllCourses', function(req, res){
 
     var courseLinksCallback = function(courseLinks) {
         console.log(courseLinks.length + " department links");
-        for(var courseLink of courseLinks){
+        /*for(var courseLink of courseLinks){
             console.log(courseLink);
             courseCatalogScraper.getCourses(coursesCallback, request, cheerio, courseLink);
-        }
-        //courseCatalogScraper.getCourses(coursesCallback, request, cheerio, "http://ucsd.edu/catalog/courses/CSE.html");
+        }*/
+        courseCatalogScraper.getCourses(coursesCallback, request, cheerio, "http://ucsd.edu/catalog/courses/CSE.html");
     };
 
     courseLinkScraper.getCourseLinks(courseLinksCallback, request, cheerio);
