@@ -19,16 +19,20 @@ exports.getPrereqs = function(callback, request, cheerio, courseArray) {
 
       prereqs = $('td').map(function() {
 
-        var coReqs = []
+        var orReqs = []
 
         var data = $(this).children('span.bold_text').text().replace(/ +/g,'%');
 
         if ( data != '' ) {
+
           var parsed = data.split('%');
           parsed.pop();
-          coReqs.push(parsed);
-          return coReqs;
+          orReqs.push(parsed);
+
+          return orReqs;
+
         } else {
+          
           return null;
         }
 
