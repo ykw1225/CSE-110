@@ -16,17 +16,27 @@ app.get('/scrapeAllCourses', function(req, res){
     var allCourses = [];
     var coursesToFind = 0;
     var coursesFound = 0;
+    var totalCourses = 0;
 
     var databaseCallback = function(message) {
-        console.log("inserted " + coursesFound);
+        console.log("inserted " + totalCourses);
     }
 
     var prereqCallback = function(courseArray) {
-        if(courseArray) allCourses.push(courseArray);
         coursesFound++;
-        console.log("to find " + coursesToFind + "\tfound" + coursesFound);
+        if(courseArray){
+            allCourses.push(courseArray);
+            //console.log("to find " + coursesToFind + "\tfound " + coursesFound + " " + courseArray[0] + " " + courseArray[1]);
+            //console.log("prereqs: " + courseArray[5]);
+        } else {
+            //console.log("to find " + coursesToFind + "\tfound " + coursesFound + " null");
+        }
         if(coursesToFind==coursesFound) {
             database_accessor.insertCourses(allCourses, databaseCallback);
+            allCourses = [];
+            totalCourses += coursesFound;
+            coursesToFind = 0;
+            coursesFound = 0;
         }
     }
 
@@ -39,13 +49,26 @@ app.get('/scrapeAllCourses', function(req, res){
 
     var courseLinksCallback = function(courseLinks) {
         console.log(courseLinks.length + " department links");
-        /*for(var courseLink of courseLinks){
-            console.log(courseLink);
-            courseCatalogScraper.getCourses(coursesCallback, request, cheerio, courseLink);
-        }*/
-        courseCatalogScraper.getCourses(coursesCallback, request, cheerio, "http://ucsd.edu/catalog/courses/CSE.html");
+        var i = 0;
+        var id = 0;
+        var intervalCallback = function() {
+            if(i == courseLinks.length) {
+                console.log("DONE");
+                clearInterval(id);
+            } else {
+                console.log(i + ": " + courseLinks[i]);
+                courseCatalogScraper.getCourses(coursesCallback, request, cheerio, courseLinks[i]);
+                i++;
+            }
+        };
+        id = setInterval(intervalCallback, 5000);
+        //courseCatalogScraper.getCourses(coursesCallback, request, cheerio, "http://ucsd.edu/catalog/courses/MATH.html");
     };
 
-    courseLinkScraper.getCourseLinks(courseLinksCallback, request, cheerio);
-    res.send("check console");
+    var start = function() {
+        courseLinkScraper.getCourseLinks(courseLinksCallback, request, cheerio);
+    }
+
+    database_accessor.removeAllCourses(start);
+    res.send("check console\n");
 })

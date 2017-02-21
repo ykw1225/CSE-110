@@ -10,6 +10,9 @@ const getAllDepartmentsQuery = "SELECT DISTINCT department FROM courses";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
+
+const removeAllCoursesQuery = "TRUNCATE courses";
+
 //global variables for synchronization
 var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
 /*
@@ -121,7 +124,7 @@ exports.getCourseInfo = function(course, callback) {
         }
         else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
-            
+
             var courseNode = {
                 Code: 200,
                 body: {
@@ -205,4 +208,10 @@ exports.insertCourses = function(courses, callback) {
     } else {
         callback("nothing to insert");
     }
+}
+
+exports.removeAllCourses = function(callback) {
+    client.execute(removeAllCoursesQuery, function(err) {
+        callback();
+    })
 }
