@@ -218,9 +218,9 @@ exports.removeAllCourses = function(callback) {
     })
 }
 
-exports.removeDepartment = function(department, callback){
+exports.removeDepartmentCourses = function(department, callback){
     var param = [department];
-    client.execute(deleteDepartmentFromCoursesQuery, params, function(err, result) {
+    client.execute(deleteDepartmentFromCoursesQuery, param, function(err, result) {
         if(err) console.log(err);
         console.log(result);
         callback();
