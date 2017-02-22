@@ -6,6 +6,7 @@ import { CollegeService } from '../services/college.service';
 import { UndergradDegreeService } from '../services/undergraddegree.service';
 
 import { AppComponent } from '../components/app.component';
+import { CollapsibleSidebarComponent } from '../components/app.collapsiblesidebar';
 import { LeftBarComponent } from '../components/app.leftbar';
 import { RightBarComponent } from '../components/app.rightbar';
 import { graphDisplayComponent } from '../components/app.graphDisplay';
@@ -19,6 +20,7 @@ import { footerComponent } from '../components/app.footer';
     ],
     declarations: [
         AppComponent,
+        CollapsibleSidebarComponent,
         LeftBarComponent,
         RightBarComponent,
         graphDisplayComponent,

@@ -1,31 +1,48 @@
+<collapsible-sidebar>
 <div class="sidebar-left sidebar col-xs-2 text-center bg-warning">
-    <!-- Begin Left Sidebar -->
-    <h5>Select College</h5>
-    <select class="selectpicker" data-width="100%" title="Nothing Selected">
-        <option *ngFor="let college of colleges" [value]="college">{{ college }}</option>
-    </select>
-    <br /><br />
-    <h5>Select Major</h5>
-    <!-- Read from array of departments -->
-    <select class="selectpicker" data-width="100%" title="Nothing Selected">
-        <option *ngFor="let degree of undergradDegrees" [value]="degree">{{ degree }}</option>
-    </select>
-    <br /><br />
-    <h5>Select Minor</h5>
-    <!-- Read from array of departments -->
-    <select class="selectpicker" data-width="100%" title="Nothing Selected">
-        <option>CSE</option>
-        <option>Applied Mathematics</option>
-        </select>
-    <br /><br />
-    <h5>Select Course</h5>
-    <!-- Read from array of courses -->
-    <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true">
-        <option>CSE 8A</option>
-        <option>CSE 8B</option>
-        <option>MATH 20A</option>
-        <option>MATH 140</option>
-        <option>COGS 100</option>
-        <option>LIT 11</option>
-        </select>
+    <div class="row">
+        <div class="col-md-12">
+            <label for="collegeSelect">Select College</label>
+            <select class="selectpicker" data-width="100%" title="Nothing Selected" id="collegeSelect">
+                <option *ngFor="let college of colleges" [value]="college">{{ college }}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <label for="degreeSelect">Select Major</label>
+            <!-- Read from array of departments -->
+            <select class="selectpicker" data-width="100%" title="Nothing Selected" id="degreeSelect">
+                <option *ngFor="let degree of undergradDegrees" [value]="degree">{{ degree }}</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <label for="minorSelect">Select Minor</label>
+            <!-- Read from array of departments -->
+            <select class="selectpicker" data-width="100%" title="Nothing Selected" id="minorSelect">
+                <option>CSE</option>
+                <option>Applied Mathematics</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <label for="courseSelector">Select Course</label>
+            <!-- Read from array of courses -->
+            <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true" id="courseSelector">
+                <option>CSE 8A</option>
+                <option>CSE 8B</option>
+                <option>MATH 20A</option>
+                <option>MATH 140</option>
+                <option>COGS 100</option>
+                <option>LIT 11</option>
+            </select>
+        </div>
+    </div>
 </div>
+</collapsible-sidebar>

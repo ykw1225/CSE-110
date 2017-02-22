@@ -8,5 +8,4 @@ import { UndergradDegreeService } from '../services/undergraddegree.service';
     templateUrl: '/templates/rightBar.html'
 })
 export class RightBarComponent {
-/**I wasn't exactly sure what to put here so I'm leaving it blank for now.*/
 }
