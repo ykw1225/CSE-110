@@ -12,6 +12,8 @@ const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
 
 const removeAllCoursesQuery = "TRUNCATE courses";
+//query that deletes row with specific department
+const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
 
 //global variables for synchronization
 var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
@@ -214,4 +216,13 @@ exports.removeAllCourses = function(callback) {
     client.execute(removeAllCoursesQuery, function(err) {
         callback();
     })
+}
+
+exports.removeDepartmentCourses = function(department, callback){
+    var param = [department];
+    client.execute(deleteDepartmentFromCoursesQuery, param, function(err, result) {
+        if(err) console.log(err);
+        console.log(result);
+        callback();
+    });
 }
