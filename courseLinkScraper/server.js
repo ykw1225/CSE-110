@@ -25,8 +25,6 @@ app.get('/scrape', function(req, res){
 
       $('#content > p > span.courseFacLink > a:contains("courses")').each(function() {
 
-      //  var data = $(this);
-
         var data = $(this);
 
         courseName = data.attr('title');
@@ -35,14 +33,6 @@ app.get('/scrape', function(req, res){
 
         courseWebLinks.push(new CoursePage(courseName, courseLink));
 
-      /*  course = data.children().eq(9).find('span.courseFacLink').children().eq(0).text();
-        courseName = data.children().eq(9).find('span.courseFacLink').children().eq(0).attr('title');
-        courseLink = data.children().eq(9).find('span.courseFacLink').children().eq(0).attr('href');
-*/
-
-      /*  json.course = course;
-        json.courseName = courseName;
-        json.courseLink = courseLink; */
 
       })
     }
@@ -53,12 +43,10 @@ app.get('/scrape', function(req, res){
 
     })
 
-    // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
     res.send('Check your console!')
 
   }) ;
 
-  //All the web scraping magic will happen here
 
 })
 
