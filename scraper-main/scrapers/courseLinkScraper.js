@@ -1,3 +1,5 @@
+"use strict";
+
 exports.getCourseLinks = function(callback, request, cheerio) {
     var courseWebLinks = [];
     var base = "http://ucsd.edu/catalog"

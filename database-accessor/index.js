@@ -245,6 +245,12 @@ exports.insertDepartments = function(departments, callback) {
     }
 }
 
+/*insert an array of majors*/
+exports.insertMajors = function(majors, callback) {
+
+    callback("can't insert yet");
+}
+
 exports.removeAllCourses = function(callback) {
     client.execute(removeAllCoursesQuery, function(err) {
         callback();

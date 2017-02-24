@@ -1,6 +1,6 @@
 "use strict";
 
-exports.getDepartments = function(callback, request, cheerio) {
+exports.getDepartments = function(callback, request) {
     var departments = [];
     var url = "http://plans.ucsd.edu/controller.php?action=LoadSearchControls";
 

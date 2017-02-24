@@ -9,6 +9,11 @@ var courseCatalogScraper = require('./scrapers/courseCatalogScraper');
 var coursePrereqsScraper = require('./scrapers/coursePrereqsScraper');
 var departmentScraper = require('./scrapers/departmentScraper');
 
+//we'll keep adding to this
+var degreeScrapers = {
+    "CSE" : require('./scrapers/degrees/cse')
+};
+
 app.listen("3001");
 console.log("Scraping Host Started on Port 3001");
 
@@ -81,6 +86,27 @@ app.get('/scrape/departments', function(req,res) {
         })
     }
     departmentScraper.getDepartments(departmentsCallback, request);
+    res.send("check console\n");
+});
+
+/* DEGREE SCRAPERS */
+app.get('/scrape/degree/:department', function(req, res) {
+    var dep = req.params.department.toUpperCase();
+    if(!degreeScrapers[dep]) {
+        res.send("Can't scrape that.");
+        return;
+    }
+
+    var databaseCallback = function(message) {
+        console.log(message);
+    }
+
+    var degreeCallback = function(majors) {
+        console.log(majors);
+        database_accessor.insertMajors(majors, databaseCallback);
+    }
+
+    degreeScrapers[dep].getMajors(degreeCallback);
     res.send("check console\n");
 });
 
