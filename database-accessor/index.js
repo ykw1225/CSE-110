@@ -161,7 +161,7 @@ exports.getCourseMap = function(course, callback) {
 exports.getAllDepartments = function(callback) {
     client.execute(getAllDepartmentsQuery, function(err, result) {
         if(err) console.log(err);
-        console.log(result);
+        //console.log(result);
         callback(result['rows']);
     });
 };
@@ -171,7 +171,7 @@ exports.getAllClassesInDepartment = function(department, callback) {
     var params = [department];
     client.execute(getAllClassesInDepartment, params, function(err, result) {
         if(err) console.log(err);
-        console.log(result);
+        //console.log(result);
         callback(result['rows']);
     });
 }
@@ -222,7 +222,7 @@ exports.removeDepartmentCourses = function(department, callback){
     var param = [department];
     client.execute(deleteDepartmentFromCoursesQuery, param, function(err, result) {
         if(err) console.log(err);
-        console.log(result);
+        //console.log(result);
         callback();
     });
 }
