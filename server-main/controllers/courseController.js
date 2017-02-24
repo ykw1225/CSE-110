@@ -85,40 +85,10 @@ exports.init = function (app) {
         }
     });
 
-    app.get('/api/departments', function (request, response) {
-        console.log("Finding all course departments");
-        database_accessor.getAllDepartments(function(result) {
-            response.send(result);
-        });
-    });
-
-    app.get('/api/:department/courses', function (request, response) {
+    app.get('/api/:department/course', function (request, response) {
         console.log("Finding all courses in " + request.params.department);
         database_accessor.getAllClassesInDepartment(request.params.department.toUpperCase(), function(result) {
             response.send(result);
         });
-    });
-
-    // Deprecated.  Refactored API to make it more angular friendly.
-    app.post("/getCourseInfo", function(req, res) {
-        console.log("Finding Course Info For " + req.body['course']);
-
-        //TODO incorrect request format
-
-        var courseInfoCallback = function(result) {
-            //TODO handle different results
-            res.send(result);
-        };
-        database_accessor.getCourseInfo(req.body['course'], courseInfoCallback);
-    });
-
-    // Deprecated.  Refactored API to make it more angular friendly.
-    app.post("/getCourseMap", function(req, res) {
-        console.log("Finding Course Map For " + req.body['course']);
-
-        var courseMapCallback = function(result) {
-            res.send(result);
-        };
-        database_accessor.getCourseMap(req.body['course'], courseMapCallback);
     });
 };

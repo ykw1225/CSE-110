@@ -21,7 +21,13 @@ System.config({
         '@angular/http': {
             main: 'bundles/http.umd.min.js',
         },
+        '@angular/forms': {
+            main: 'bundles/forms.umd.min.js',
+        },
         'core-js': { defaultExtension: 'js', format: 'cjs' },
+        'underscore': {
+            main: 'underscore-min.js'
+        }
     }
 });
 System.defaultJSExtensions = true;

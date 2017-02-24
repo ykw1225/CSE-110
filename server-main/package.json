@@ -12,20 +12,22 @@
   "devDependencies": {
     "@types/core-js": "^0.9.35",
     "@types/systemjs": "^0.20.0",
+    "@types/underscore": "^1.7.36",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.4.1",
     "gulp-typescript": "^3.1.4",
     "gulp-using": "^0.1.1",
     "gulp-watch": "^4.3.11",
-    "typescript": "^2.1.5"
+    "typescript": "^2.2.1"
   },
   "dependencies": {
-    "@angular/common": "^2.4.6",
-    "@angular/compiler": "^2.4.6",
-    "@angular/core": "^2.4.6",
-    "@angular/http": "^2.4.7",
-    "@angular/platform-browser": "^2.4.6",
-    "@angular/platform-browser-dynamic": "^2.4.6",
+    "@angular/common": "^2.4.8",
+    "@angular/compiler": "^2.4.8",
+    "@angular/core": "^2.4.8",
+    "@angular/forms": "^2.4.8",
+    "@angular/http": "^2.4.8",
+    "@angular/platform-browser": "^2.4.8",
+    "@angular/platform-browser-dynamic": "^2.4.8",
     "body-parser": "1.16.0",
     "core-js": "^2.4.1",
     "database-accessor": "../database-accessor",
@@ -34,6 +36,7 @@
     "rxjs": "^5.1.1",
     "systemjs": "^0.20.5",
     "ts-helpers": "^1.1.2",
+    "underscore": "^1.8.3",
     "zone.js": "^0.7.6"
   }
 }

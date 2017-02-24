@@ -6,5 +6,12 @@ exports.init = function (app) {
             'degree1',
             'degree2'
         ]);
-    })
+    });
+
+    app.get('/api/undergrad/:college/minor', function (request, response) {
+        response.send([
+            'minor1',
+            'minor2'
+        ]);
+    });
 }

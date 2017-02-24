@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { CollegeService } from '../services/college.service';
 import { UndergradDegreeService } from '../services/undergraddegree.service';
+import { DepartmentService } from '../services/department.service';
+import { CourseService } from '../services/course.service';
 
 import { AppComponent } from '../components/app.component';
 import { CollapsibleSidebarComponent } from '../components/app.collapsiblesidebar';
@@ -16,7 +19,8 @@ import { footerComponent } from '../components/app.footer';
 @NgModule({
     imports: [
         BrowserModule,
-        HttpModule
+        HttpModule,
+        FormsModule
     ],
     declarations: [
         AppComponent,
@@ -32,7 +36,9 @@ import { footerComponent } from '../components/app.footer';
     ],
     providers: [
         CollegeService,
-        UndergradDegreeService
+        UndergradDegreeService,
+        DepartmentService,
+        CourseService
     ]
 })
 export class AppModule {

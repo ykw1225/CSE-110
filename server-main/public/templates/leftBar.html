@@ -12,7 +12,6 @@
     <div class="row">
         <div class="col-md-12">
             <label for="degreeSelect">Select Major</label>
-            <!-- Read from array of departments -->
             <select class="selectpicker" data-width="100%" title="Nothing Selected" id="degreeSelect">
                 <option *ngFor="let degree of undergradDegrees" [value]="degree">{{ degree }}</option>
             </select>
@@ -22,10 +21,17 @@
     <div class="row">
         <div class="col-md-12">
             <label for="minorSelect">Select Minor</label>
-            <!-- Read from array of departments -->
             <select class="selectpicker" data-width="100%" title="Nothing Selected" id="minorSelect">
-                <option>CSE</option>
-                <option>Applied Mathematics</option>
+                <option *ngFor="let minor of undergradMinors" [value]="minor">{{ minor }}</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <label for="departmentSelect">Select Department</label>
+            <select class="selectpicker" data-width="100%" title="Nothing Selected" id="departmentSelect" [(ngModel)]="departmentModel">
+                <option *ngFor="let department of departments" [value]="department.department">{{ department.department }}</option>
             </select>
         </div>
     </div>
@@ -35,12 +41,7 @@
             <label for="courseSelector">Select Course</label>
             <!-- Read from array of courses -->
             <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true" id="courseSelector">
-                <option>CSE 8A</option>
-                <option>CSE 8B</option>
-                <option>MATH 20A</option>
-                <option>MATH 140</option>
-                <option>COGS 100</option>
-                <option>LIT 11</option>
+                <option *ngFor="let course of courses" [value]="course">{{ course.department }} {{ course.number }}</option>
             </select>
         </div>
     </div>

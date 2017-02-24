@@ -21,8 +21,11 @@ app.listen(3000, function() {
 var collegeController = require('./controllers/collegeController');
 collegeController.init(app);
 
-var courseController = require('./controllers/courseController');
-courseController.init(app);
-
 var undergradDegreeController = require('./controllers/undergradDegreeController');
 undergradDegreeController.init(app);
+
+var departmentController = require('./controllers/departmentController');
+departmentController.init(app);
+
+var courseController = require('./controllers/courseController');
+courseController.init(app);

@@ -41,6 +41,14 @@ interface UndergradDegree {
     units: number;
 }
 
+interface UndergradMinor {
+    college: string;
+    degreeCode: string;
+    department: string;
+    requiredCourses: string[];
+    units: number;
+}
+
 @Injectable()
 export class UndergradDegreeService {
     constructor(private http: Http) {
@@ -56,6 +64,19 @@ export class UndergradDegreeService {
     public getDegreeAsync(college: string, department: string, degreeCode: string): Promise<UndergradDegree> {
         return this.http.get(`/api/undergrad/${college}/degree/${department}/${degreeCode}`)
             .map(response => JSON.parse(response.json()) as UndergradDegree)
+            .toPromise();
+    }
+
+    public getMinorsAsync(college: string): Promise<string[]> {
+        return this.http.get(`/api/undergrad/${college}/minor`)
+            .map(response => response.json() as string[])
+            .map(data => data.sort())
+            .toPromise();
+    }
+
+    public getMinorAsync(college: string, department: string, degreeCode: string): Promise<UndergradMinor> {
+        return this.http.get(`/api/undergrad/${college}/minor/${department}/${degreeCode}`)
+            .map(response => JSON.parse(response.json()) as UndergradMinor)
             .toPromise();
     }
 }
