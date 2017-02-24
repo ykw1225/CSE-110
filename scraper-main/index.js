@@ -7,11 +7,12 @@ var app     = express();
 var courseLinkScraper = require('./scrapers/courseLinkScraper');
 var courseCatalogScraper = require('./scrapers/courseCatalogScraper');
 var coursePrereqsScraper = require('./scrapers/coursePrereqsScraper');
+var departmentScraper = require('./scrapers/departmentScraper');
 
 app.listen("3001");
 console.log("Scraping Host Started on Port 3001");
 
-app.get('/scrapeAllCourses', function(req, res){
+app.get('/scrape/courses', function(req, res){
     console.log("getting courses");
     var allCourses = [];
     var coursesToFind = 0;
@@ -71,4 +72,28 @@ app.get('/scrapeAllCourses', function(req, res){
 
     database_accessor.removeAllCourses(start);
     res.send("check console\n");
-})
+});
+
+app.get('/scrape/departments', function(req,res) {
+    var departmentsCallback = function(departments) {
+        database_accessor.insertDepartments(departments, function() {
+            console.log("Inserted");
+        })
+    }
+    departmentScraper.getDepartments(departmentsCallback, request);
+    res.send("check console\n");
+});
+
+app.delete('/allCourses', function(req, res){
+    database_accessor.removeAllCourses(function() {
+        console.log("Removed All Courses");
+    });
+    res.send("check console\n");
+});
+
+app.delete('/:department/courses', function(req, res){
+    database_accessor.removeDepartmentCourses(req.params.department, function() {
+        console.log("Removed " + req.params.department + "'s Courses");
+    });
+    res.send("check console\n");
+});

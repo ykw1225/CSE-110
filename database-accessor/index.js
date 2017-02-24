@@ -6,10 +6,11 @@ var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'grad
 const NUM_BATCHES = 50;
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
-const getAllDepartmentsQuery = "SELECT DISTINCT department FROM courses";
+const getAllDepartmentsQuery = "SELECT * FROM departments";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
+const insertDepartmentQuery = "INSERT INTO departments (code, name) VALUES (?,?)";
 
 const removeAllCoursesQuery = "TRUNCATE courses";
 //query that deletes row with specific department
@@ -161,8 +162,7 @@ exports.getCourseMap = function(course, callback) {
 exports.getAllDepartments = function(callback) {
     client.execute(getAllDepartmentsQuery, function(err, result) {
         if(err) console.log(err);
-        //console.log(result);
-        callback(result['rows']);
+        callback(result["rows"]);
     });
 };
 
@@ -184,7 +184,6 @@ exports.insertCourses = function(courses, callback) {
 
     //cassandra cannot accept too large of a batch of queries, so splitting the batches
 
-    //check if integer division
     var batches = Math.ceil(courses.length/NUM_BATCHES);
     var num_completed = 0;
 
@@ -197,6 +196,40 @@ exports.insertCourses = function(courses, callback) {
     var count = 0;
     for(var course of courses) {
         queries[Math.floor(count/NUM_BATCHES)].push({query: insertCourseQuery, params: course});
+        count++;
+    }
+
+    if(queries.length) {
+        for(var batchQuery of queries) {
+            client.batch(batchQuery, {prepare:true}, function(err, result) {
+                if(err) console.log(err);
+                insertionCallback();
+            });
+        }
+    } else {
+        callback("nothing to insert");
+    }
+}
+
+exports.insertDepartments = function(departments, callback) {
+    var insertionCallback = function() {
+        num_completed++;
+        if(num_completed==batches) callback("inserted");
+    }
+
+    //cassandra cannot accept too large of a batch of queries, so splitting the batches
+    var batches = Math.ceil(departments.length/NUM_BATCHES);
+    var num_completed = 0;
+
+    console.log("inserting " + departments.length + " departments into database");
+    const queries = [];
+    for(var i = 0; i < batches; i++) {
+        queries.push([]);
+    }
+
+    var count = 0;
+    for(var dep of departments) {
+        queries[Math.floor(count/NUM_BATCHES)].push({query: insertDepartmentQuery, params: dep});
         count++;
     }
 
