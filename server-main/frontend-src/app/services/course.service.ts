@@ -30,7 +30,9 @@ export class CourseService {
             .toPromise();
     }
 
-    public getCourseAsync(department: string, number: string): Promise<Course> {
-        //return this.http.get('/api/')
+    public getCourseInfoAsync(department: string, number: string): Promise<Course> {
+        return this.http.get(`/api/course/info/${department}/${number}`)
+            .map(response => response.json() as Course)
+            .toPromise();
     }
 }

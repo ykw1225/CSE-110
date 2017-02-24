@@ -9,7 +9,7 @@ import * as _ from 'underscore';
 
 export interface Department {
     department: string;
-    name: string;
+    //name: string;
 }
 
 @Injectable()
