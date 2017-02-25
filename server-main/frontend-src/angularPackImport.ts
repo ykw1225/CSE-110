@@ -27,6 +27,9 @@ System.config({
         'core-js': { defaultExtension: 'js', format: 'cjs' },
         'underscore': {
             main: 'underscore-min.js'
+        },
+        "cytoscape": {
+            main: "dist/cytoscape.min.js"
         }
     }
 });

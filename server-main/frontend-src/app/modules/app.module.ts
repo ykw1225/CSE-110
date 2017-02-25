@@ -7,6 +7,7 @@ import { CollegeService } from '../services/college.service';
 import { UndergradDegreeService } from '../services/undergraddegree.service';
 import { DepartmentService } from '../services/department.service';
 import { CourseService } from '../services/course.service';
+import { PubSubEventService } from '../services/pubsubevent.service';
 
 import { AppComponent } from '../components/app.component';
 import { CollapsibleSidebarComponent } from '../components/app.collapsiblesidebar';
@@ -38,7 +39,8 @@ import { footerComponent } from '../components/app.footer';
         CollegeService,
         UndergradDegreeService,
         DepartmentService,
-        CourseService
+        CourseService,
+        PubSubEventService
     ]
 })
 export class AppModule {

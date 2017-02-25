@@ -8,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
 import * as _ from 'underscore';
 
 export interface Department {
-    department: string;
+    code: string;
     name: string;
 }
 
@@ -21,11 +21,11 @@ export class DepartmentService {
         return this.http.get('/api/department')
             .map(response => response.json() as Department[])
             .map(data => data.map(e => {
-                e.department = e.department.toUpperCase();
+                e.code = e.code.toUpperCase();
 
                 return e;
             }))
-            .map(data => _.sortBy(data, e => e.department))
+            .map(data => _.sortBy(data, e => e.code))
             .toPromise();
     }
 }

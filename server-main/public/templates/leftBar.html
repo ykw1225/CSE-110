@@ -31,7 +31,7 @@
         <div class="col-md-12">
             <label for="departmentSelect">Select Department</label>
             <select class="selectpicker" data-width="100%" title="Nothing Selected" id="departmentSelect" [(ngModel)]="departmentModel">
-                <option *ngFor="let department of departments" [value]="department.department">{{ department.department }}</option>
+                <option *ngFor="let department of departments" [value]="department.code">{{ department.name }}</option>
             </select>
         </div>
     </div>
@@ -40,7 +40,7 @@
         <div class="col-md-12">
             <label for="courseSelector">Select Course</label>
             <!-- Read from array of courses -->
-            <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true" id="courseSelector">
+            <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true" id="courseSelector" [(ngModel)]="courseModel">
                 <option *ngFor="let course of courses" [value]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
             </select>
         </div>
