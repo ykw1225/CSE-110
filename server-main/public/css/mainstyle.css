@@ -4,8 +4,7 @@ html, body {
 
 .graph{
   border: 2px solid black;
-  height: 100%;
-  margin: 10px;
+  height: 500px;
 }
 
 .sidebar{
@@ -43,11 +42,3 @@ footer{
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
-#cy {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-    }

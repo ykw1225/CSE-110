@@ -16,31 +16,61 @@ export class graphDisplayComponent {
         pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChanged(p));
     }
 
-    private _courseChanged(payload: Course): void {
-return;
+    public ngOnInit() {
+        var options: Cy.CytoscapeOptions = {
+            container: document.getElementById('cy'),
+            elements: [
+  // nodes
+  { data: { id: 'a' } },
+  { data: { id: 'b' } },
+  { data: { id: 'c' } },
+  { data: { id: 'd' } },
+  { data: { id: 'e' } },
+  { data: { id: 'f' } },
+  // edges
+  {
+    data: {
+      id: 'ab',
+      source: 'a',
+      target: 'b'
+    }
+  },
+  {
+    data: {
+      id: 'cd',
+      source: 'c',
+      target: 'd'
+    }
+  },
+  {
+    data: {
+      id: 'ef',
+      source: 'e',
+      target: 'f'
+    }
+  },
+  {
+    data: {
+      id: 'ac',
+      source: 'a',
+      target: 'd'
+    }
+  },
+  {
+    data: {
+      id: 'be',
+      source: 'b',
+      target: 'e'
+    }
+  }
+],
+layout: {
+    name: 'circle'
+},
+        }
+        this.cy = cytoscape(options);
+    }
 
-if (typeof this.cy === 'undefined') {
-        this.cy = cytoscape({
-  container: document.getElementById('cy'),
-  elements: [
-    { data: { id: 'a' } },
-    { data: { id: 'b' } },
-    {
-      data: {
-        id: 'ab',
-        source: 'a',
-        target: 'b'
-      }
-    }],
-    /*style: [
-        {
-            selector: 'node',
-            style: {
-                shape: 'hexagon',
-                'background-color': 'red'
-            }
-        }]      */
-});
-}
+    private _courseChanged(payload: Course): void {
     }
 }

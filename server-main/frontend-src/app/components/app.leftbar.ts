@@ -17,7 +17,7 @@ export class LeftBarComponent {
     public departments: Department[];
     public courses: Course[];
 
-    private _courseModel: string;
+    private _courseModel: Course;
     private _departmentModel: string;
 
     public get courseModel() {
