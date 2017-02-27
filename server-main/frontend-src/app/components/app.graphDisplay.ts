@@ -121,6 +121,13 @@ export class graphDisplayComponent {
                 source: 'CSE 20',
                 target: 'CSE 11'
               }
+            },
+            {
+              data: {
+                id: 'CSE21CSE20',
+                source: 'CSE 21',
+                target: 'CSE 20'
+              }
             }
           ],
           style: [
