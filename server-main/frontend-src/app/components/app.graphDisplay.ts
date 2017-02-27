@@ -21,46 +21,105 @@ export class graphDisplayComponent {
           container: document.getElementById('cy'),
           elements: [
             // nodes
-            { data: { id: 'a' } },
-            { data: { id: 'b' } },
-            { data: { id: 'c' } },
-            { data: { id: 'd' } },
-            { data: { id: 'e' } },
-            { data: { id: 'f' } },
+            { data: { id: 'CSE 130' } },
+            { data: { id: 'CSE 105' } },
+            { data: { id: 'CSE 100' } },
+            { data: { id: 'CSE 30' } },
+            { data: { id: 'CSE 21' } },
+            { data: { id: 'CSE 15L' } },
+            { data: { id: 'CSE 12' } },
+            { data: { id: 'CSE 20' } },
+            { data: { id: 'CSE 11' } },
             // edges
             {
               data: {
-                id: 'ab',
-                source: 'a',
-                target: 'b'
+                id: 'CSE130CSE105',
+                source: 'CSE 130',
+                target: 'CSE 105'
               }
             },
             {
               data: {
-                id: 'cd',
-                source: 'c',
-                target: 'd'
+                id: 'CSE130CSE100',
+                source: 'CSE 130',
+                target: 'CSE 100'
               }
             },
             {
               data: {
-                id: 'ef',
-                source: 'e',
-                target: 'f'
+                id: 'CSE130CSE12',
+                source: 'CSE 130',
+                target: 'CSE 12'
               }
             },
             {
               data: {
-                id: 'ac',
-                source: 'a',
-                target: 'd'
+                id: 'CSE100CSE30',
+                source: 'CSE 100',
+                target: 'CSE 30'
               }
             },
             {
               data: {
-                id: 'be',
-                source: 'b',
-                target: 'e'
+                id: 'CSE100CSE21',
+                source: 'CSE 100',
+                target: 'CSE 21'
+              }
+            },
+            {
+              data: {
+                id: 'CSE100CSE12',
+                source: 'CSE 100',
+                target: 'CSE 12'
+              }
+            },
+            {
+              data: {
+                id: 'CSE100CSE15L',
+                source: 'CSE 100',
+                target: 'CSE 15L'
+              }
+            },
+            {
+              data: {
+                id: 'CSE105CSE21',
+                source: 'CSE 105',
+                target: 'CSE 21'
+              }
+            },
+            {
+              data: {
+                id: 'CSE105CSE12',
+                source: 'CSE 105',
+                target: 'CSE 12'
+              }
+            },
+            {
+              data: {
+                id: 'CSE105CSE12',
+                source: 'CSE 105',
+                target: 'CSE 15L'
+              }
+            },
+            {
+              data: {
+                id: 'CSE12CSE11',
+                source: 'CSE 12',
+                target: 'CSE 11'
+              }
+            },
+            {
+              data: {
+                id: 'CSE15LCSE11',
+                source: 'CSE 15L',
+                target: 'CSE 11'
+              }
+            },
+            {
+              data: {
+                id: 'CSE20CSE11',
+                source: 'CSE 20',
+                target: 'CSE 11'
               }
             }
           ],
