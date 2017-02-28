@@ -38,6 +38,7 @@ else console.log("inserted");
 
 //recursively getting all relevant nodes
 var getAllPrereqs = function(currCourse, callback) {
+    console.log("curr course: " + currCourse);
     const params = currCourse.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
         //handle errors
@@ -48,7 +49,6 @@ var getAllPrereqs = function(currCourse, callback) {
                 Message: "Error getting course info\n"
             };
             courseMapNodes.push(errorNode);
-            callback();
         }
         else if(!result) {
             errorType = 2;
@@ -57,7 +57,6 @@ var getAllPrereqs = function(currCourse, callback) {
                 Message: "Data not fetched\n"
             };
             courseMapNodes.push(errorNode);
-            callback();
         }
         else if(!result['rows'].length) {
             errorType = 3;
@@ -66,7 +65,6 @@ var getAllPrereqs = function(currCourse, callback) {
                 Message: "No results found\n"
             };
             courseMapNodes.push(errorNode);
-            callback();
         }
         else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
@@ -83,18 +81,19 @@ var getAllPrereqs = function(currCourse, callback) {
                 }
                 courseMapNodes.push(courseNode);
                 if(courseNode.prereqs) {
-                    for(var prereq of courseNode.prereqs) {
-                        //not dealing with co-reqs yet, so just accesssing index 0
-                        if(courseMapNames.indexOf(prereq[0])<0){
-                            findingCourses++;
-                            getAllPrereqs(prereq[0], callback);
+                    for(var prereqGroup of courseNode.prereqs) {
+                        for(var prereq of prereqGroup) {
+                            if(courseMapNames.indexOf(prereq)<0){
+                                findingCourses++;
+                                getAllPrereqs(prereq, callback);
+                            }
                         }
                     }
                 }
             }
-            foundCourses++;
-            callback();
         }
+        foundCourses++;
+        callback();
     });
 };
 
@@ -145,9 +144,7 @@ exports.getCourseInfo = function(course, callback) {
 
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
-        if (errorType != 0){
-            callback(courseMapNodes);
-        } else if(foundCourses==findingCourses) {
+        if(foundCourses==findingCourses) {
             callback(courseMapNodes);
         }
     };

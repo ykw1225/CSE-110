@@ -67,7 +67,7 @@ app.get('/scrape/courses', function(req, res){
                 i++;
             }
         };
-        id = setInterval(intervalCallback, 5000);
+        id = setInterval(intervalCallback, 3000);
         //courseCatalogScraper.getCourses(coursesCallback, request, cheerio, "http://ucsd.edu/catalog/courses/MATH.html");
     };
 
@@ -87,6 +87,14 @@ app.get('/scrape/departments', function(req,res) {
     }
     departmentScraper.getDepartments(departmentsCallback, request);
     res.send("check console\n");
+});
+
+app.get('/test', function(req, res) {
+    var name = "CSE12L";
+    var nameMatch = name.match(/[A-Z]{2,4}/);
+    var nameSplit = name.split(/[A-Z]{2,4}/);
+    console.log(nameMatch + " " + nameSplit[1]);
+    res.send("");
 });
 
 /* DEGREE SCRAPERS */

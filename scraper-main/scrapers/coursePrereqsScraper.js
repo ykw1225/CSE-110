@@ -20,6 +20,11 @@ exports.getPrereqs = function(callback, request, cheerio, courseArray) {
                 if(data != ''){
                     var parsed = data.split('%');
                     parsed.pop();
+                    for(var i in parsed) {
+                        var nameMatch = parsed[i].match(/[A-Z]{2,4}/);
+                        var nameSplit = parsed[i].split(/[A-Z]{2,4}/);
+                        parsed[i] = nameMatch + " " + nameSplit[1];
+                    }
                     orReqs.push(parsed);
                     return orReqs;
                 } else {
