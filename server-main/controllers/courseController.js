@@ -15,7 +15,8 @@ exports.init = function (app) {
         //checking deapartment params, report error if it contains not only letters
         if (!(request.params.department.match(letters) )|| request.params.department.length <=0 ) {
             var errorNode = {
-                Code: 400,
+                Code: 405,
+                name: String(request.params.department + ' ' + request.params.coursenumber),
                 Message: "incorrect request format: department\n"
             };
             response.status(errorNode.Code).send(errorNode.Message);
@@ -24,7 +25,8 @@ exports.init = function (app) {
         //checking coursenumber params, report error if it contains something other than numbers or letters
         else if (!(request.params.coursenumber.match(letterNumCheck)) || request.params.coursenumber.length <=0 ) {
             var errorNode = {
-                Code: 400,
+                Code: 406,
+                name: String(request.params.department + ' ' + request.params.coursenumber),
                 Message: "incorrect request format: coursenumber\n"
             };
             response.status(errorNode.Code).send(errorNode.Message);
@@ -54,7 +56,8 @@ exports.init = function (app) {
         //checking department params, report error if it contains not only letters
         if (!request.params.department.match(letters) || !request.params.department) {
             var errorNode = {
-                Code: 400,
+                Code: 405,
+                name: String(request.params.department + ' ' + request.params.coursenumber),
                 Message: "incorrect request format: department\n"
             };
             response.status(errorNode.Code).send(errorNode.Message);
@@ -63,7 +66,8 @@ exports.init = function (app) {
         //checking coursenumber params, report error if it contains something other than numbers or letters
         else if (!request.params.coursenumber.match(letterNumCheck)) {
             var errorNode = {
-                Code: 400,
+                Code: 406,
+                name: String(request.params.department + ' ' + request.params.coursenumber),
                 Message: "incorrect request format: coursenumber\n"
             };
             response.status(errorNode.Code).send(errorNode.Message);
