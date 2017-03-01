@@ -80,6 +80,7 @@ app.get('/scrape/courses', function(req, res){
 });
 
 app.get('/scrape/departments', function(req,res) {
+    console.log("Scraping All Departments");
     var departmentsCallback = function(departments) {
         database_accessor.insertDepartments(departments, function() {
             console.log("Inserted");

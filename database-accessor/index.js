@@ -6,11 +6,11 @@ var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'grad
 const NUM_BATCHES = 50;
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
-const getAllDepartmentsQuery = "SELECT * FROM departments";
+const getAllDepartmentsQuery = "SELECT name, code_list FROM departments";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
-const insertDepartmentQuery = "INSERT INTO departments (code, name) VALUES (?,?)";
+const insertDepartmentQuery = "INSERT INTO departments (code, name, code_list) VALUES (?,?,?)";
 
 const removeAllCoursesQuery = "TRUNCATE courses";
 //query that deletes row with specific department
