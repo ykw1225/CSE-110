@@ -1,17 +1,18 @@
 var cassandra = require('cassandra-driver');
 var async = require('async');
-var _ = require('underscore');
 
 var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'grad'});
 
 const NUM_BATCHES = 50;
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
-const getAllDepartmentsQuery = "SELECT * FROM departments";
+const getAllDepartmentsQuery = "SELECT name, code_list FROM departments";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
-const insertDepartmentQuery = "INSERT INTO departments (code, name) VALUES (?,?)";
+const insertDepartmentQuery = "INSERT INTO departments (code, name, code_list) VALUES (?,?,?)";
+
+const insertDegreeQuery = "INSERT INTO degrees (department, number, title, description, requirements) VALUES (?,?,?,?,?)";
 
 const removeAllCoursesQuery = "TRUNCATE courses";
 //query that deletes row with specific department
@@ -46,7 +47,8 @@ var getAllPrereqs = function(currCourse, callback) {
         if(err) {
             errorType = 1;
             var errorNode = {
-                Code: 400,
+                Code: 401,
+                name: params,
                 Message: "Error getting course info\n"
             };
             courseMapNodes.push(errorNode);
@@ -54,7 +56,8 @@ var getAllPrereqs = function(currCourse, callback) {
         else if(!result) {
             errorType = 2;
             var errorNode = {
-                Code: 400,
+                Code: 402,
+                name: params,
                 Message: "Data not fetched\n"
             };
             courseMapNodes.push(errorNode);
@@ -62,7 +65,8 @@ var getAllPrereqs = function(currCourse, callback) {
         else if(!result['rows'].length) {
             errorType = 3;
             var errorNode = {
-                Code: 404,
+                Code: 403,
+                name: params,
                 Message: "No results found\n"
             };
             courseMapNodes.push(errorNode);
@@ -104,7 +108,8 @@ exports.getCourseInfo = function(course, callback) {
         if(err) {
             errorType = 1;
             var errorNode = {
-                Code: 403,
+                Code: 401,
+                name: params,
                 Message: "Error getting course info\n"
             };
             callback(errorNode);
@@ -112,7 +117,8 @@ exports.getCourseInfo = function(course, callback) {
         else if(!result) {
             errorType = 2;
             var errorNode = {
-                Code: 404,
+                Code: 402,
+                name: params,
                 Message: "Data not fetched\n"
             };
             callback(errorNode);
@@ -120,13 +126,15 @@ exports.getCourseInfo = function(course, callback) {
         else if(!result['rows'].length) {
             errorType = 3;
             var errorNode = {
-                Code: 405,
+                Code: 403,
+                name: params,
                 Message: "No results found\n"
             };
             callback(errorNode);
         }
         else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
+            console.log("no error in querying "+name);
 
             var courseNode = {
                 Code: 200,
@@ -145,7 +153,7 @@ exports.getCourseInfo = function(course, callback) {
 
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
-        if(foundCourses === findingCourses) {
+        if(foundCourses==findingCourses) {
             callback(courseMapNodes);
         }
     };
@@ -245,9 +253,36 @@ exports.insertDepartments = function(departments, callback) {
 
 /*insert an array of majors*/
 exports.insertMajors = function(majors, callback) {
+    var major = [
+        "CS",
+        "25",
+        "CE",
+        "desc",
+        [
+            {
+                type: "yes",
+                courses: ["CSE 20", "CSE 21"],
+                courses_needed: 0,
+                credits_needed: 4
+            }
+        ]
+    ];
 
-    callback("can't insert yet");
-}
+    const queries = [];
+    for(var major of majors) {
+        queries.push({query: insertDegreeQuery, params: major});
+    }
+    client.batch(queries, {prepare:true}, function(err, result) {
+        callback("inserted");
+    });
+    /*
+    client.execute(insertDegreeQuery, major, {prepare:true}, function(err) {
+        if(err) console.log(err);
+        else console.log("worked");
+        callback("TRIED");
+    })*/
+    //callback("can't insert yet");
+};
 
 exports.removeAllCourses = function(callback) {
     client.execute(removeAllCoursesQuery, function(err) {

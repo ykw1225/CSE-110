@@ -80,6 +80,7 @@ app.get('/scrape/courses', function(req, res){
 });
 
 app.get('/scrape/departments', function(req,res) {
+    console.log("Scraping All Departments");
     var departmentsCallback = function(departments) {
         database_accessor.insertDepartments(departments, function() {
             console.log("Inserted");
@@ -114,7 +115,7 @@ app.get('/scrape/degree/:department', function(req, res) {
         database_accessor.insertMajors(majors, databaseCallback);
     }
 
-    degreeScrapers[dep].getMajors(degreeCallback);
+    degreeScrapers[dep].getMajors(degreeCallback, request, cheerio);
     res.send("check console\n");
 });
 
