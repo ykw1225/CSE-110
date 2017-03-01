@@ -7,6 +7,11 @@ import 'rxjs/add/operator/toPromise';
 
 import * as _ from 'underscore';
 
+export interface CourseMap {
+    name: string;
+    prereqs: string[][];
+}
+
 export interface Course {
     department: string;
     description: string;
@@ -35,4 +40,11 @@ export class CourseService {
             .map(response => response.json() as Course)
             .toPromise();
     }
+
+    public getCourseMapAsync(department: string, number: string): Promise<CourseMap[]> {
+        return this.http.get(`/api/course/map/${department}/${number}`)
+            .map(response => { console.log(response.json);return response.json() as CourseMap[] })
+            .toPromise();
+    }
 }
+

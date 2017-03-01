@@ -40,7 +40,7 @@
             <label for="courseSelector">Select Course</label>
             <!-- Read from array of courses -->
             <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true" id="courseSelector" [(ngModel)]="courseModel">
-                <option *ngFor="let course of courses" [value]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
+                <option *ngFor="let course of courses" [ngValue]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
             </select>
         </div>
     </div>
