@@ -12,6 +12,11 @@ export interface CourseMap {
     prereqs: string[][];
 }
 
+export interface ErrorNode {
+    Code: number;
+    Message: string;
+}
+
 export interface Course {
     department: string;
     description: string;
@@ -41,9 +46,9 @@ export class CourseService {
             .toPromise();
     }
 
-    public getCourseMapAsync(department: string, number: string): Promise<CourseMap[]> {
+    public getCourseMapAsync(department: string, number: string): Promise<Array<CourseMap | ErrorNode>> {
         return this.http.get(`/api/course/map/${department}/${number}`)
-            .map(response => { console.log(response.json);return response.json() as CourseMap[] })
+            .map(response => { return response.json() as CourseMap[] })
             .toPromise();
     }
 }

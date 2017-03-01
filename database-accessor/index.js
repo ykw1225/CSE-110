@@ -37,63 +37,6 @@ if(err) console.log(err);
 else console.log("inserted");
 })*/
 
-function getAllPrereqs2(currCourse, callback) {
-    var courseMapNodes = [];
-
-    function getMorePrereqs(promises) {
-        if (typeof promises === 'undefined' || promises.length === 0) {
-            if (typeof callback !== 'undefined') callback(courseMapNodes);
-
-            return;
-        }
-
-        Promise.all(promises).then(function (results) {
-            var courseMaps = _.chain(results)
-                                .filter(r => r && r.rowLength > 0)
-                                .map(r => ({
-                                    name: r['rows'][0]['department'] + " " + r['rows'][0]['number'],
-                                    title: r['rows'][0]['title'],
-                                    description: r['rows'][0]['description'],
-                                    credits: r['rows'][0]['credits'],
-                                    prereqs: r['rows'][0]['prereqs']
-                                })).value();
-
-            courseMapNodes.push(courseMaps);
-
-            var collectedCourses = _.chain(courseMapNodes)
-                                    .flatten()
-                                    .pluck("name")
-                                    .uniq()
-                                    .value();
-
-            var prereqs = _.chain(courseMaps)
-                            .filter(c => c.prereqs)
-                            .pluck("prereqs")
-                            .flatten()
-                            .uniq()
-                            .difference(collectedCourses)
-                            .value();
-
-            var promises = _.chain(prereqs)
-                            .map(p => getCurrentCourse(p))
-                            .value();
-
-            console.log(collectedCourses);
-            console.log(prereqs);
-
-            getMorePrereqs(promises);
-        });
-    }
-
-    function getCurrentCourse(course) {
-        console.log("curr course: " + course);
-        const params = course.split(" ");
-        return client.execute(getCourseInfoQuery, params);
-    }
-
-    getMorePrereqs([getCurrentCourse(currCourse)]);
-}
-
 //recursively getting all relevant nodes
 var getAllPrereqs = function(currCourse, callback) {
     console.log("curr course: " + currCourse);
@@ -201,10 +144,6 @@ exports.getCourseInfo = function(course, callback) {
 };
 
 exports.getCourseMap = function(course, callback) {
-    getAllPrereqs2(course, callback);
-
-
-    return;
     var courseMapCallback = function() {
         if(foundCourses === findingCourses) {
             callback(courseMapNodes);
