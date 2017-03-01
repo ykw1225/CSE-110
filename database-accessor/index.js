@@ -12,6 +12,8 @@ const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
 const insertDepartmentQuery = "INSERT INTO departments (code, name, code_list) VALUES (?,?,?)";
 
+const insertDegreeQuery = "INSERT INTO degrees (department, number, title, description, requirements) VALUES (?,?,?,?,?)";
+
 const removeAllCoursesQuery = "TRUNCATE courses";
 //query that deletes row with specific department
 const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
@@ -251,9 +253,36 @@ exports.insertDepartments = function(departments, callback) {
 
 /*insert an array of majors*/
 exports.insertMajors = function(majors, callback) {
+    var major = [
+        "CS",
+        "25",
+        "CE",
+        "desc",
+        [
+            {
+                type: "yes",
+                courses: ["CSE 20", "CSE 21"],
+                courses_needed: 0,
+                credits_needed: 4
+            }
+        ]
+    ];
 
-    callback("can't insert yet");
-}
+    const queries = [];
+    for(var major of majors) {
+        queries.push({query: insertDegreeQuery, params: major});
+    }
+    client.batch(queries, {prepare:true}, function(err, result) {
+        callback("inserted");
+    });
+    /*
+    client.execute(insertDegreeQuery, major, {prepare:true}, function(err) {
+        if(err) console.log(err);
+        else console.log("worked");
+        callback("TRIED");
+    })*/
+    //callback("can't insert yet");
+};
 
 exports.removeAllCourses = function(callback) {
     client.execute(removeAllCoursesQuery, function(err) {
