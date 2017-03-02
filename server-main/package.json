@@ -34,7 +34,7 @@
     "cytoscape": "^2.7.15",
     "database-accessor": "../database-accessor",
     "express": "4.14.0",
-    "materializecss": "^1.0.11",
+    "materialize-css": "^0.98.0",
     "rxjs": "^5.2.0",
     "systemjs": "^0.20.5",
     "ts-helpers": "^1.1.2",
