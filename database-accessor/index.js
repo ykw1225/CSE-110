@@ -1,13 +1,14 @@
 var cassandra = require('cassandra-driver');
 var async = require('async');
 
-var client = new cassandra.Client({contactPoints: ['127.0.0.1'], keyspace: 'grad'});
+var client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'grad' });
 
 const NUM_BATCHES = 50;
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
 const getAllDepartmentsQuery = "SELECT name, code_list FROM departments";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
+const getAllCodeListInDepartment = "SELECT code_list FROM departments WHERE code = ?";
 
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
 const insertDepartmentQuery = "INSERT INTO departments (code, name, code_list) VALUES (?,?,?)";
@@ -19,7 +20,10 @@ const removeAllCoursesQuery = "TRUNCATE courses";
 const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
 
 //global variables for synchronization
-var courseMapNames = [], courseMapNodes = [], findingCourses = 0, foundCourses = 0;
+var courseMapNames = [],
+    courseMapNodes = [],
+    findingCourses = 0,
+    foundCourses = 0;
 /*
 introduce errorType.
 0 for no errors;
@@ -44,7 +48,7 @@ var getAllPrereqs = function(currCourse, callback) {
     const params = currCourse.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
         //handle errors
-        if(err) {
+        if (err) {
             errorType = 1;
             var errorNode = {
                 Code: 401,
@@ -52,8 +56,7 @@ var getAllPrereqs = function(currCourse, callback) {
                 Message: "Error getting course info\n"
             };
             courseMapNodes.push(errorNode);
-        }
-        else if(!result) {
+        } else if (!result) {
             errorType = 2;
             var errorNode = {
                 Code: 402,
@@ -61,8 +64,7 @@ var getAllPrereqs = function(currCourse, callback) {
                 Message: "Data not fetched\n"
             };
             courseMapNodes.push(errorNode);
-        }
-        else if(!result['rows'].length) {
+        } else if (!result['rows'].length) {
             errorType = 3;
             var errorNode = {
                 Code: 403,
@@ -70,25 +72,24 @@ var getAllPrereqs = function(currCourse, callback) {
                 Message: "No results found\n"
             };
             courseMapNodes.push(errorNode);
-        }
-        else {
+        } else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
 
             //checking if not already found node
-            if(courseMapNames.indexOf(name)<0) {
+            if (courseMapNames.indexOf(name) < 0) {
                 courseMapNames.push(name);
                 var courseNode = {
-                        name: name,
-                        title: result['rows'][0]['title'],
-                        description : result['rows'][0]['description'],
-                        credits : result['rows'][0]['credits'],
-                        prereqs : result['rows'][0]['prereqs']
+                    name: name,
+                    title: result['rows'][0]['title'],
+                    description: result['rows'][0]['description'],
+                    credits: result['rows'][0]['credits'],
+                    prereqs: result['rows'][0]['prereqs']
                 }
                 courseMapNodes.push(courseNode);
-                if(courseNode.prereqs) {
-                    for(var prereqGroup of courseNode.prereqs) {
-                        for(var prereq of prereqGroup) {
-                            if(courseMapNames.indexOf(prereq)<0){
+                if (courseNode.prereqs) {
+                    for (var prereqGroup of courseNode.prereqs) {
+                        for (var prereq of prereqGroup) {
+                            if (courseMapNames.indexOf(prereq) < 0) {
                                 findingCourses++;
                                 getAllPrereqs(prereq, callback);
                             }
@@ -105,7 +106,7 @@ var getAllPrereqs = function(currCourse, callback) {
 exports.getCourseInfo = function(course, callback) {
     const params = course.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
-        if(err) {
+        if (err) {
             errorType = 1;
             var errorNode = {
                 Code: 401,
@@ -113,8 +114,7 @@ exports.getCourseInfo = function(course, callback) {
                 Message: "Error getting course info\n"
             };
             callback(errorNode);
-        }
-        else if(!result) {
+        } else if (!result) {
             errorType = 2;
             var errorNode = {
                 Code: 402,
@@ -122,8 +122,7 @@ exports.getCourseInfo = function(course, callback) {
                 Message: "Data not fetched\n"
             };
             callback(errorNode);
-        }
-        else if(!result['rows'].length) {
+        } else if (!result['rows'].length) {
             errorType = 3;
             var errorNode = {
                 Code: 403,
@@ -131,19 +130,18 @@ exports.getCourseInfo = function(course, callback) {
                 Message: "No results found\n"
             };
             callback(errorNode);
-        }
-        else {
+        } else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
-            console.log("no error in querying "+name);
+            console.log("no error in querying " + name);
 
             var courseNode = {
                 Code: 200,
                 body: {
                     name: name,
                     title: result['rows'][0]['title'],
-                    description : result['rows'][0]['description'],
-                    credits : result['rows'][0]['credits'],
-                    prereqs : result['rows'][0]['prereqs']
+                    description: result['rows'][0]['description'],
+                    credits: result['rows'][0]['credits'],
+                    prereqs: result['rows'][0]['prereqs']
                 }
             }
             callback(courseNode);
@@ -153,7 +151,7 @@ exports.getCourseInfo = function(course, callback) {
 
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
-        if(foundCourses==findingCourses) {
+        if (foundCourses == findingCourses) {
             callback(courseMapNodes);
         }
     };
@@ -167,48 +165,118 @@ exports.getCourseMap = function(course, callback) {
 
 exports.getAllDepartments = function(callback) {
     client.execute(getAllDepartmentsQuery, function(err, result) {
-        if(err) console.log(err);
+        if (err) console.log(err);
         callback(result["rows"]);
     });
 };
 
 exports.getAllClassesInDepartment = function(department, callback) {
     console.log("getting " + department + " courses");
+    var finalResult = [];
     var params = [department];
-    client.execute(getAllClassesInDepartment, params, function(err, result) {
-        if(err) console.log(err);
-        //console.log(result);
-        callback(result['rows']);
+    console.log(params);
+    client.execute(getAllCodeListInDepartment, params, function(err, result) {
+        if (err) {
+            errorType = 1;
+            var errorNode = {
+                Code: 401,
+                name: params,
+                Message: "Error getting course info\n"
+            };
+            callback(errorNode);
+        } else if (!result) {
+            errorType = 2;
+            var errorNode = {
+                Code: 402,
+                name: params,
+                Message: "Data not fetched\n"
+            };
+            callback(errorNode);
+        } else if (!result['rows'].length) {
+            errorType = 3;
+            var errorNode = {
+                Code: 403,
+                name: params,
+                Message: "No results found\n"
+            };
+            callback(errorNode);
+        } else {
+            var codeList = result["rows"][0]["code_list"];
+            console.log("Codelist: " + codeList);
+            //async needed for client execution
+            async.each(codeList, function(code, executeCallback) {
+                var param = [code];
+                console.log("Code: " + param);
+                client.execute(getAllClassesInDepartment, param, function(err2, result2) {
+                    if (err2) {
+                        errorType = 1;
+                        var errorNode = {
+                            Code: 401,
+                            name: params,
+                            Message: "Error getting course info\n"
+                        };
+                        callback(errorNode);
+                    } else if (!result) {
+                        errorType = 2;
+                        var errorNode = {
+                            Code: 402,
+                            name: params,
+                            Message: "Data not fetched\n"
+                        };
+                        callback(errorNode);
+                    } else if (!result['rows'].length) {
+                        errorType = 3;
+                        var errorNode = {
+                            Code: 403,
+                            name: params,
+                            Message: "No results found\n"
+                        };
+                        callback(errorNode);
+                    } else {
+                        //console.log(result);
+                        console.log("result2: " + result2['rows']);
+                        finalResult.push(result2['rows']);
+                        //console.log("finalresult in client: " + finalResult);
+                        executeCallback();
+                    }
+                });
+            }, function(err) {
+
+                console.log("finalresult: " + finalResult);
+                callback(finalResult);
+            });
+        }
     });
+
 }
 
 exports.insertCourses = function(courses, callback) {
     var insertionCallback = function() {
         num_completed++;
-        if(num_completed==batches) callback("inserted");
+        if (num_completed == batches) callback("inserted");
     }
 
     //cassandra cannot accept too large of a batch of queries, so splitting the batches
 
-    var batches = Math.ceil(courses.length/NUM_BATCHES);
+    var batches = Math.ceil(courses.length / NUM_BATCHES);
     var num_completed = 0;
 
     console.log("inserting " + courses.length + " courses into database");
     const queries = [];
-    for(var i = 0; i < batches; i++) {
+    for (var i = 0; i < batches; i++) {
         queries.push([]);
     }
 
     var count = 0;
-    for(var course of courses) {
-        queries[Math.floor(count/NUM_BATCHES)].push({query: insertCourseQuery, params: course});
+    for (var course of courses) {
+        queries[Math.floor(count / NUM_BATCHES)].push({ query: insertCourseQuery, params: course });
         count++;
     }
 
-    if(queries.length) {
-        for(var batchQuery of queries) {
-            client.batch(batchQuery, {prepare:true}, function(err, result) {
-                if(err) console.log(err);
+    if (queries.length) {
+        for (var batchQuery of queries) {
+            client.batch(batchQuery, { prepare: true }, function(err, result) {
+                if (err) console.log(err);
                 insertionCallback();
             });
         }
@@ -220,29 +288,29 @@ exports.insertCourses = function(courses, callback) {
 exports.insertDepartments = function(departments, callback) {
     var insertionCallback = function() {
         num_completed++;
-        if(num_completed==batches) callback("inserted");
+        if (num_completed == batches) callback("inserted");
     }
 
     //cassandra cannot accept too large of a batch of queries, so splitting the batches
-    var batches = Math.ceil(departments.length/NUM_BATCHES);
+    var batches = Math.ceil(departments.length / NUM_BATCHES);
     var num_completed = 0;
 
     console.log("inserting " + departments.length + " departments into database");
     const queries = [];
-    for(var i = 0; i < batches; i++) {
+    for (var i = 0; i < batches; i++) {
         queries.push([]);
     }
 
     var count = 0;
-    for(var dep of departments) {
-        queries[Math.floor(count/NUM_BATCHES)].push({query: insertDepartmentQuery, params: dep});
+    for (var dep of departments) {
+        queries[Math.floor(count / NUM_BATCHES)].push({ query: insertDepartmentQuery, params: dep });
         count++;
     }
 
-    if(queries.length) {
-        for(var batchQuery of queries) {
-            client.batch(batchQuery, {prepare:true}, function(err, result) {
-                if(err) console.log(err);
+    if (queries.length) {
+        for (var batchQuery of queries) {
+            client.batch(batchQuery, { prepare: true }, function(err, result) {
+                if (err) console.log(err);
                 insertionCallback();
             });
         }
@@ -257,22 +325,19 @@ exports.insertMajors = function(majors, callback) {
         "CS",
         "25",
         "CE",
-        "desc",
-        [
-            {
-                type: "yes",
-                courses: ["CSE 20", "CSE 21"],
-                courses_needed: 0,
-                credits_needed: 4
-            }
-        ]
+        "desc", [{
+            type: "yes",
+            courses: ["CSE 20", "CSE 21"],
+            courses_needed: 0,
+            credits_needed: 4
+        }]
     ];
 
     const queries = [];
-    for(var major of majors) {
-        queries.push({query: insertDegreeQuery, params: major});
+    for (var major of majors) {
+        queries.push({ query: insertDegreeQuery, params: major });
     }
-    client.batch(queries, {prepare:true}, function(err, result) {
+    client.batch(queries, { prepare: true }, function(err, result) {
         callback("inserted");
     });
     /*
@@ -290,10 +355,10 @@ exports.removeAllCourses = function(callback) {
     })
 }
 
-exports.removeDepartmentCourses = function(department, callback){
+exports.removeDepartmentCourses = function(department, callback) {
     var param = [department];
     client.execute(deleteDepartmentFromCoursesQuery, param, function(err, result) {
-        if(err) console.log(err);
+        if (err) console.log(err);
         //console.log(result);
         callback();
     });
