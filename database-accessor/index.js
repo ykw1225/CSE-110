@@ -235,7 +235,7 @@ exports.getAllClassesInDepartment = function(department, callback) {
                     } else {
                         //console.log(result);
                         console.log("result2: " + result2['rows']);
-                        finalResult.push(result2['rows']);
+                        finalResult = finalResult.concat(result2['rows']);
                         //console.log("finalresult in client: " + finalResult);
                         executeCallback();
                     }
