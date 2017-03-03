@@ -6,7 +6,7 @@ var client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'gra
 const NUM_BATCHES = 50;
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
-const getAllDepartmentsQuery = "SELECT name, code_list FROM departments";
+const getAllDepartmentsQuery = "SELECT code, name FROM departments";
 const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
 const getAllCodeListInDepartment = "SELECT code_list FROM departments WHERE code = ?";
 
@@ -174,7 +174,7 @@ exports.getAllClassesInDepartment = function(department, callback) {
     console.log("getting " + department + " courses");
     var finalResult = [];
     var params = [department];
-    console.log(params);
+    console.log("params" + params);
     client.execute(getAllCodeListInDepartment, params, function(err, result) {
         if (err) {
             errorType = 1;
