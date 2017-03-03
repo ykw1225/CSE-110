@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/core-js": "^0.9.35",
     "@types/jquery": "^2.0.40",
+    "@types/materialize-css": "^0.98.0",
     "@types/systemjs": "^0.20.0",
     "@types/underscore": "^1.7.36",
     "gulp": "^3.9.1",
