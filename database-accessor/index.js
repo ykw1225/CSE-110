@@ -174,7 +174,6 @@ exports.getAllClassesInDepartment = function(department, callback) {
     console.log("getting " + department + " courses");
     var finalResult = [];
     var params = [department];
-    console.log("params" + params);
     client.execute(getAllCodeListInDepartment, params, function(err, result) {
         if (err) {
             errorType = 1;
@@ -202,11 +201,9 @@ exports.getAllClassesInDepartment = function(department, callback) {
             callback(errorNode);
         } else {
             var codeList = result["rows"][0]["code_list"];
-            console.log("Codelist: " + codeList);
             //async needed for client execution
             async.each(codeList, function(code, executeCallback) {
                 var param = [code];
-                console.log("Code: " + param);
                 client.execute(getAllClassesInDepartment, param, function(err2, result2) {
                     if (err2) {
                         errorType = 1;
@@ -234,15 +231,12 @@ exports.getAllClassesInDepartment = function(department, callback) {
                         callback(errorNode);
                     } else {
                         //console.log(result);
-                        console.log("result2: " + result2['rows']);
                         finalResult = finalResult.concat(result2['rows']);
                         //console.log("finalresult in client: " + finalResult);
                         executeCallback();
                     }
                 });
             }, function(err) {
-
-                console.log("finalresult: " + finalResult);
                 callback(finalResult);
             });
         }
