@@ -32,7 +32,7 @@ exports.getMajors = function(callback, request, cheerio) {
             p = p.next();
             text += "\n\n" + p.text();
         }
-        major[3] = text;    //set descritpion
+        major[3] = text;    //set description
 
         // skips lower div title & defn & goes to the list of requirements
         var ol = p.next().next().next();
@@ -50,7 +50,7 @@ exports.getMajors = function(callback, request, cheerio) {
         var req1s = req1text;
         var currCourse = [];
 
-        // changes emptyReq to a json string object & parses it
+        // changes emptyReq to a json string object & parses it - to make a deep copy and not assign by reference
         var currReq = JSON.parse(JSON.stringify(emptyReq));
         //9 courses in this req
         for(var i=0;i<9;i++){
