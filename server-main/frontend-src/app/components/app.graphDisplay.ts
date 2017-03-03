@@ -18,7 +18,6 @@ export class graphDisplayComponent {
   }
 
   public ngOnInit() {
-
     this._cy = cytoscape({
       container: document.getElementById('cy'),
       style: [
@@ -31,12 +30,13 @@ export class graphDisplayComponent {
           }
         }],
       layout: {
-        name: 'grid'
+        name: 'breadthfirst'
       }
     });
   }
 
   private async _courseChangedAsync(payload: Course): Promise<void> {
+    let rootName = payload.department + " " +  payload.number;
     let courseMap: CourseMap[] =
       _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
         .filter((c: Object) => !c.hasOwnProperty('Code'))
@@ -70,6 +70,9 @@ export class graphDisplayComponent {
 
     this._cy.remove(this._cy.elements());
     this._cy.add(nodes.concat(edges));
-    this._cy.layout({ name: 'grid' });
+    this._cy.layout({
+      name: 'breadthfirst',
+      roots: [rootName]
+    });
   }
 }
