@@ -21,15 +21,20 @@ exports.getMajors = function(callback, request, cheerio) {
 
         var csheader = $(".program-overview-subhead-2").first();
 
-        //description
+        //Grabs Program Header
         var p = csheader.next();
+
+        // Grabs Program description
         var text = p.text();
+
+        // skips 2 paragraphs to get to lower div requrements
         for(var i=0;i<2;i++) {
             p = p.next();
             text += "\n\n" + p.text();
         }
         major[3] = text;    //set descritpion
 
+        // skips lower div title & defn & goes to the list of requirements
         var ol = p.next().next().next();
 
         //lower div requirements
@@ -37,10 +42,15 @@ exports.getMajors = function(callback, request, cheerio) {
 
         //REQ 1
         var req1 = olchildren.first();
+
+        // takes the whole requirements text
         var req1text = req1.text();
 
+        // parses the requirements
         var req1s = req1text;
         var currCourse = [];
+
+        // changes emptyReq to a json string object & parses it
         var currReq = JSON.parse(JSON.stringify(emptyReq));
         //9 courses in this req
         for(var i=0;i<9;i++){
