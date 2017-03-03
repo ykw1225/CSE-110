@@ -35,7 +35,10 @@ export class CourseService {
 
     public getCoursesAsync(department: string): Promise<Course[]> {
         return this.http.get(`/api/${department}/course`)
-            .map(response => response.json() as Course[])
+            .map(response => response.json() as Course[][])
+            .map(c => _.chain(c)
+                        .flatten()
+                        .value())
             .map(data => _.sortBy(data, e => parseInt(e.number.match(/[0-9]+/)[0])))
             .toPromise();
     }
