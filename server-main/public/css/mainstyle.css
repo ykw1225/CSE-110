@@ -3,11 +3,6 @@ html, body {
   height: 100%;
 }
 
-.graph{
-  border: 2px solid black;
-  height: 500px;
-}
-
 .sidebar{
   padding-bottom: 20px;
 }
@@ -43,6 +38,10 @@ footer{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.graph{
+  height: 500px;
 }
 
  /*

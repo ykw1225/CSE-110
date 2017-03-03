@@ -16,7 +16,7 @@ export class graphDisplayComponent {
     pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChanged(p));
   }
 
-  public _old() {
+  public ngOnInit() {
     var cy = cytoscape({
           container: document.getElementById('cy'),
           elements: [
