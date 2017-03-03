@@ -15,7 +15,7 @@ exports.getDepartments = function(callback, request) {
                 departments.push([dep.code, dep.name, [dep.code, "NANO"]]);
             } else if(dep.code == "BIOL") {
                 departments.push([dep.code, dep.name, [dep.code, "BILD", "BIBC", "BICD", "BIEB", "BIMM", "BIPN", "BISP", "BGGN"]]);
-            } else {
+            } else if(dep.code != "ANTH"){
                 departments.push([dep.code, dep.name, [dep.code]]);
             }
         }
