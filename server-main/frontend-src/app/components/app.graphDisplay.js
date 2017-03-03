@@ -65,6 +65,14 @@ var graphDisplayComponent = (function () {
                         'background-color': 'red',
                         label: 'data(id)'
                     }
+                },
+                {
+                    selector: '.multiNode',
+                    style: {
+                        'background-color': 'black',
+                        'border-width': 3,
+                        'border-color': '#000',
+                    }
                 }
             ],
             layout: {
@@ -74,7 +82,7 @@ var graphDisplayComponent = (function () {
     };
     graphDisplayComponent.prototype._courseChangedAsync = function (payload) {
         return __awaiter(this, void 0, void 0, function () {
-            var rootName, courseMap, _a, _b, _c, nodes, edges;
+            var rootName, courseMap, _a, _b, _c, nodes, _i, nodes_1, node, edges;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -88,10 +96,14 @@ var graphDisplayComponent = (function () {
                         nodes = _.chain(courseMap)
                             .map(function (c) { return ({
                             data: {
-                                id: c.name
-                            }
+                                id: c.name,
+                            },
                         }); })
                             .value();
+                        for (_i = 0, nodes_1 = nodes; _i < nodes_1.length; _i++) {
+                            node = nodes_1[_i];
+                            node.addClass('multiNode');
+                        }
                         edges = _.chain(courseMap)
                             .filter(function (c) { return typeof c.prereqs !== 'undefined'; })
                             .map(function (c) { return (_.chain(c.prereqs)

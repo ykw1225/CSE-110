@@ -28,7 +28,16 @@ export class graphDisplayComponent {
             'background-color': 'red',
             label: 'data(id)'
           }
-        }],
+        },
+        {
+          selector: '.multiNode',
+          style: {
+            'background-color': 'black',
+            'border-width': 3,
+            'border-color': '#000',
+          }
+        }
+      ],
       layout: {
         name: 'breadthfirst'
       }
@@ -45,10 +54,14 @@ export class graphDisplayComponent {
     let nodes = _.chain(courseMap)
       .map(c => ({
         data: {
-          id: c.name
-        }
+          id: c.name,
+        },
       }))
       .value();
+
+    for(let node of nodes) {
+      node.addClass('multiNode');
+    }
 
     let edges = _.chain(courseMap)
       .filter(c => typeof c.prereqs !== 'undefined')
