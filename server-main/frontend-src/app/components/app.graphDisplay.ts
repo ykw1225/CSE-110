@@ -56,12 +56,9 @@ export class graphDisplayComponent {
         data: {
           id: c.name,
         },
+        classes: 'multiNode'
       }))
       .value();
-
-    for(let node of nodes) {
-      node.addClass('multiNode');
-    }
 
     let edges = _.chain(courseMap)
       .filter(c => typeof c.prereqs !== 'undefined')

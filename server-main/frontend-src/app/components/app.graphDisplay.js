@@ -82,7 +82,7 @@ var graphDisplayComponent = (function () {
     };
     graphDisplayComponent.prototype._courseChangedAsync = function (payload) {
         return __awaiter(this, void 0, void 0, function () {
-            var rootName, courseMap, _a, _b, _c, nodes, _i, nodes_1, node, edges;
+            var rootName, courseMap, _a, _b, _c, nodes, edges;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -98,12 +98,9 @@ var graphDisplayComponent = (function () {
                             data: {
                                 id: c.name,
                             },
+                            classes: 'multiNode'
                         }); })
                             .value();
-                        for (_i = 0, nodes_1 = nodes; _i < nodes_1.length; _i++) {
-                            node = nodes_1[_i];
-                            node.addClass('multiNode');
-                        }
                         edges = _.chain(courseMap)
                             .filter(function (c) { return typeof c.prereqs !== 'undefined'; })
                             .map(function (c) { return (_.chain(c.prereqs)
