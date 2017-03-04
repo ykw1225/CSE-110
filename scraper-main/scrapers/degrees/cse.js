@@ -336,9 +336,11 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses) {
         req2 = req1.next();
         currReq.courses = req2.text().match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/g);
         currReq.courses_needed = currReq.courses.length;
+        console.log(currReq);
         requirements.push(currReq);
 
         //ELECTIVES
+        currReq = JSON.parse(JSON.stringify(emptyReq));
         currReq.type = "Electives";
         currReq.courses = cseUDCourses;
         currReq.courses_needed = 7;
