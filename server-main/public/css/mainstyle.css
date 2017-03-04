@@ -239,3 +239,8 @@ footer{
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
  }
+
+.courseCard {
+  width: 300px;
+  height: 200 px;
+}
