@@ -30,7 +30,8 @@ import { ToolbarComponent } from '../components/app.toolbar';
         graphDisplayComponent,
         NavComponent,
         PageFooterComponent,
-        ToolbarComponent
+        ToolbarComponent,
+        courseCardComponent
     ],
     bootstrap: [
         AppComponent
