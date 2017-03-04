@@ -16,6 +16,7 @@ import { graphDisplayComponent } from '../components/app.graphDisplay';
 import { NavComponent } from '../components/app.nav';
 import { PageFooterComponent } from '../components/app.pageFooter';
 import { ToolbarComponent } from '../components/app.toolbar';
+import { courseCardComponent } from '../components/app.courseCard';
 
 @NgModule({
     imports: [
