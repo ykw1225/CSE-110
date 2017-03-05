@@ -1,9 +1,29 @@
 # GRAD
 
+## Team
+* Madel Asistio - Software Development Lead
+* Robert Chen - Quality Assurance Lead
+* Chris Crutchfield - Project Manager
+* Raghav Kansal - Database Specialist
+* Vivian Pham - Business Analyst
+* Gina Ratto - Senior System Analyst
+* Summer Wang - User Interface Specialist
+* Kit Wong - Algorithm Specialist
+* Jon Lee - Software Architect
+
 ## Requirements
-### Server Requirements
+
 ### Browser Requirements
-* Latest Chrome Browser on Desktop
+* Chrome 56 (Not Mobile)
+
+## Manual Setup Instructions
+### Server Requirements
+* Ubuntu 16.04.2 LTS
+
+## Automated Setup Instructions
+* Windows 10 1607
+* Ubuntu 16.04.2 LTS
+* macOS Sierra 10.12
 
 ## Contact Information
 * **Chris Crutchfield** - Project Manager and Technical Support
