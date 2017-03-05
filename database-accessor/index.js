@@ -18,6 +18,10 @@ const insertDegreeQuery = "INSERT INTO degrees (department, number, title, descr
 const removeAllCoursesQuery = "TRUNCATE courses";
 //query that deletes row with specific department
 const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
+//query that finds all degrees with department name, in degrees table
+const getAllDegreesInDeparmtnet = "SELECT number, title FROM degrees where department = ?";
+//query that return specific degree with given number 
+const getDegreeFromCodeName = "SELECT * FROM degrees where department = ? and number = ?";
 
 //global variables for synchronization
 var courseMapNames = [],
@@ -342,6 +346,79 @@ exports.insertMajors = function(majors, callback) {
     })*/
     //callback("can't insert yet");
 };
+
+/*
+ * get all the degrees in given department
+ */
+exports.getDegreesInDepartment = function(department, callback) {
+    var params = [department];
+    client.execute(getAllDegreesInDeparmtnet, params, function(err, result) {
+        if (err) {
+            errorType = 1;
+            var errorNode = {
+                Code: 401,
+                name: params,
+                Message: "Error getting course info\n"
+            };
+            callback(errorNode);
+        } else if (!result) {
+            errorType = 2;
+            var errorNode = {
+                Code: 402,
+                name: params,
+                Message: "Data not fetched\n"
+            };
+            callback(errorNode);
+        } else if (!result['rows'].length) {
+            errorType = 3;
+            var errorNode = {
+                Code: 403,
+                name: params,
+                Message: "No results found\n"
+            };
+            callback(errorNode);
+        } else {
+            var degrees = result["rows"];
+            callback(degrees);
+        }
+    });
+}
+
+/*
+ * get specific degree object with given degree code
+ */
+exports.getDegreeFromCode = function(department, code, callback) {
+    var params = [department, code];
+    client.execute(getDegreeFromCodeName, params, function(err, result) {
+        if (err) {
+            errorType = 1;
+            var errorNode = {
+                Code: 401,
+                name: params,
+                Message: "Error getting course info\n"
+            };
+            callback(errorNode);
+        } else if (!result) {
+            errorType = 2;
+            var errorNode = {
+                Code: 402,
+                name: params,
+                Message: "Data not fetched\n"
+            };
+            callback(errorNode);
+        } else if (!result['rows'].length) {
+            errorType = 3;
+            var errorNode = {
+                Code: 403,
+                name: params,
+                Message: "No results found\n"
+            };
+            callback(errorNode);
+        } else {
+            callback(result["rows"][0]);
+        }
+    });
+}
 
 exports.removeAllCourses = function(callback) {
     client.execute(removeAllCoursesQuery, function(err) {

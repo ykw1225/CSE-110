@@ -65,6 +65,14 @@ var graphDisplayComponent = (function () {
                         'background-color': 'red',
                         label: 'data(id)'
                     }
+                },
+                {
+                    selector: '.multiNode',
+                    style: {
+                        'background-color': 'black',
+                        'border-width': 3,
+                        'border-color': '#000',
+                    }
                 }
             ],
             layout: {
@@ -88,8 +96,9 @@ var graphDisplayComponent = (function () {
                         nodes = _.chain(courseMap)
                             .map(function (c) { return ({
                             data: {
-                                id: c.name
-                            }
+                                id: c.name,
+                            },
+                            classes: 'multiNode'
                         }); })
                             .value();
                         edges = _.chain(courseMap)
