@@ -19,32 +19,32 @@ export class graphDisplayComponent {
 
     public ngOnInit() {
         this._cy = cytoscape({
-          container: document.getElementById('cy'),
-          style: [
-            {
-              selector: 'node',
-              style: {
-                shape: 'circle',
-                'background-color': 'red',
-                label: 'data(name)'
-              }
-            },
-            {
-              selector: '.multiNode',
-              style: {
-                'background-color': 'black',
-                'border-width': 3,
-                'border-color': '#000',
-              }
+            container: document.getElementById('cy'),
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        shape: 'circle',
+                        'background-color': 'red',
+                        label: 'data(name)'
+                    }
+                },
+                {
+                    selector: '.multiNode',
+                    style: {
+                        'background-color': 'black',
+                        'border-width': 3,
+                        'border-color': '#000',
+                    }
+                }
+            ],
+            layout: {
+                name: 'breadthfirst'
             }
-          ],
-          layout: {
-            name: 'breadthfirst'
-          }
         });
-      }
+    }
 
-      private async _courseChangedAsync(payload: Course): Promise<void> {
+    private async _courseChangedAsync(payload: Course): Promise<void> {
         let rootName = payload.department + " " +  payload.number;
         let courseMap: CourseMap[] =
           _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
