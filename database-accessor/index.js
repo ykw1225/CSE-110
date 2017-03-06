@@ -20,14 +20,15 @@ const removeAllCoursesQuery = "TRUNCATE courses";
 const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
 //query that finds all degrees with department name, in degrees table
 const getAllDegreesInDeparmtnet = "SELECT number, title FROM degrees where department = ?";
-//query that return specific degree with given number 
+//query that return specific degree with given number
 const getDegreeFromCodeName = "SELECT * FROM degrees where department = ? and number = ?";
 
 //global variables for synchronization
 var courseMapNames = [],
     courseMapNodes = [],
     findingCourses = 0,
-    foundCourses = 0;
+    foundCourses = 0,
+    errorCourses = [];
 /*
 introduce errorType.
 0 for no errors;
@@ -59,6 +60,7 @@ var getAllPrereqs = function(currCourse, callback) {
                 name: params,
                 Message: "Error getting course info\n"
             };
+            errorCourses.push(currCourse);
             courseMapNodes.push(errorNode);
         } else if (!result) {
             errorType = 2;
@@ -67,6 +69,7 @@ var getAllPrereqs = function(currCourse, callback) {
                 name: params,
                 Message: "Data not fetched\n"
             };
+            errorCourses.push(currCourse);
             courseMapNodes.push(errorNode);
         } else if (!result['rows'].length) {
             errorType = 3;
@@ -75,6 +78,7 @@ var getAllPrereqs = function(currCourse, callback) {
                 name: params,
                 Message: "No results found\n"
             };
+            errorCourses.push(currCourse);
             courseMapNodes.push(errorNode);
         } else {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
@@ -114,7 +118,7 @@ exports.getCourseInfo = function(course, callback) {
             errorType = 1;
             var errorNode = {
                 Code: 401,
-                name: params,
+                name: course,
                 Message: "Error getting course info\n"
             };
             callback(errorNode);
@@ -122,7 +126,7 @@ exports.getCourseInfo = function(course, callback) {
             errorType = 2;
             var errorNode = {
                 Code: 402,
-                name: params,
+                name: course,
                 Message: "Data not fetched\n"
             };
             callback(errorNode);
@@ -130,7 +134,7 @@ exports.getCourseInfo = function(course, callback) {
             errorType = 3;
             var errorNode = {
                 Code: 403,
-                name: params,
+                name: course,
                 Message: "No results found\n"
             };
             callback(errorNode);
@@ -156,6 +160,26 @@ exports.getCourseInfo = function(course, callback) {
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
         if (foundCourses == findingCourses) {
+            console.log("error courses: ");
+            console.log(errorCourses);
+            for(var course of courseMapNodes) {
+                for(var i in course.prereqs) {
+                    var toRemove = [];
+                    for(var j in course.prereqs[i]) {
+                        if(errorCourses.indexOf(course.prereqs[i][j])>-1) {
+                            toRemove.push(j);
+                        }
+                    }
+                    if(course.prereqs[i].length == toRemove.length) {
+                        course.prereqs.splice(i, 1);
+                    } else {
+                        while(toRemove.length > 0) {
+                            var j = toRemove.pop();
+                            course.prereqs[i].splice(j, 1);
+                        }
+                    }
+                }
+            }
             callback(courseMapNodes);
         }
     };
@@ -164,6 +188,7 @@ exports.getCourseMap = function(course, callback) {
     courseMapNodes = [];
     foundCourses = 0
     findingCourses = 1;
+    errorCourses = [];
     getAllPrereqs(course, courseMapCallback);
 };
 

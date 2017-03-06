@@ -43,6 +43,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var course_service_1 = require("../services/course.service");
 var pubsubevent_service_1 = require("../services/pubsubevent.service");
@@ -63,7 +64,7 @@ var graphDisplayComponent = (function () {
                     style: {
                         shape: 'circle',
                         'background-color': 'red',
-                        label: 'data(id)'
+                        label: 'data(name)'
                     }
                 },
                 {
@@ -82,7 +83,7 @@ var graphDisplayComponent = (function () {
     };
     graphDisplayComponent.prototype._courseChangedAsync = function (payload) {
         return __awaiter(this, void 0, void 0, function () {
-            var rootName, courseMap, _a, _b, _c, nodes, edges;
+            var rootName, courseMap, _a, _b, _c, nodes, edges, nodeQueue, _loop_1;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -93,29 +94,60 @@ var graphDisplayComponent = (function () {
                         courseMap = _b.apply(_a, [_d.sent()])
                             .filter(function (c) { return !c.hasOwnProperty('Code'); })
                             .value();
-                        nodes = _.chain(courseMap)
-                            .map(function (c) { return ({
+                        this._fullCourseMap = courseMap;
+                        nodes = [];
+                        edges = [];
+                        nodeQueue = [];
+                        nodeQueue.push({ id: courseMap[0].name, name: courseMap[0].name });
+                        nodes.push({
                             data: {
-                                id: c.name,
-                            },
-                            classes: 'multiNode'
-                        }); })
-                            .value();
-                        edges = _.chain(courseMap)
-                            .filter(function (c) { return typeof c.prereqs !== 'undefined'; })
-                            .map(function (c) { return (_.chain(c.prereqs)
-                            .flatten()
-                            .map(function (p) { return ({ course: c.name, prereq: p }); })
-                            .value()); })
-                            .flatten()
-                            .map(function (c) { return ({
-                            data: {
-                                id: c.course + c.prereq,
-                                source: c.course,
-                                target: c.prereq
+                                id: courseMap[0].name,
+                                name: courseMap[0].name
                             }
-                        }); })
-                            .value();
+                        });
+                        console.log("no problem");
+                        _loop_1 = function () {
+                            console.log("q ing");
+                            var nodeObj = nodeQueue.shift();
+                            var node = _.find(courseMap, function (c) { return c.name == nodeObj.name; });
+                            if (node.prereqs) {
+                                for (var _i = 0, _a = node.prereqs; _i < _a.length; _i++) {
+                                    var preq = _a[_i];
+                                    console.log("in preq");
+                                    var preqId = preq.join('');
+                                    edges.push({
+                                        data: {
+                                            id: nodeObj.id + preqId,
+                                            source: nodeObj.id,
+                                            target: preqId
+                                        }
+                                    });
+                                    if (preq.length > 1) {
+                                        nodes.push({
+                                            data: {
+                                                id: preqId,
+                                                name: preq[0]
+                                            },
+                                            classes: "multiNode",
+                                            courses: preq
+                                        });
+                                        nodeQueue.push({ id: preqId, name: preq[0] });
+                                    }
+                                    else {
+                                        nodes.push({
+                                            data: {
+                                                id: preqId,
+                                                name: preqId
+                                            }
+                                        });
+                                        nodeQueue.push({ id: preqId, name: preq[0] });
+                                    }
+                                }
+                            }
+                        };
+                        while (nodeQueue.length > 0) {
+                            _loop_1();
+                        }
                         this._cy.remove(this._cy.elements());
                         this._cy.add(nodes.concat(edges));
                         this._cy.layout({

@@ -12,7 +12,7 @@ import * as _ from 'underscore';
 })
 export class graphDisplayComponent {
   private _cy: Cy.Instance;
-
+  private _fullCourseMap: CourseMap[];
   constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
     pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
   }
@@ -26,7 +26,7 @@ export class graphDisplayComponent {
           style: {
             shape: 'circle',
             'background-color': 'red',
-            label: 'data(id)'
+            label: 'data(name)'
           }
         },
         {
@@ -51,32 +51,64 @@ export class graphDisplayComponent {
         .filter((c: Object) => !c.hasOwnProperty('Code'))
         .value() as CourseMap[];
 
-    let nodes = _.chain(courseMap)
-      .map(c => ({
-        data: {
-          id: c.name,
-        },
-        classes: 'multiNode'
-      }))
-      .value();
+    this._fullCourseMap = courseMap;
 
-    let edges = _.chain(courseMap)
-      .filter(c => typeof c.prereqs !== 'undefined')
-      .map(c => (
-        _.chain(c.prereqs)
-          .flatten()
-          .map(p => ({ course: c.name, prereq: p }))
-          .value()
-      ))
-      .flatten()
-      .map(c => ({
-        data: {
-          id: c.course + c.prereq,
-          source: c.course,
-          target: c.prereq
+    let nodes = [];
+    let edges = [];
+
+    let nodeQueue = [];
+    nodeQueue.push({id: courseMap[0].name, name: courseMap[0].name});
+    nodes.push({
+      data: {
+        id: courseMap[0].name,
+        name: courseMap[0].name
+      }
+    });
+
+    console.log("no problem");
+
+    while(nodeQueue.length > 0) {
+      console.log("q ing");
+
+      let nodeObj = nodeQueue.shift();
+      let node = _.find(courseMap, c => c.name == nodeObj.name);
+
+      if(node.prereqs) {
+        for(let preq of node.prereqs) {
+          console.log("in preq");
+          let preqId = preq.join('');
+          edges.push({
+            data: {
+              id: nodeObj.id + preqId,
+              source: nodeObj.id,
+              target: preqId
+            }
+          });
+
+          if(preq.length > 1) {
+            //multi node
+            nodes.push({
+              data: {
+                id: preqId,
+                name: preq[0]
+              },
+              classes: "multiNode",
+              courses: preq
+            });
+            nodeQueue.push({id: preqId, name: preq[0]});
+          } else {
+            //single node
+            nodes.push({
+              data: {
+                id: preqId,
+                name: preqId
+              }
+            });
+            nodeQueue.push({id: preqId, name: preq[0]});
+          }
         }
-      }))
-      .value();
+      }
+    }
 
     this._cy.remove(this._cy.elements());
     this._cy.add(nodes.concat(edges));
