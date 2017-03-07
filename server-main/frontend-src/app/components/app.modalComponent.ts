@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 
 import * as $ from 'jquery';
 import 'materialize-css';
@@ -8,6 +8,8 @@ import 'materialize-css';
     templateUrl: '/templates/modal.html'
 })
 export class ModalComponent {
+    @Input() public title: string;
+
     constructor (private _modalElement: ElementRef) {
     }
 
