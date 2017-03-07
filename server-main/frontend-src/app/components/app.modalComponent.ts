@@ -8,6 +8,7 @@ import 'materialize-css';
     templateUrl: '/templates/modal.html'
 })
 export class ModalComponent {
+    @Input("modal-id") public modalID: string;
     @Input() public title: string;
 
     constructor (private _modalElement: ElementRef) {
@@ -15,7 +16,11 @@ export class ModalComponent {
 
     public ngOnInit() {
         $(document).ready(() => {
-            $(this._modalElement.nativeElement).children().modal().modal('open');
+            // Get the angular element.
+            // It will be the parent to the element we want.
+            $(this._modalElement.nativeElement)
+                .children()
+                .modal();
         });
     }
 }
