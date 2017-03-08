@@ -13,11 +13,13 @@ import * as _ from 'underscore';
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
     private _fullCourseMap: CourseMap[];
+    private _rootNames: string[];
     /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
         subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
     }*/
     constructor(private _pubsubEventService: PubSubEventService, private courseService: CourseService) {
         this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
+        this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this.updateMultiNode(p));
     }
 
     public ngOnInit() {
@@ -55,6 +57,19 @@ export class graphDisplayComponent {
                 .value() as CourseMap[];
 
         this._fullCourseMap = courseMap;
+        //this._rootNames.push(rootName);
+        this._rootNames = [rootName];
+
+/* THIS BREAKS ANGULAR
+        let data = {
+            id: courseMap[0].name,
+            name: courseMap[0].name
+        };
+        let nodes = [];
+        nodes.push({
+            data: data
+        });
+        this.createTree(data, nodes);*/
 
         let nodes = [];
         let edges = [];
@@ -67,7 +82,6 @@ export class graphDisplayComponent {
                 name: courseMap[0].name
             }
         });
-
 
         while (nodeQueue.length > 0) {
 
@@ -114,12 +128,12 @@ export class graphDisplayComponent {
         this._cy.add(nodes.concat(edges));
         this._cy.layout({
             name: 'breadthfirst',
-            roots: [rootName]
+            roots: this._rootNames
         });
 
         this._cy.on('tap', event =>  {
             if (event.cyTarget.hasClass('multiNode')) {
-                this._pubsubEventService.publish(Events.MultiNodeEvent, 
+                this._pubsubEventService.publish(Events.MultiNodeEvent,
                 {
                     id: event.cyTarget.id(),
                     courses: event.cyTarget.data('courses')
@@ -127,7 +141,107 @@ export class graphDisplayComponent {
                 console.log('tap ' + event.cyTarget.id());
                 console.log(event.cyTarget.data('courses'));
                 console.log(event.cyTarget);
+
+                //just for testing
+                this.updateMultiNode({
+                    id: event.cyTarget.id(),
+                    course: event.cyTarget.data('courses')[1]
+                });
             }
         });
+    }
+
+    private createTree(root, nodes) {
+        let edges = [];
+
+        let nodeQueue = [];
+        nodeQueue.push({ id: root.id, name: root.course });
+
+        console.log(this._fullCourseMap);
+
+        while (nodeQueue.length > 0) {
+
+            let nodeObj = nodeQueue.shift();
+            let node = _.find(this._fullCourseMap, c => c.name == nodeObj.name);
+
+            if (node.prereqs) {
+                for (let preq of node.prereqs) {
+                    let preqId = preq.join('');
+                    edges.push({
+                        data: {
+                            id: nodeObj.id + preqId,
+                            source: nodeObj.id,
+                            target: preqId
+                        }
+                    });
+
+                    if (preq.length > 1) {
+                        //multi node
+                        nodes.push({
+                            data: {
+                                id: preqId,
+                                name: preq[0],
+                                courses: preq
+                            },
+                            classes: "multiNode",
+                        });
+                        nodeQueue.push({ id: preqId, name: preq[0] });
+                    } else {
+                        //single node
+                        nodes.push({
+                            data: {
+                                id: preqId,
+                                name: preqId
+                            }
+                        });
+                        nodeQueue.push({ id: preqId, name: preq[0] });
+                    }
+                }
+            }
+        }
+
+        this._cy.add(nodes.concat(edges));
+        this._cy.layout({
+            name: 'breadthfirst',
+            roots: this._rootNames
+        });
+    }
+
+    private updateMultiNode(payload) {
+        console.log("updating: ");
+        console.log(this._cy.$('node[id = "' + payload.id + '"]'));
+        var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
+        this.removeTree(rootNode);
+        rootNode.data("name", payload.course);
+        this.createTree(payload, []);
+    }
+
+    private removeTree(rootNode) {
+        var nodes = rootNode;
+        let allNodes = this._cy.$('node');
+
+        var nodesToRemove = [];
+        while(!nodes.empty()){
+            let connectedEdgesToRemove = nodes.connectedEdges(function(){
+              return !this.target().anySame(nodes);
+            });
+
+            let connectedEdgesToFilter = nodes.connectedEdges().difference(nodes.connectedEdges());
+
+            connectedEdgesToRemove.targets().forEach(function(target) {
+                let cetf = target.connectedEdges(function() {
+                    return this.sources().anySame(allNodes.difference(nodes).difference(target));
+                });
+                connectedEdgesToFilter = connectedEdgesToFilter.union(cetf);
+            });
+
+            let connectedNodesToRemove = connectedEdgesToRemove.targets().difference(connectedEdgesToFilter.targets());
+            connectedEdgesToRemove.remove();
+
+            Array.prototype.push.apply(nodesToRemove, connectedNodesToRemove);
+
+            nodes = connectedNodesToRemove;
+        }
+        nodesToRemove.forEach(n => n.remove());
     }
 }

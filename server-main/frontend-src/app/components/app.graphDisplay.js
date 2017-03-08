@@ -50,10 +50,12 @@ var pubsubevent_service_1 = require("../services/pubsubevent.service");
 var cytoscape = require("cytoscape");
 var _ = require("underscore");
 var graphDisplayComponent = (function () {
-    function graphDisplayComponent(pubsubEventService, courseService) {
+    function graphDisplayComponent(_pubsubEventService, courseService) {
         var _this = this;
+        this._pubsubEventService = _pubsubEventService;
         this.courseService = courseService;
-        pubsubEventService.subscribe(pubsubevent_service_1.Events.CourseChangedEvent, function (p) { return _this._courseChangedAsync(p); });
+        this._pubsubEventService.subscribe(pubsubevent_service_1.Events.CourseChangedEvent, function (p) { return _this._courseChangedAsync(p); });
+        this._pubsubEventService.subscribe(pubsubevent_service_1.Events.MultiNodeSelectedEvent, function (p) { return _this.updateMultiNode(p); });
     }
     graphDisplayComponent.prototype.ngOnInit = function () {
         this._cy = cytoscape({
@@ -83,6 +85,7 @@ var graphDisplayComponent = (function () {
     };
     graphDisplayComponent.prototype._courseChangedAsync = function (payload) {
         return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
             var rootName, courseMap, _a, _b, _c, nodes, edges, nodeQueue, _loop_1;
             return __generator(this, function (_d) {
                 switch (_d.label) {
@@ -95,6 +98,7 @@ var graphDisplayComponent = (function () {
                             .filter(function (c) { return !c.hasOwnProperty('Code'); })
                             .value();
                         this._fullCourseMap = courseMap;
+                        this._rootNames = [rootName];
                         nodes = [];
                         edges = [];
                         nodeQueue = [];
@@ -105,15 +109,12 @@ var graphDisplayComponent = (function () {
                                 name: courseMap[0].name
                             }
                         });
-                        console.log("no problem");
                         _loop_1 = function () {
-                            console.log("q ing");
                             var nodeObj = nodeQueue.shift();
                             var node = _.find(courseMap, function (c) { return c.name == nodeObj.name; });
                             if (node.prereqs) {
                                 for (var _i = 0, _a = node.prereqs; _i < _a.length; _i++) {
                                     var preq = _a[_i];
-                                    console.log("in preq");
                                     var preqId = preq.join('');
                                     edges.push({
                                         data: {
@@ -126,10 +127,10 @@ var graphDisplayComponent = (function () {
                                         nodes.push({
                                             data: {
                                                 id: preqId,
-                                                name: preq[0]
+                                                name: preq[0],
+                                                courses: preq
                                             },
                                             classes: "multiNode",
-                                            courses: preq
                                         });
                                         nodeQueue.push({ id: preqId, name: preq[0] });
                                     }
@@ -152,12 +153,112 @@ var graphDisplayComponent = (function () {
                         this._cy.add(nodes.concat(edges));
                         this._cy.layout({
                             name: 'breadthfirst',
-                            roots: [rootName]
+                            roots: this._rootNames
+                        });
+                        this._cy.on('tap', function (event) {
+                            if (event.cyTarget.hasClass('multiNode')) {
+                                _this._pubsubEventService.publish(pubsubevent_service_1.Events.MultiNodeEvent, {
+                                    id: event.cyTarget.id(),
+                                    courses: event.cyTarget.data('courses')
+                                });
+                                console.log('tap ' + event.cyTarget.id());
+                                console.log(event.cyTarget.data('courses'));
+                                console.log(event.cyTarget);
+                                _this.updateMultiNode({
+                                    id: event.cyTarget.id(),
+                                    course: event.cyTarget.data('courses')[1]
+                                });
+                            }
                         });
                         return [2 /*return*/];
                 }
             });
         });
+    };
+    graphDisplayComponent.prototype.createTree = function (root, nodes) {
+        var edges = [];
+        var nodeQueue = [];
+        nodeQueue.push({ id: root.id, name: root.course });
+        console.log(this._fullCourseMap);
+        var _loop_2 = function () {
+            var nodeObj = nodeQueue.shift();
+            var node = _.find(this_1._fullCourseMap, function (c) { return c.name == nodeObj.name; });
+            if (node.prereqs) {
+                for (var _i = 0, _a = node.prereqs; _i < _a.length; _i++) {
+                    var preq = _a[_i];
+                    var preqId = preq.join('');
+                    edges.push({
+                        data: {
+                            id: nodeObj.id + preqId,
+                            source: nodeObj.id,
+                            target: preqId
+                        }
+                    });
+                    if (preq.length > 1) {
+                        nodes.push({
+                            data: {
+                                id: preqId,
+                                name: preq[0],
+                                courses: preq
+                            },
+                            classes: "multiNode",
+                        });
+                        nodeQueue.push({ id: preqId, name: preq[0] });
+                    }
+                    else {
+                        nodes.push({
+                            data: {
+                                id: preqId,
+                                name: preqId
+                            }
+                        });
+                        nodeQueue.push({ id: preqId, name: preq[0] });
+                    }
+                }
+            }
+        };
+        var this_1 = this;
+        while (nodeQueue.length > 0) {
+            _loop_2();
+        }
+        this._cy.add(nodes.concat(edges));
+        this._cy.layout({
+            name: 'breadthfirst',
+            roots: this._rootNames
+        });
+    };
+    graphDisplayComponent.prototype.updateMultiNode = function (payload) {
+        console.log("updating: ");
+        console.log(this._cy.$('node[id = "' + payload.id + '"]'));
+        var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
+        this.removeTree(rootNode);
+        rootNode.data("name", payload.course);
+        this.createTree(payload, []);
+    };
+    graphDisplayComponent.prototype.removeTree = function (rootNode) {
+        var nodes = rootNode;
+        var allNodes = this._cy.$('node');
+        var nodesToRemove = [];
+        var _loop_3 = function () {
+            var connectedEdgesToRemove = nodes.connectedEdges(function () {
+                return !this.target().anySame(nodes);
+            });
+            var connectedEdgesToFilter = nodes.connectedEdges().difference(nodes.connectedEdges());
+            connectedEdgesToRemove.targets().forEach(function (target) {
+                var cetf = target.connectedEdges(function () {
+                    return this.sources().anySame(allNodes.difference(nodes).difference(target));
+                });
+                connectedEdgesToFilter = connectedEdgesToFilter.union(cetf);
+            });
+            var connectedNodesToRemove = connectedEdgesToRemove.targets().difference(connectedEdgesToFilter.targets());
+            connectedEdgesToRemove.remove();
+            Array.prototype.push.apply(nodesToRemove, connectedNodesToRemove);
+            nodes = connectedNodesToRemove;
+        };
+        while (!nodes.empty()) {
+            _loop_3();
+        }
+        nodesToRemove.forEach(function (n) { return n.remove(); });
     };
     return graphDisplayComponent;
 }());
