@@ -7,14 +7,17 @@ import * as cytoscape from 'cytoscape';
 import * as _ from 'underscore';
 
 @Component({
-  selector: 'graphDisplay',
-  templateUrl: '/templates/graphDisplay.html'
+    selector: 'graphDisplay',
+    templateUrl: '/templates/graphDisplay.html'
 })
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
     private _fullCourseMap: CourseMap[];
-    constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
-        pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
+    /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
+        subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
+    }*/
+    constructor(private _pubsubEventService: PubSubEventService, private courseService: CourseService) {
+        this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
     }
 
     public ngOnInit() {
@@ -45,11 +48,11 @@ export class graphDisplayComponent {
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
-        let rootName = payload.department + " " +  payload.number;
+        let rootName = payload.department + " " + payload.number;
         let courseMap: CourseMap[] =
-          _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
-            .filter((c: Object) => !c.hasOwnProperty('Code'))
-            .value() as CourseMap[];
+            _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
+                .filter((c: Object) => !c.hasOwnProperty('Code'))
+                .value() as CourseMap[];
 
         this._fullCourseMap = courseMap;
 
@@ -57,7 +60,7 @@ export class graphDisplayComponent {
         let edges = [];
 
         let nodeQueue = [];
-        nodeQueue.push({id: courseMap[0].name, name: courseMap[0].name});
+        nodeQueue.push({ id: courseMap[0].name, name: courseMap[0].name });
         nodes.push({
             data: {
                 id: courseMap[0].name,
@@ -65,17 +68,14 @@ export class graphDisplayComponent {
             }
         });
 
-        console.log("no problem");
 
-        while(nodeQueue.length > 0) {
-            console.log("q ing");
+        while (nodeQueue.length > 0) {
 
             let nodeObj = nodeQueue.shift();
             let node = _.find(courseMap, c => c.name == nodeObj.name);
 
-            if(node.prereqs) {
-                for(let preq of node.prereqs) {
-                    console.log("in preq");
+            if (node.prereqs) {
+                for (let preq of node.prereqs) {
                     let preqId = preq.join('');
                     edges.push({
                         data: {
@@ -85,17 +85,17 @@ export class graphDisplayComponent {
                         }
                     });
 
-                    if(preq.length > 1) {
+                    if (preq.length > 1) {
                         //multi node
                         nodes.push({
                             data: {
                                 id: preqId,
-                                name: preq[0]
+                                name: preq[0],
+                                courses: preq
                             },
                             classes: "multiNode",
-                            courses: preq
                         });
-                        nodeQueue.push({id: preqId, name: preq[0]});
+                        nodeQueue.push({ id: preqId, name: preq[0] });
                     } else {
                         //single node
                         nodes.push({
@@ -104,7 +104,7 @@ export class graphDisplayComponent {
                                 name: preqId
                             }
                         });
-                        nodeQueue.push({id: preqId, name: preq[0]});
+                        nodeQueue.push({ id: preqId, name: preq[0] });
                     }
                 }
             }
@@ -115,6 +115,19 @@ export class graphDisplayComponent {
         this._cy.layout({
             name: 'breadthfirst',
             roots: [rootName]
+        });
+
+        this._cy.on('tap', event =>  {
+            if (event.cyTarget.hasClass('multiNode')) {
+                this._pubsubEventService.publish(Events.MultiNodeEvent, 
+                {
+                    id: event.cyTarget.id(),
+                    courses: event.cyTarget.data('courses')
+                });
+                console.log('tap ' + event.cyTarget.id());
+                console.log(event.cyTarget.data('courses'));
+                console.log(event.cyTarget);
+            }
         });
     }
 }
