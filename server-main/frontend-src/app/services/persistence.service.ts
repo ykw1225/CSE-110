@@ -11,10 +11,21 @@ export class PersistenceService{
 		// check if key or data is null
 		if(key !== null && data !== null){
 
+			var replaced: boolean = false;
+
+			// check if the data is already existed
+			if(localStorage.getItem(key)){
+				console.log("\tWARNNING: [KEY](" + key + ") is already EXISTED with [DATA](" + localStorage.getItem(key) + ")");
+				console.log("\tWARNNING: [KEY](" + key + ") is REPLACED with [DATA](" + JSON.stringify(data) + ")");
+				replaced = true;
+			}
+
 			localStorage.setItem(key, JSON.stringify(data));
 
-		}else
-			console.log("\tERROR: Either [KEY] or [DATA] is inValid !!!");
+		}else{
+			if(replaced) console.log("\tSUCCEED to add [KEY](" + key + ") with [DATA](" + JSON.stringify(data) + ")");
+			else console.log("\tERROR: Either [KEY] or [DATA] is INVALID !!!");
+		}
 
 	} // end of saveData
 
@@ -30,12 +41,12 @@ export class PersistenceService{
 		// remove the data
 		if(localStorage.getItem(key)){
 			localStorage.removeItem(key);
-			console.log("\tSuccess to remove " + key + " !!!");
+			console.log("\tSUCCEED to remove " + key + " !!!");
 		}
 
 		// the data corresponding to the KEY is not found
 		else
-			console.log("\tERROR: " + key + " is not found !!!");
+			console.log("\tERROR: " + key + " is NOT FOUND !!!");
 
 	} // end of deleteData
 
@@ -50,7 +61,7 @@ export class PersistenceService{
 
 		// get the value of the data
 		if(localStorage.getItem(key)){
-			console.log("\tSuccess to find " + key + " !!!");
+			console.log("\tSUCCEED: find " + key + " !!!");
 			return JSON.parse(localStorage.getItem(key));
 		}
 
