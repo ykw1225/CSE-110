@@ -8,8 +8,7 @@ import 'materialize-css';
     templateUrl: '/templates/modal.html'
 })
 export class ModalComponent {
-    @Input("modal-id") public modalID: string;
-    @Input() public title: string;
+    @Input() public modalID: string;
 
     constructor (private _modalElement: ElementRef) {
     }
@@ -20,7 +19,9 @@ export class ModalComponent {
             // It will be the parent to the element we want.
             $(this._modalElement.nativeElement)
                 .children()
-                .modal();
+                .modal({
+                    dismissible: true,
+                });
         });
     }
 }

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 import { Course } from '../services/course.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
+
+import * as $ from 'jquery';
 
 import * as cytoscape from 'cytoscape';
 
@@ -11,14 +13,62 @@ import * as cytoscape from 'cytoscape';
 })
 export class graphDisplayComponent {
   private cy: Cy.Instance;
+  private readonly _emptyGraphJokes: {
+    title: string,
+    subtitle: string
+  }[] = [
+    { title: "it feels lonely here", subtitle: "Use the Add class or degree button" }
+  ];
 
-  constructor(pubsubEventService: PubSubEventService) {
+  private _graphJokeElement: JQuery;
+
+  constructor(pubsubEventService: PubSubEventService, private _element: ElementRef) {
     pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChanged(p));
+    pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
+  }
+
+  private _clearGraph(): void {
+    this.cy.remove(this.cy.elements());
+
+    /*
+
+    let graphJokes = this._getRandomJoke();
+
+    if (this._graphJokeElement) {
+      this._graphJokeElement.remove();
+      this._graphJokeElement = undefined;
+    }
+
+    let title = $('<h3>')
+                    .addClass('grey-text')
+                    .addClass('text-darken-2')
+                    .html(graphJokes.title);
+
+    let subtitle = $('<h5>')
+                    .addClass('graph-joke-subtitle')
+                    .addClass('grey-text')
+                    .addClass('text-lighten-1')
+                    .html(graphJokes.subtitle);
+
+    this._graphJokeElement = $('<div>')
+                                .addClass('center-align')
+                                .append(title)
+                                .append(subtitle);
+
+    $(this._element.nativeElement)
+      .prepend(this._graphJokeElement);
+      */
+  }
+
+  private _getRandomJoke() {
+    let randomNumber = Math.floor((Math.random() * 100) % this._emptyGraphJokes.length);
+
+    return this._emptyGraphJokes[randomNumber];
   }
 
   public ngOnInit() {
-    var cy = cytoscape({
-          container: document.getElementById('cy'),
+    this.cy = cytoscape({
+          container: this._element.nativeElement,
           elements: [
             // nodes
             { data: { id: 'CSE 130' } },

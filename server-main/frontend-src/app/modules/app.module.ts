@@ -17,7 +17,8 @@ import { NavComponent } from '../components/app.nav';
 import { PageFooterComponent } from '../components/app.pageFooter';
 import { ToolbarComponent } from '../components/app.toolbar';
 import { courseCardComponent } from '../components/app.courseCard';
-import { ModalComponent } from '../components/app.modalComponent';
+import { ModalComponent } from '../components/app.modal';
+import { TabsComponent } from '../components/app.tabs';
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { ModalComponent } from '../components/app.modalComponent';
         PageFooterComponent,
         ToolbarComponent,
         courseCardComponent,
-        ModalComponent
+        ModalComponent,
+        TabsComponent
     ],
     bootstrap: [
         AppComponent
