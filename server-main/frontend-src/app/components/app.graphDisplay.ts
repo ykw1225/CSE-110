@@ -35,28 +35,60 @@ export class graphDisplayComponent {
                 {
                     selector: 'node',
                     style: {
-                        shape: 'circle',
-                        'background-color': 'red',
-                        label: 'data(name)'
+                        'shape': 'circle',
+                        'text-valign': 'center',
+                        'background-color': '#ff5d6a',
+                        'color': 'white',
+                        'text-outline-width': 2,
+                        'text-outline-color': 'black',
+                        'content': 'data(name)',
+                        'width': 'content',
+                        'height': 'content',
+                        'padding': 40,
+                        'border-color': 'black',
+                        'border-width': 3,
+                        'font-size': 24,
+                        'font-family': "Helvetica Neue",
+                        'shadow-blur': 5,
+                        'shadow-color': '#a5a5a5',
+                        'shadow-offset-x': 6,
+                        'shadow-offset-y': 7,
+                        'shadow-opacity': 0.55
                     }
                 },
                 {
                     selector: 'edge',
                     style: {
                         'target-arrow-shape': 'triangle',
-                        'width': 4,
-                        'line-color': '#ddd',
+                        'width': 6,
+                        'line-color': 'grey',
                         'curve-style': 'bezier'
                     }
                 },
                 {
                     selector: '.multiNode',
                     style: {
-                        'background-color': 'black',
+                        'shape': 'circle',
+                        'text-valign': 'center',
+                        'background-color': '#ffe455',
+                        'color': 'white',
+                        'text-outline-width': 2,
+                        'text-outline-color': 'black',
+                        'content': 'data(name)',
+                        'width': 'content',
+                        'height': 'content',
+                        'padding': 40,
+                        'border-color': 'black',
                         'border-width': 3,
-                        'border-color': '#000',
+                        'font-size': 24,
+                        'font-family': "Helvetica Neue",
+                        'shadow-blur': 5,
+                        'shadow-color': '#a5a5a5',
+                        'shadow-offset-x': 6,
+                        'shadow-offset-y': 7,
+                        'shadow-opacity': 0.55
                     }
-                }
+                },
             ],
             layout: {
                 name: 'breadthfirst',
@@ -64,14 +96,15 @@ export class graphDisplayComponent {
             }
         });
 
-        this._cy.on('tap', event =>  {
+
+        this._cy.on('tap', event => {
             if (event.cyTarget.hasClass &&
-              event.cyTarget.hasClass('multiNode')) {
+                event.cyTarget.hasClass('multiNode')) {
                 this._pubsubEventService.publish(Events.MultiNodeEvent,
-                {
-                    id: event.cyTarget.id(),
-                    courses: event.cyTarget.data('courses')
-                });
+                    {
+                        id: event.cyTarget.id(),
+                        courses: event.cyTarget.data('courses')
+                    });
                 console.log('tap ' + event.cyTarget.id());
                 console.log(event.cyTarget.data('courses'));
                 console.log(event.cyTarget);
@@ -84,53 +117,53 @@ export class graphDisplayComponent {
                 });
             }
         });
-        }
-
-  private _clearGraph(): void {
-    this._cy.remove(this._cy.elements());
-
-    
-/*
-    let graphJokes = this._getRandomJoke();
-
-    if (this._graphJokeElement) {
-      this._graphJokeElement.remove();
-      this._graphJokeElement = undefined;
     }
 
-    let title = $('<h3>')
-                    .addClass('grey-text')
-                    .addClass('text-darken-2')
-                    .html(graphJokes.title);
+    private _clearGraph(): void {
+        this._cy.remove(this._cy.elements());
 
-    let subtitle = $('<h5>')
-                    .addClass('graph-joke-subtitle')
-                    .addClass('grey-text')
-                    .addClass('text-lighten-1')
-                    .html(graphJokes.subtitle);
 
-    this._graphJokeElement = $('<div>')
-                                .addClass('center-align')
-                                .append(title)
-                                .append(subtitle);
+        /*
+            let graphJokes = this._getRandomJoke();
+        
+            if (this._graphJokeElement) {
+              this._graphJokeElement.remove();
+              this._graphJokeElement = undefined;
+            }
+        
+            let title = $('<h3>')
+                            .addClass('grey-text')
+                            .addClass('text-darken-2')
+                            .html(graphJokes.title);
+        
+            let subtitle = $('<h5>')
+                            .addClass('graph-joke-subtitle')
+                            .addClass('grey-text')
+                            .addClass('text-lighten-1')
+                            .html(graphJokes.subtitle);
+        
+            this._graphJokeElement = $('<div>')
+                                        .addClass('center-align')
+                                        .append(title)
+                                        .append(subtitle);
+        
+            $(this._element.nativeElement)
+              .prepend(this._graphJokeElement);
+              */
+    }
 
-    $(this._element.nativeElement)
-      .prepend(this._graphJokeElement);
+    /*
+      private _getRandomJoke() {
+        let randomNumber = Math.floor((Math.random() * 100) % this._emptyGraphJokes.length);
+    
+        return this._emptyGraphJokes[randomNumber];
+      }
       */
-  }
-
-/*
-  private _getRandomJoke() {
-    let randomNumber = Math.floor((Math.random() * 100) % this._emptyGraphJokes.length);
-
-    return this._emptyGraphJokes[randomNumber];
-  }
-  */
 
     private _degreeAdded(payload: UndergradDegree): void {
-      console.log(payload);
+        console.log(payload);
 
-      alert("Help, I've shot myself in the foot");
+        alert("Help, I've shot myself in the foot");
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
@@ -242,15 +275,15 @@ export class graphDisplayComponent {
         let allNodes = this._cy.$('node');
 
         var nodesToRemove = [];
-        while(!nodes.empty()){
-            let connectedEdgesToRemove = nodes.connectedEdges(function(){
-              return !this.target().anySame(nodes);
+        while (!nodes.empty()) {
+            let connectedEdgesToRemove = nodes.connectedEdges(function () {
+                return !this.target().anySame(nodes);
             });
 
             let connectedEdgesToFilter = nodes.connectedEdges().difference(nodes.connectedEdges());
 
-            connectedEdgesToRemove.targets().forEach(function(target) {
-                let cetf = target.connectedEdges(function() {
+            connectedEdgesToRemove.targets().forEach(function (target) {
+                let cetf = target.connectedEdges(function () {
                     return this.sources().anySame(allNodes.difference(nodes).difference(target));
                 });
                 connectedEdgesToFilter = connectedEdgesToFilter.union(cetf);
