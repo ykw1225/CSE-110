@@ -95,6 +95,7 @@ var graphDisplayComponent = (function () {
                 directed: false
             }
         });
+        console.log("TESTING");
         this._cy.on('tap', function (event) {
             if (event.cyTarget.hasClass('multiNode')) {
                 _this._pubsubEventService.publish(pubsubevent_service_1.Events.MultiNodeEvent, {
