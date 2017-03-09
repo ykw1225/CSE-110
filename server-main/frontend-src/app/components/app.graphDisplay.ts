@@ -117,6 +117,21 @@ export class graphDisplayComponent {
                 });
             }
         });
+<<<<<<< HEAD
+=======
+    }
+
+    private _clearGraph(): void {
+        this._cy.remove(this._cy.elements());
+
+
+/*
+    let graphJokes = this._getRandomJoke();
+
+    if (this._graphJokeElement) {
+      this._graphJokeElement.remove();
+      this._graphJokeElement = undefined;
+>>>>>>> b5d511a653d962a3fc2e2a7afa0d2f25b2729934
     }
 
     private _clearGraph(): void {
@@ -164,6 +179,14 @@ export class graphDisplayComponent {
         console.log(payload);
 
         alert("Help, I've shot myself in the foot");
+    }
+
+    private async _addCourseMap(payload: Course): Promise<void> {
+        let courseMap: CourseMap[] =
+            _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
+                .filter((c: Object) => !c.hasOwnProperty('Code'))
+                .value() as CourseMap[];
+        this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
