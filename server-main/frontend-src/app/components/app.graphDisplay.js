@@ -73,7 +73,7 @@ var graphDisplayComponent = (function () {
                     }
                 },
                 {
-                    selector: 'edge',
+                    selector: 'edges',
                     style: {
                         'target-arrow-shape': 'triangle',
                         'width': 4,

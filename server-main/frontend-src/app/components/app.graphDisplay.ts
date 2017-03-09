@@ -35,7 +35,7 @@ export class graphDisplayComponent {
                     }
                 },
                 {
-                    selector: 'edge',
+                    selector: 'edges',
                     style: {
                         'target-arrow-shape': 'triangle',
                         'width': 4,
