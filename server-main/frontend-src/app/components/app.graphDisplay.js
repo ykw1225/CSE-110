@@ -73,20 +73,20 @@ var graphDisplayComponent = (function () {
                     }
                 },
                 {
-                    selector: '.multiNode',
-                    style: {
-                        'background-color': 'black',
-                        'border-width': 3,
-                        'border-color': '#000',
-                    }
-                },
-                {
                     selector: 'edge',
                     style: {
                         'target-arrow-shape': 'triangle',
                         'width': 4,
                         'line-color': '#ddd',
                         'curve-style': 'bezier'
+                    }
+                },
+                {
+                    selector: '.multiNode',
+                    style: {
+                        'background-color': 'black',
+                        'border-width': 3,
+                        'border-color': '#000',
                     }
                 }
             ],

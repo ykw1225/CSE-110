@@ -35,6 +35,15 @@ export class graphDisplayComponent {
                     }
                 },
                 {
+                    selector: 'edge',
+                    style: {
+                        'target-arrow-shape': 'triangle',
+                        'width': 4,
+                        'line-color': '#ddd',
+                        'curve-style': 'bezier'
+                    }
+                },
+                {
                     selector: '.multiNode',
                     style: {
                         'background-color': 'black',
@@ -44,7 +53,8 @@ export class graphDisplayComponent {
                 }
             ],
             layout: {
-                name: 'breadthfirst'
+                name: 'breadthfirst',
+                directed: false
             }
         });
 
@@ -141,7 +151,8 @@ export class graphDisplayComponent {
         this._cy.add(nodes.concat(edges));
         this._cy.layout({
             name: 'breadthfirst',
-            roots: this._rootNames
+            roots: this._rootNames,
+            directed: false
         });
     }
 
