@@ -49,3 +49,5 @@ jspm_packages
 server-main/public/**/*.js
 
 .DS_Store
+
+server-main/frontend-src/**/*.js

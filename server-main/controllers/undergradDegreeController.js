@@ -62,4 +62,19 @@ exports.init = function(app) {
             }
         });
     });
+
+    /*
+     * Get all departments that has degree info in db
+     */
+    app.get('/api/degree/departments', function(request, response) {
+        console.log('Finding all departments names with degree programs in db');
+        database_accessor.getDepartmentsFromDegrees(function(result) {
+            //handle error
+            if (result.hasOwnProperty('Code')) {
+                response.status(result.Code).send(result.Message);
+            } else {
+                response.send(result);
+            }
+        });
+    });
 }

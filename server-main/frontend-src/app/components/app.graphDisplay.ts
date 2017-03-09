@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
+import { UndergradDegreeService, UndergradDegree } from '../services/undergraddegree.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
 
 import * as cytoscape from 'cytoscape';
@@ -17,9 +18,12 @@ export class graphDisplayComponent {
     /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
         subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
     }*/
-    constructor(private _pubsubEventService: PubSubEventService, private courseService: CourseService) {
+    constructor(private _pubsubEventService: PubSubEventService,
+        private _courseService: CourseService,
+        private _undergradDegreeService: UndergradDegreeService) {
         this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
-        this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this.updateMultiNode(p));
+        this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
+        this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
     }
 
     public ngOnInit() {
@@ -72,7 +76,7 @@ export class graphDisplayComponent {
 
                 console.log("updating multi node for testing");
                 //just for testing
-                this.updateMultiNode({
+                this._updateMultiNode({
                     id: event.cyTarget.id(),
                     name: event.cyTarget.data('courses')[1]
                 });
@@ -80,20 +84,31 @@ export class graphDisplayComponent {
         });
     }
 
+    private _degreeAdded(payload: UndergradDegree): void {
+      console.log(payload);
+
+      alert("Help, I've shot myself in the foot");
+    }
+
     private async _courseChangedAsync(payload: Course): Promise<void> {
         let rootName = payload.department + " " + payload.number;
         let courseMap: CourseMap[] =
-            _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
+            _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
                 .filter((c: Object) => !c.hasOwnProperty('Code'))
                 .value() as CourseMap[];
+
+        let data = {
+            id: rootName,
+            name: rootName,
+            description: courseMap[0].description,
+            credits: courseMap[0].credits,
+            title: courseMap[0].title
+        };
 
         this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
         this._rootNames.push(rootName);
 
-        let data = {
-            id: rootName,
-            name: rootName
-        };
+
         let nodes = [];
         nodes.push({
             data: data
@@ -125,22 +140,30 @@ export class graphDisplayComponent {
                     });
 
                     if (preq.length > 1) {
+                        let courseAdding = _.find(this._fullCourseMap, c => c.name === preq[0]);
                         //multi node
                         nodes.push({
                             data: {
                                 id: preqId,
                                 name: preq[0],
-                                courses: preq
+                                courses: preq,
+                                title: courseAdding.title,
+                                description: courseAdding.description,
+                                credits: courseAdding.credits
                             },
                             classes: "multiNode",
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
                     } else {
+                        let courseAdding = _.find(this._fullCourseMap, c => c.name === preqId);
                         //single node
                         nodes.push({
                             data: {
                                 id: preqId,
-                                name: preqId
+                                name: preqId,
+                                title: courseAdding.title,
+                                description: courseAdding.description,
+                                credits: courseAdding.credits
                             }
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
@@ -157,7 +180,7 @@ export class graphDisplayComponent {
         });
     }
 
-    private updateMultiNode(payload) {
+    private _updateMultiNode(payload) {
         console.log("updating: ");
         console.log(this._cy.$('node[id = "' + payload.id + '"]'));
 

@@ -22,6 +22,8 @@ const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department =
 const getAllDegreesInDeparmtnet = "SELECT number, title FROM degrees where department = ?";
 //query that return specific degree with given number
 const getDegreeFromCodeName = "SELECT * FROM degrees where department = ? and number = ?";
+//query that return all department names in degrees table
+const getDepartmentsFromDegreesQuery = "SELECT DISTINCT department from degrees";
 
 //global variables for synchronization
 var courseMapNames = [],
@@ -162,18 +164,18 @@ exports.getCourseMap = function(course, callback) {
         if (foundCourses == findingCourses) {
             console.log("error courses: ");
             console.log(errorCourses);
-            for(var course of courseMapNodes) {
-                for(var i in course.prereqs) {
+            for (var course of courseMapNodes) {
+                for (var i in course.prereqs) {
                     var toRemove = [];
-                    for(var j in course.prereqs[i]) {
-                        if(errorCourses.indexOf(course.prereqs[i][j])>-1) {
+                    for (var j in course.prereqs[i]) {
+                        if (errorCourses.indexOf(course.prereqs[i][j]) > -1) {
                             toRemove.push(j);
                         }
                     }
-                    if(course.prereqs[i].length == toRemove.length) {
+                    if (course.prereqs[i].length == toRemove.length) {
                         course.prereqs.splice(i, 1);
                     } else {
-                        while(toRemove.length > 0) {
+                        while (toRemove.length > 0) {
                             var j = toRemove.pop();
                             course.prereqs[i].splice(j, 1);
                         }
@@ -443,6 +445,38 @@ exports.getDegreeFromCode = function(department, code, callback) {
             callback(result["rows"][0]);
         }
     });
+}
+
+exports.getDepartmentsFromDegrees = function(callback) {
+    client.execute(getDepartmentsFromDegreesQuery, function(err, result) {
+        if (err) {
+            errorType = 1;
+            var errorNode = {
+                Code: 401,
+                name: params,
+                Message: "Error getting course info\n"
+            };
+            callback(errorNode);
+        } else if (!result) {
+            errorType = 2;
+            var errorNode = {
+                Code: 402,
+                name: params,
+                Message: "Data not fetched\n"
+            };
+            callback(errorNode);
+        } else if (!result['rows'].length) {
+            errorType = 3;
+            var errorNode = {
+                Code: 403,
+                name: params,
+                Message: "No results found\n"
+            };
+            callback(errorNode);
+        } else {
+            callback(result["rows"]);
+        }
+    })
 }
 
 exports.removeAllCourses = function(callback) {

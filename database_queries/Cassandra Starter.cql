@@ -30,18 +30,8 @@ CREATE TABLE grad.degrees (
 	PRIMARY KEY(department, number)
 );
 
-CREATE TABLE grad.colleges (
-	college text,
-    requirements list<frozen<requirement>>,
-	PRIMARY KEY(college)
-);
-
-CREATE TABLE grad.users(
-	uid int,
-	college text,
-	major text,
-	second_major text,
-	minor text,
-	courses_taken list<text>,
-	PRIMARY KEY(uid)
+CREATE TABLE grad.departments (
+	code text PRIMARY KEY,
+	name text,
+	code_list list<text>
 );
