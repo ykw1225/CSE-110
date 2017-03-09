@@ -19,6 +19,7 @@ import { ToolbarComponent } from '../components/app.toolbar';
 import { courseCardComponent } from '../components/app.courseCard';
 import { ModalComponent } from '../components/app.modal';
 import { TabsComponent } from '../components/app.tabs';
+import { CardContainerComponent } from '../components/app.cardContainer';
 
 @NgModule({
     imports: [
@@ -36,7 +37,8 @@ import { TabsComponent } from '../components/app.tabs';
         ToolbarComponent,
         courseCardComponent,
         ModalComponent,
-        TabsComponent
+        TabsComponent,
+        CardContainerComponent
     ],
     bootstrap: [
         AppComponent
