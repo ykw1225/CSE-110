@@ -60,7 +60,6 @@ export class graphDisplayComponent {
         //this._rootNames.push(rootName);
         this._rootNames = [rootName];
 
-/* THIS BREAKS ANGULAR
         let data = {
             id: courseMap[0].name,
             name: courseMap[0].name
@@ -69,8 +68,9 @@ export class graphDisplayComponent {
         nodes.push({
             data: data
         });
-        this.createTree(data, nodes);*/
+        this._createTree(data, nodes);
 
+/*
         let nodes = [];
         let edges = [];
 
@@ -148,21 +148,20 @@ export class graphDisplayComponent {
                     course: event.cyTarget.data('courses')[1]
                 });
             }
-        });
+        });*/
     }
 
-    private createTree(root, nodes) {
+    private _createTree(root, nodes: any[]) {
         let edges = [];
 
         let nodeQueue = [];
-        nodeQueue.push({ id: root.id, name: root.course });
-
-        console.log(this._fullCourseMap);
+        nodeQueue.push({ id: root.id, name: root.name });
 
         while (nodeQueue.length > 0) {
 
             let nodeObj = nodeQueue.shift();
-            let node = _.find(this._fullCourseMap, c => c.name == nodeObj.name);
+            console.log(nodeObj);
+            let node = _.find(this._fullCourseMap, c => c.name === nodeObj.name);
 
             if (node.prereqs) {
                 for (let preq of node.prereqs) {
@@ -213,7 +212,7 @@ export class graphDisplayComponent {
         var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
         this.removeTree(rootNode);
         rootNode.data("name", payload.course);
-        this.createTree(payload, []);
+        this._createTree(payload, []);
     }
 
     private removeTree(rootNode) {
