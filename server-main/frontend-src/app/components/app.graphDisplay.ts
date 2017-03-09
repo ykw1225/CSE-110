@@ -13,7 +13,7 @@ import * as _ from 'underscore';
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
     private _fullCourseMap: CourseMap[];
-    private _rootNames: string[];
+    private _rootNames: string[] = [];
     /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
         subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
     }*/
