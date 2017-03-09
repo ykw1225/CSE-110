@@ -12,7 +12,7 @@ import * as _ from 'underscore';
 })
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
-    private _fullCourseMap: CourseMap[];
+    private _fullCourseMap: CourseMap[] = [];
     private _rootNames: string[] = [];
     /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
         subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
@@ -59,10 +59,11 @@ export class graphDisplayComponent {
                 console.log(event.cyTarget.data('courses'));
                 console.log(event.cyTarget);
 
+                console.log("updating multi node for testing");
                 //just for testing
                 this.updateMultiNode({
                     id: event.cyTarget.id(),
-                    course: event.cyTarget.data('courses')[1]
+                    name: event.cyTarget.data('courses')[1]
                 });
             }
         });
@@ -147,9 +148,12 @@ export class graphDisplayComponent {
     private updateMultiNode(payload) {
         console.log("updating: ");
         console.log(this._cy.$('node[id = "' + payload.id + '"]'));
+
         var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
         this.removeTree(rootNode);
-        rootNode.data("name", payload.course);
+        rootNode.data("name", payload.name);
+
+        console.log(rootNode);
         this._createTree(payload, []);
     }
 
