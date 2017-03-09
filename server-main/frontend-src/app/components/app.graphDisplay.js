@@ -80,9 +80,19 @@ var graphDisplayComponent = (function () {
                         'border-color': '#000',
                     }
                 }
+                {
+                    selector: '.edges',
+                    style: {
+                        'target-arrow-shape': 'triangle',
+                        'width': 4,
+                        'line-color': '#ddd',
+                        'curve-style': 'bezier'
+                    }
+                }
             ],
             layout: {
-                name: 'breadthfirst'
+                name: 'breadthfirst',
+                directed: false
             }
         });
         this._cy.on('tap', function (event) {
@@ -180,7 +190,8 @@ var graphDisplayComponent = (function () {
         this._cy.add(nodes.concat(edges));
         this._cy.layout({
             name: 'breadthfirst',
-            roots: this._rootNames
+            roots: this._rootNames,
+            directed: false
         });
     };
     graphDisplayComponent.prototype.updateMultiNode = function (payload) {
