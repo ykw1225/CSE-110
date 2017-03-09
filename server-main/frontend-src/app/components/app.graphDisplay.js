@@ -73,7 +73,7 @@ var graphDisplayComponent = (function () {
                     }
                 },
                 {
-                    selector: 'edges',
+                    selector: 'edge',
                     style: {
                         'target-arrow-shape': 'triangle',
                         'width': 4,
@@ -92,11 +92,12 @@ var graphDisplayComponent = (function () {
             ],
             layout: {
                 name: 'breadthfirst',
-                directed: true
+                directed: false
             }
         });
         this._cy.on('tap', function (event) {
-            if (event.cyTarget.hasClass('multiNode')) {
+            if (event.cyTarget.hasClass &&
+                event.cyTarget.hasClass('multiNode')) {
                 _this._pubsubEventService.publish(pubsubevent_service_1.Events.MultiNodeEvent, {
                     id: event.cyTarget.id(),
                     courses: event.cyTarget.data('courses')
@@ -191,7 +192,7 @@ var graphDisplayComponent = (function () {
         this._cy.layout({
             name: 'breadthfirst',
             roots: this._rootNames,
-            directed: true
+            directed: false
         });
     };
     graphDisplayComponent.prototype.updateMultiNode = function (payload) {

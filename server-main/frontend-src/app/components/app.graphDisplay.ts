@@ -35,7 +35,7 @@ export class graphDisplayComponent {
                     }
                 },
                 {
-                    selector: 'edges',
+                    selector: 'edge',
                     style: {
                         'target-arrow-shape': 'triangle',
                         'width': 4,
@@ -54,12 +54,13 @@ export class graphDisplayComponent {
             ],
             layout: {
                 name: 'breadthfirst',
-                directed: true
+                directed: false
             }
         });
 
         this._cy.on('tap', event =>  {
-            if (event.cyTarget.hasClass('multiNode')) {
+            if (event.cyTarget.hasClass &&
+              event.cyTarget.hasClass('multiNode')) {
                 this._pubsubEventService.publish(Events.MultiNodeEvent,
                 {
                     id: event.cyTarget.id(),
@@ -152,7 +153,7 @@ export class graphDisplayComponent {
         this._cy.layout({
             name: 'breadthfirst',
             roots: this._rootNames,
-            directed: true
+            directed: false
         });
     }
 
