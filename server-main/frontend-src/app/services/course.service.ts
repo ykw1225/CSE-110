@@ -9,7 +9,10 @@ import * as _ from 'underscore';
 
 export interface CourseMap {
     name: string;
+    description: string;
     prereqs: string[][];
+    credits: number[];
+    title: string;
 }
 
 export interface ErrorNode {
@@ -56,4 +59,3 @@ export class CourseService {
             .toPromise();
     }
 }
-

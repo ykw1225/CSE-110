@@ -56,7 +56,6 @@ export class LeftBarComponent {
         departmentService.getDepartmentsAsync().then(r => this.departments = r);
 
         undergradDegreeService.getDegreesAsync('Sixth').then(r => this.undergradDegrees = r);
-        undergradDegreeService.getMinorsAsync('Sixth').then(r => this.undergradMinors = r);
     }
 
     private async _shootSelfInFootAsync(): Promise<void> {

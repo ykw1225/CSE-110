@@ -41,6 +41,15 @@ export class graphDisplayComponent {
                     }
                 },
                 {
+                    selector: 'edge',
+                    style: {
+                        'target-arrow-shape': 'triangle',
+                        'width': 4,
+                        'line-color': '#ddd',
+                        'curve-style': 'bezier'
+                    }
+                },
+                {
                     selector: '.multiNode',
                     style: {
                         'background-color': 'black',
@@ -50,12 +59,14 @@ export class graphDisplayComponent {
                 }
             ],
             layout: {
-                name: 'breadthfirst'
+                name: 'breadthfirst',
+                directed: false
             }
         });
 
         this._cy.on('tap', event =>  {
-            if (event.cyTarget.hasClass('multiNode')) {
+            if (event.cyTarget.hasClass &&
+              event.cyTarget.hasClass('multiNode')) {
                 this._pubsubEventService.publish(Events.MultiNodeEvent,
                 {
                     id: event.cyTarget.id(),
@@ -129,13 +140,18 @@ export class graphDisplayComponent {
                 .filter((c: Object) => !c.hasOwnProperty('Code'))
                 .value() as CourseMap[];
 
+        let data = {
+            id: rootName,
+            name: rootName,
+            description: courseMap[0].description,
+            credits: courseMap[0].credits,
+            title: courseMap[0].title
+        };
+
         this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
         this._rootNames.push(rootName);
 
-        let data = {
-            id: rootName,
-            name: rootName
-        };
+
         let nodes = [];
         nodes.push({
             data: data
@@ -167,22 +183,30 @@ export class graphDisplayComponent {
                     });
 
                     if (preq.length > 1) {
+                        let courseAdding = _.find(this._fullCourseMap, c => c.name === preq[0]);
                         //multi node
                         nodes.push({
                             data: {
                                 id: preqId,
                                 name: preq[0],
-                                courses: preq
+                                courses: preq,
+                                title: courseAdding.title,
+                                description: courseAdding.description,
+                                credits: courseAdding.credits
                             },
                             classes: "multiNode",
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
                     } else {
+                        let courseAdding = _.find(this._fullCourseMap, c => c.name === preqId);
                         //single node
                         nodes.push({
                             data: {
                                 id: preqId,
-                                name: preqId
+                                name: preqId,
+                                title: courseAdding.title,
+                                description: courseAdding.description,
+                                credits: courseAdding.credits
                             }
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
@@ -194,7 +218,8 @@ export class graphDisplayComponent {
         this._cy.add(nodes.concat(edges));
         this._cy.layout({
             name: 'breadthfirst',
-            roots: this._rootNames
+            roots: this._rootNames,
+            directed: false
         });
     }
 
