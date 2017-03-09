@@ -32,7 +32,7 @@ interface FourYearPlan {
     years: Year[];
 }
 
-interface UndergradDegree {
+export interface UndergradDegree {
     college: string;
     degreeCode: string;
     department: string;
@@ -63,7 +63,7 @@ export class UndergradDegreeService {
 
     public getDegreeAsync(college: string, department: string, degreeCode: string): Promise<UndergradDegree> {
         return this.http.get(`/api/undergrad/${college}/degree/${department}/${degreeCode}`)
-            .map(response => JSON.parse(response.json()) as UndergradDegree)
+            .map(response => response.json() as UndergradDegree)
             .toPromise();
     }
 

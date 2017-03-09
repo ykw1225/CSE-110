@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 export enum Events {
     CourseChangedEvent,
     MultiNodeEvent,
-    MultiNodeSelectedEvent
+    MultiNodeSelectedEvent,
+    DegreeAddedEvent
 }
 
 @Injectable()

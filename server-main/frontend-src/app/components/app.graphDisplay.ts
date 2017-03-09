@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
-import { UndergradDegreeService } from '../services/undergraddegree.service';
+import { UndergradDegreeService, UndergradDegree } from '../services/undergraddegree.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
 
 import * as cytoscape from 'cytoscape';
@@ -23,6 +23,7 @@ export class graphDisplayComponent {
         private _undergradDegreeService: UndergradDegreeService) {
         this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
+        this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
     }
 
     public ngOnInit() {
@@ -72,8 +73,8 @@ export class graphDisplayComponent {
         });
     }
 
-    private async _degreeAddedAsync(): Promise<void> {
-        let degree = await this._undergradDegreeService.getDegreeAsync("Sixth", "CSE", "CS1");
+    private _degreeAdded(payload: UndergradDegree): void {
+      alert("Help, I've shot myself in the foot");
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CollegeService } from '../services/college.service';
-import { UndergradDegreeService } from '../services/undergraddegree.service';
+import { UndergradDegreeService, UndergradDegree } from '../services/undergraddegree.service';
 import { DepartmentService, Department } from '../services/department.service';
 import { CourseService, Course } from '../services/course.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
@@ -57,5 +57,10 @@ export class LeftBarComponent {
 
         undergradDegreeService.getDegreesAsync('Sixth').then(r => this.undergradDegrees = r);
         undergradDegreeService.getMinorsAsync('Sixth').then(r => this.undergradMinors = r);
+    }
+
+    private async _shootSelfInFootAsync(): Promise<void> {
+        let payload = await this.undergradDegreeService.getDegreeAsync("Gary", "cse", "26");
+        this.pubSubEventService.publish(Events.DegreeAddedEvent, payload);
     }
 }
