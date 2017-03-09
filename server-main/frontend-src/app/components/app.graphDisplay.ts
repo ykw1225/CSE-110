@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
+import { UndergradDegreeService } from '../services/undergraddegree.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
 
 import * as cytoscape from 'cytoscape';
@@ -17,9 +18,11 @@ export class graphDisplayComponent {
     /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
         subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
     }*/
-    constructor(private _pubsubEventService: PubSubEventService, private courseService: CourseService) {
+    constructor(private _pubsubEventService: PubSubEventService,
+        private _courseService: CourseService,
+        private _undergradDegreeService: UndergradDegreeService) {
         this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
-        this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this.updateMultiNode(p));
+        this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
     }
 
     public ngOnInit() {
@@ -61,7 +64,7 @@ export class graphDisplayComponent {
 
                 console.log("updating multi node for testing");
                 //just for testing
-                this.updateMultiNode({
+                this._updateMultiNode({
                     id: event.cyTarget.id(),
                     name: event.cyTarget.data('courses')[1]
                 });
@@ -69,10 +72,14 @@ export class graphDisplayComponent {
         });
     }
 
+    private async _degreeAddedAsync(): Promise<void> {
+        let degree = await this._undergradDegreeService.getDegreeAsync("Sixth", "CSE", "CS1");
+    }
+
     private async _courseChangedAsync(payload: Course): Promise<void> {
         let rootName = payload.department + " " + payload.number;
         let courseMap: CourseMap[] =
-            _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
+            _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
                 .filter((c: Object) => !c.hasOwnProperty('Code'))
                 .value() as CourseMap[];
 
@@ -145,7 +152,7 @@ export class graphDisplayComponent {
         });
     }
 
-    private updateMultiNode(payload) {
+    private _updateMultiNode(payload) {
         console.log("updating: ");
         console.log(this._cy.$('node[id = "' + payload.id + '"]'));
 
