@@ -4287,6 +4287,7 @@ declare namespace Cy {
         ready?: () => void;
         /** Called on 'layoutstop' */
         stop?: () => void;
+        roots?: string[]
     }
 
     /**
