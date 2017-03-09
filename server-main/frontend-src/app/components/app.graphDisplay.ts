@@ -47,89 +47,6 @@ export class graphDisplayComponent {
                 name: 'breadthfirst'
             }
         });
-    }
-
-    private async _courseChangedAsync(payload: Course): Promise<void> {
-        let rootName = payload.department + " " + payload.number;
-        let courseMap: CourseMap[] =
-            _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
-                .filter((c: Object) => !c.hasOwnProperty('Code'))
-                .value() as CourseMap[];
-
-        this._fullCourseMap = courseMap;
-        //this._rootNames.push(rootName);
-        this._rootNames = [rootName];
-
-        let data = {
-            id: courseMap[0].name,
-            name: courseMap[0].name
-        };
-        let nodes = [];
-        nodes.push({
-            data: data
-        });
-        this._createTree(data, nodes);
-
-/*
-        let nodes = [];
-        let edges = [];
-
-        let nodeQueue = [];
-        nodeQueue.push({ id: courseMap[0].name, name: courseMap[0].name });
-        nodes.push({
-            data: {
-                id: courseMap[0].name,
-                name: courseMap[0].name
-            }
-        });
-
-        while (nodeQueue.length > 0) {
-
-            let nodeObj = nodeQueue.shift();
-            let node = _.find(courseMap, c => c.name == nodeObj.name);
-
-            if (node.prereqs) {
-                for (let preq of node.prereqs) {
-                    let preqId = preq.join('');
-                    edges.push({
-                        data: {
-                            id: nodeObj.id + preqId,
-                            source: nodeObj.id,
-                            target: preqId
-                        }
-                    });
-
-                    if (preq.length > 1) {
-                        //multi node
-                        nodes.push({
-                            data: {
-                                id: preqId,
-                                name: preq[0],
-                                courses: preq
-                            },
-                            classes: "multiNode",
-                        });
-                        nodeQueue.push({ id: preqId, name: preq[0] });
-                    } else {
-                        //single node
-                        nodes.push({
-                            data: {
-                                id: preqId,
-                                name: preqId
-                            }
-                        });
-                        nodeQueue.push({ id: preqId, name: preq[0] });
-                    }
-                }
-            }
-        }
-
-        this._cy.remove(this._cy.elements());
-        this._cy.add(nodes.concat(edges));
-        this._cy.layout({
-            name: 'breadthfirst',
-            roots: this._rootNames
-        });
 
         this._cy.on('tap', event =>  {
             if (event.cyTarget.hasClass('multiNode')) {
@@ -148,7 +65,28 @@ export class graphDisplayComponent {
                     course: event.cyTarget.data('courses')[1]
                 });
             }
-        });*/
+        });
+    }
+
+    private async _courseChangedAsync(payload: Course): Promise<void> {
+        let rootName = payload.department + " " + payload.number;
+        let courseMap: CourseMap[] =
+            _.chain(await this.courseService.getCourseMapAsync(payload.department, payload.number))
+                .filter((c: Object) => !c.hasOwnProperty('Code'))
+                .value() as CourseMap[];
+
+        this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
+        this._rootNames.push(rootName);
+
+        let data = {
+            id: rootName,
+            name: rootName
+        };
+        let nodes = [];
+        nodes.push({
+            data: data
+        });
+        this._createTree(data, nodes);
     }
 
     private _createTree(root, nodes: any[]) {

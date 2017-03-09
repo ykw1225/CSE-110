@@ -58,6 +58,7 @@ var graphDisplayComponent = (function () {
         this._pubsubEventService.subscribe(pubsubevent_service_1.Events.MultiNodeSelectedEvent, function (p) { return _this.updateMultiNode(p); });
     }
     graphDisplayComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this._cy = cytoscape({
             container: document.getElementById('cy'),
             style: [
@@ -82,11 +83,25 @@ var graphDisplayComponent = (function () {
                 name: 'breadthfirst'
             }
         });
+        this._cy.on('tap', function (event) {
+            if (event.cyTarget.hasClass('multiNode')) {
+                _this._pubsubEventService.publish(pubsubevent_service_1.Events.MultiNodeEvent, {
+                    id: event.cyTarget.id(),
+                    courses: event.cyTarget.data('courses')
+                });
+                console.log('tap ' + event.cyTarget.id());
+                console.log(event.cyTarget.data('courses'));
+                console.log(event.cyTarget);
+                _this.updateMultiNode({
+                    id: event.cyTarget.id(),
+                    course: event.cyTarget.data('courses')[1]
+                });
+            }
+        });
     };
     graphDisplayComponent.prototype._courseChangedAsync = function (payload) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            var rootName, courseMap, _a, _b, _c, nodes, edges, nodeQueue, _loop_1;
+            var rootName, courseMap, _a, _b, _c, data, nodes;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -97,92 +112,30 @@ var graphDisplayComponent = (function () {
                         courseMap = _b.apply(_a, [_d.sent()])
                             .filter(function (c) { return !c.hasOwnProperty('Code'); })
                             .value();
-                        this._fullCourseMap = courseMap;
-                        this._rootNames = [rootName];
-                        nodes = [];
-                        edges = [];
-                        nodeQueue = [];
-                        nodeQueue.push({ id: courseMap[0].name, name: courseMap[0].name });
-                        nodes.push({
-                            data: {
-                                id: courseMap[0].name,
-                                name: courseMap[0].name
-                            }
-                        });
-                        _loop_1 = function () {
-                            var nodeObj = nodeQueue.shift();
-                            var node = _.find(courseMap, function (c) { return c.name == nodeObj.name; });
-                            if (node.prereqs) {
-                                for (var _i = 0, _a = node.prereqs; _i < _a.length; _i++) {
-                                    var preq = _a[_i];
-                                    var preqId = preq.join('');
-                                    edges.push({
-                                        data: {
-                                            id: nodeObj.id + preqId,
-                                            source: nodeObj.id,
-                                            target: preqId
-                                        }
-                                    });
-                                    if (preq.length > 1) {
-                                        nodes.push({
-                                            data: {
-                                                id: preqId,
-                                                name: preq[0],
-                                                courses: preq
-                                            },
-                                            classes: "multiNode",
-                                        });
-                                        nodeQueue.push({ id: preqId, name: preq[0] });
-                                    }
-                                    else {
-                                        nodes.push({
-                                            data: {
-                                                id: preqId,
-                                                name: preqId
-                                            }
-                                        });
-                                        nodeQueue.push({ id: preqId, name: preq[0] });
-                                    }
-                                }
-                            }
+                        this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
+                        this._rootNames.push(rootName);
+                        data = {
+                            id: rootName,
+                            name: rootName
                         };
-                        while (nodeQueue.length > 0) {
-                            _loop_1();
-                        }
-                        this._cy.remove(this._cy.elements());
-                        this._cy.add(nodes.concat(edges));
-                        this._cy.layout({
-                            name: 'breadthfirst',
-                            roots: this._rootNames
+                        nodes = [];
+                        nodes.push({
+                            data: data
                         });
-                        this._cy.on('tap', function (event) {
-                            if (event.cyTarget.hasClass('multiNode')) {
-                                _this._pubsubEventService.publish(pubsubevent_service_1.Events.MultiNodeEvent, {
-                                    id: event.cyTarget.id(),
-                                    courses: event.cyTarget.data('courses')
-                                });
-                                console.log('tap ' + event.cyTarget.id());
-                                console.log(event.cyTarget.data('courses'));
-                                console.log(event.cyTarget);
-                                _this.updateMultiNode({
-                                    id: event.cyTarget.id(),
-                                    course: event.cyTarget.data('courses')[1]
-                                });
-                            }
-                        });
+                        this._createTree(data, nodes);
                         return [2 /*return*/];
                 }
             });
         });
     };
-    graphDisplayComponent.prototype.createTree = function (root, nodes) {
+    graphDisplayComponent.prototype._createTree = function (root, nodes) {
         var edges = [];
         var nodeQueue = [];
-        nodeQueue.push({ id: root.id, name: root.course });
-        console.log(this._fullCourseMap);
-        var _loop_2 = function () {
+        nodeQueue.push({ id: root.id, name: root.name });
+        var _loop_1 = function () {
             var nodeObj = nodeQueue.shift();
-            var node = _.find(this_1._fullCourseMap, function (c) { return c.name == nodeObj.name; });
+            console.log(nodeObj);
+            var node = _.find(this_1._fullCourseMap, function (c) { return c.name === nodeObj.name; });
             if (node.prereqs) {
                 for (var _i = 0, _a = node.prereqs; _i < _a.length; _i++) {
                     var preq = _a[_i];
@@ -219,7 +172,7 @@ var graphDisplayComponent = (function () {
         };
         var this_1 = this;
         while (nodeQueue.length > 0) {
-            _loop_2();
+            _loop_1();
         }
         this._cy.add(nodes.concat(edges));
         this._cy.layout({
@@ -233,13 +186,13 @@ var graphDisplayComponent = (function () {
         var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
         this.removeTree(rootNode);
         rootNode.data("name", payload.course);
-        this.createTree(payload, []);
+        this._createTree(payload, []);
     };
     graphDisplayComponent.prototype.removeTree = function (rootNode) {
         var nodes = rootNode;
         var allNodes = this._cy.$('node');
         var nodesToRemove = [];
-        var _loop_3 = function () {
+        var _loop_2 = function () {
             var connectedEdgesToRemove = nodes.connectedEdges(function () {
                 return !this.target().anySame(nodes);
             });
@@ -256,7 +209,7 @@ var graphDisplayComponent = (function () {
             nodes = connectedNodesToRemove;
         };
         while (!nodes.empty()) {
-            _loop_3();
+            _loop_2();
         }
         nodesToRemove.forEach(function (n) { return n.remove(); });
     };
