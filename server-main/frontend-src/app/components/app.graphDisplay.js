@@ -92,7 +92,7 @@ var graphDisplayComponent = (function () {
             ],
             layout: {
                 name: 'breadthfirst',
-                directed: false
+                directed: true
             }
         });
         this._cy.on('tap', function (event) {
@@ -191,7 +191,7 @@ var graphDisplayComponent = (function () {
         this._cy.layout({
             name: 'breadthfirst',
             roots: this._rootNames,
-            directed: false
+            directed: true
         });
     };
     graphDisplayComponent.prototype.updateMultiNode = function (payload) {
