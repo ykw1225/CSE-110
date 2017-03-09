@@ -17,7 +17,7 @@ export class graphDisplayComponent {
     title: string,
     subtitle: string
   }[] = [
-    { title: "it feels lonely here", subtitle: "Use the Add class or degree button" }
+    { title: "it feels lonely here :'(", subtitle: "Use the Add class or degree button" }
   ];
 
   private _graphJokeElement: JQuery;
@@ -30,7 +30,7 @@ export class graphDisplayComponent {
   private _clearGraph(): void {
     this.cy.remove(this.cy.elements());
 
-    /*
+    
 
     let graphJokes = this._getRandomJoke();
 
@@ -57,7 +57,6 @@ export class graphDisplayComponent {
 
     $(this._element.nativeElement)
       .prepend(this._graphJokeElement);
-      */
   }
 
   private _getRandomJoke() {

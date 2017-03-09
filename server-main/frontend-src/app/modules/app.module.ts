@@ -20,6 +20,7 @@ import { courseCardComponent } from '../components/app.courseCard';
 import { ModalComponent } from '../components/app.modal';
 import { TabsComponent } from '../components/app.tabs';
 import { CardContainerComponent } from '../components/app.cardContainer';
+import { CourseDegreeModal } from '../components/app.courseDegreeModal'
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import { CardContainerComponent } from '../components/app.cardContainer';
         courseCardComponent,
         ModalComponent,
         TabsComponent,
-        CardContainerComponent
+        CardContainerComponent,
+        CourseDegreeModal
     ],
     bootstrap: [
         AppComponent
