@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
 import { UndergradDegreeService, UndergradDegree } from '../services/undergraddegree.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
+
+import * as $ from 'jquery';
 
 import * as cytoscape from 'cytoscape';
 import * as _ from 'underscore';
@@ -71,7 +73,48 @@ export class graphDisplayComponent {
                 });
             }
         });
+        }
+
+  private _clearGraph(): void {
+    this._cy.remove(this._cy.elements());
+
+    
+/*
+    let graphJokes = this._getRandomJoke();
+
+    if (this._graphJokeElement) {
+      this._graphJokeElement.remove();
+      this._graphJokeElement = undefined;
     }
+
+    let title = $('<h3>')
+                    .addClass('grey-text')
+                    .addClass('text-darken-2')
+                    .html(graphJokes.title);
+
+    let subtitle = $('<h5>')
+                    .addClass('graph-joke-subtitle')
+                    .addClass('grey-text')
+                    .addClass('text-lighten-1')
+                    .html(graphJokes.subtitle);
+
+    this._graphJokeElement = $('<div>')
+                                .addClass('center-align')
+                                .append(title)
+                                .append(subtitle);
+
+    $(this._element.nativeElement)
+      .prepend(this._graphJokeElement);
+      */
+  }
+
+/*
+  private _getRandomJoke() {
+    let randomNumber = Math.floor((Math.random() * 100) % this._emptyGraphJokes.length);
+
+    return this._emptyGraphJokes[randomNumber];
+  }
+  */
 
     private _degreeAdded(payload: UndergradDegree): void {
       console.log(payload);

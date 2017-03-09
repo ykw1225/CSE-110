@@ -30,6 +30,16 @@ System.config({
         },
         "cytoscape": {
             main: "dist/cytoscape.min.js"
+        },
+        "materialize-css": {
+            main: 'dist/js/materialize.js',
+            format: 'cjs'
+        },
+        'jquery': {
+            main: 'dist/jquery.min.js',
+        },
+        'hammerjs': {
+            main: 'hammer.min.js'
         }
     }
 });

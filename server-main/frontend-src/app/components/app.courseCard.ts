@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'collapsible-sidebar',
-    templateUrl: '/templates/collapsibleSidebar.html'
+    selector: 'courseCard',
+    templateUrl: '/templates/courseCard.html'
 })
-export class CollapsibleSidebarComponent {
+export class courseCardComponent {
     public isHidden: boolean = true;
     public showHideText: string = "Show";
 

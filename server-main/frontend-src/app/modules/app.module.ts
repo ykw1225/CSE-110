@@ -10,12 +10,17 @@ import { CourseService } from '../services/course.service';
 import { PubSubEventService } from '../services/pubsubevent.service';
 
 import { AppComponent } from '../components/app.component';
-import { CollapsibleSidebarComponent } from '../components/app.collapsiblesidebar';
 import { LeftBarComponent } from '../components/app.leftbar';
 import { RightBarComponent } from '../components/app.rightbar';
 import { graphDisplayComponent } from '../components/app.graphDisplay';
-import { headerComponent } from '../components/app.header';
-import { footerComponent } from '../components/app.footer';
+import { NavComponent } from '../components/app.nav';
+import { PageFooterComponent } from '../components/app.pageFooter';
+import { ToolbarComponent } from '../components/app.toolbar';
+import { courseCardComponent } from '../components/app.courseCard';
+import { ModalComponent } from '../components/app.modal';
+import { TabsComponent } from '../components/app.tabs';
+import { CardContainerComponent } from '../components/app.cardContainer';
+import { CourseDegreeModal } from '../components/app.courseDegreeModal'
 
 @NgModule({
     imports: [
@@ -25,12 +30,17 @@ import { footerComponent } from '../components/app.footer';
     ],
     declarations: [
         AppComponent,
-        CollapsibleSidebarComponent,
         LeftBarComponent,
         RightBarComponent,
         graphDisplayComponent,
-        headerComponent,
-        footerComponent
+        NavComponent,
+        PageFooterComponent,
+        ToolbarComponent,
+        courseCardComponent,
+        ModalComponent,
+        TabsComponent,
+        CardContainerComponent,
+        CourseDegreeModal
     ],
     bootstrap: [
         AppComponent

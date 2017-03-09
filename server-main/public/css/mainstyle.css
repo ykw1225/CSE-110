@@ -1,10 +1,6 @@
+/*
 html, body {
   height: 100%;
-}
-
-.graph{
-  border: 2px solid black;
-  height: 500px;
 }
 
 .sidebar{
@@ -35,10 +31,220 @@ footer{
   color: white;
   padding-top: 10px;
 }
+*/
 
 .ui-loading {
   position: fixed; /* or absolute */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.graph{
+  height: 500px;
+}
+
+ /*
+       * Constants:
+       *      RADIUS      = 12.5
+       *      STROKEWIDTH = 3
+       *      ARCSIZE     = 270 degrees (amount of circle the arc takes up)
+       *      ARCTIME     = 1333ms (time it takes to expand and contract arc)
+       *      ARCSTARTROT = 216 degrees (how much the start location of the arc
+       *                                should rotate each time, 216 gives us a
+       *                                5 pointed star shape (it's 360/5 * 2).
+       *                                For a 7 pointed star, we might do
+       *                                360/7 * 3 = 154.286)
+       *
+       *      SHRINK_TIME = 400ms
+       */
+
+ .spinner {
+  margin: 10px 20px;
+  text-align: center;
+  display: inline-block;
+ }
+
+ .spinner svg {
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+ }
+
+ .qp-circular-loader {
+  width: 64px;
+  /* 2*RADIUS + STROKEWIDTH */
+
+  height: 64px;
+  /* 2*RADIUS + STROKEWIDTH */
+
+  stroke-width: 3px;
+ }
+
+ .qp-circular-loader-path {
+  stroke-dasharray: 58.9;
+  /* 2*RADIUS*PI * ARCSIZE/360 */
+
+  stroke-dashoffset: 58.9;
+  /* 2*RADIUS*PI * ARCSIZE/360 */
+  /* hides things initially */
+ }
+ /* SVG elements seem to have a different default origin */
+
+ .qp-circular-loader,
+ .qp-circular-loader * {
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+ }
+ /* Rotating the whole thing */
+
+ @-webkit-keyframes rotate {
+  from {
+   -webkit-transform: rotate(0deg);
+  }
+  to {
+   -webkit-transform: rotate(360deg);
+  }
+ }
+
+ @keyframes rotate {
+  from {
+   transform: rotate(0deg);
+  }
+  to {
+   transform: rotate(360deg);
+  }
+ }
+
+ .qp-circular-loader {
+  -webkit-animation-name: rotate;
+  animation-name: rotate;
+  -webkit-animation-duration: 1568.63ms;
+  animation-duration: 1568.63ms;
+  /* 360 * ARCTIME / (ARCSTARTROT + (360-ARCSIZE)) */
+
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+ }
+ /* Filling and unfilling the arc */
+
+ @-webkit-keyframes fillunfill {
+  from {
+   stroke-dashoffset: 58.8
+   /* 2*RADIUS*PI * ARCSIZE/360 - 0.1 */
+   /* 0.1 a bit of a magic constant here */
+  }
+  50% {
+   stroke-dashoffset: 0;
+  }
+  to {
+   stroke-dashoffset: -58.4
+   /* -(2*RADIUS*PI * ARCSIZE/360 - 0.5) */
+   /* 0.5 a bit of a magic constant here */
+  }
+ }
+
+ @keyframes fillunfill {
+  from {
+   stroke-dashoffset: 58.8
+   /* 2*RADIUS*PI * ARCSIZE/360 - 0.1 */
+   /* 0.1 a bit of a magic constant here */
+  }
+  50% {
+   stroke-dashoffset: 0;
+  }
+  to {
+   stroke-dashoffset: -58.4
+   /* -(2*RADIUS*PI * ARCSIZE/360 - 0.5) */
+   /* 0.5 a bit of a magic constant here */
+  }
+ }
+
+ @-webkit-keyframes rot {
+  from {
+   -webkit-transform: rotate(0deg);
+  }
+  to {
+   -webkit-transform: rotate(-360deg);
+  }
+ }
+
+ @keyframes rot {
+  from {
+   transform: rotate(0deg);
+  }
+  to {
+   transform: rotate(-360deg);
+  }
+ }
+
+ @-webkit-keyframes colors {
+  0% {
+   stroke: #754fa0;
+  }
+  20% {
+   stroke: #09b7bf;
+  }
+  40% {
+   stroke: #90d36b;
+  }
+  60% {
+   stroke: #f2d40d;
+  }
+  80% {
+   stroke: #fcb12b;
+  }
+  100% {
+   stroke: #ed1b72;
+  }
+ }
+
+ @keyframes colors {
+  0% {
+   stroke: #754fa0;
+  }
+  20% {
+   stroke: #09b7bf;
+  }
+  40% {
+   stroke: #90d36b;
+  }
+  60% {
+   stroke: #f2d40d;
+  }
+  80% {
+   stroke: #fcb12b;
+  }
+  100% {
+   stroke: #ed1b72;
+  }
+ }
+
+ .qp-circular-loader-path {
+  -webkit-animation-name: fillunfill, rot, colors;
+  animation-name: fillunfill, rot, colors;
+  -webkit-animation-duration: 1333ms, 5332ms, 5332ms;
+  animation-duration: 1333ms, 5332ms, 5332ms;
+  /* ARCTIME, 4*ARCTIME, 4*ARCTIME */
+
+  -webkit-animation-iteration-count: infinite, infinite, infinite;
+  animation-iteration-count: infinite, infinite, infinite;
+  -webkit-animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1), steps(4), linear;
+  animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1), steps(4), linear;
+  -webkit-animation-play-state: running, running, running;
+  animation-play-state: running, running, running;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+ }
+
+.courseCard {
+  width: 300px;
+  height: 500px;
+}
+
+.card-content {
+  height: 200px;
 }

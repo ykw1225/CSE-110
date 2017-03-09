@@ -26,6 +26,7 @@ export interface Course {
     prereqs: string[];
     quarter: string;
     title: string;
+    name: string;
 }
 
 @Injectable()
