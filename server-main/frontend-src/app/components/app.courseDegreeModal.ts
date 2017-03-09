@@ -20,7 +20,7 @@ export class CourseDegreeModal {public colleges: string[];
     public courses: Course[];
 
     private _courseModel: Course;
-    private _departmentModel: string;
+    private _departmentModel: Department;
 
     private _courseSelect: JQuery;
 
@@ -29,11 +29,10 @@ export class CourseDegreeModal {public colleges: string[];
     }
 
     public set courseModel(value) {
+console.log(value);
+
         if (this._courseModel !== value) {
             this._courseModel = value;
-
-            // We don't know who is listening, but tell them we did a thing.
-            this.pubSubEventService.publish(Events.CourseChangedEvent, value);
         }
     }
 
@@ -45,9 +44,7 @@ export class CourseDegreeModal {public colleges: string[];
         if (this._departmentModel !== value) {
             this._departmentModel = value;
 
-            console.log(value);
-
-            this.courseService.getCoursesAsync(value)
+            this.courseService.getCoursesAsync(value.code)
                 .then(r => this.courses = r)
         }
     }

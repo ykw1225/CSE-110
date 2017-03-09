@@ -4,7 +4,7 @@
         <div class="input-field col s12" class="department">
             <select [(ngModel)]="departmentModel" style="display: inline">
                 <option value="" disabled selected>Choose your option</option>
-                <option *ngFor="let department of departments" [value]="department.code">{{ department.name }}</option>
+                <option *ngFor="let department of departments" [ngValue]="department">{{ department.name }}</option>
             </select>
             <label>Department</label>
         </div>
@@ -13,7 +13,7 @@
         <div class="input-field col s12" class="course">
             <select [(ngModel)]="courseModel" style="display: inline">
                 <option value="" disabled selected>Choose your option</option>
-                <option *ngFor="let course of courses" [value]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
+                <option *ngFor="let course of courses" [ngValue]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
             </select>
             <label>Course</label>
         </div>

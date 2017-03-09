@@ -185,6 +185,8 @@ export class graphDisplayComponent {
                     if (preq.length > 1) {
                         let courseAdding = _.find(this._fullCourseMap, c => c.name === preq[0]);
                         //multi node
+
+                        console.log(courseAdding);
                         nodes.push({
                             data: {
                                 id: preqId,
