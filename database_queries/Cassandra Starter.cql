@@ -30,6 +30,12 @@ CREATE TABLE grad.degrees (
 	PRIMARY KEY(department, number)
 );
 
+CREATE TABLE grad.departments (
+	code text PRIMARY KEY,
+	name text,
+	code_list list<text>
+);
+
 CREATE TABLE grad.colleges (
 	college text,
     requirements list<frozen<requirement>>,
