@@ -84,12 +84,12 @@ export class graphDisplayComponent {
                 });
             }
         });
-        }
+    }
 
-  private _clearGraph(): void {
-    this._cy.remove(this._cy.elements());
+    private _clearGraph(): void {
+        this._cy.remove(this._cy.elements());
 
-    
+
 /*
     let graphJokes = this._getRandomJoke();
 
@@ -131,6 +131,14 @@ export class graphDisplayComponent {
       console.log(payload);
 
       alert("Help, I've shot myself in the foot");
+    }
+
+    private async _addCourseMap(payload: Course): Promise<void> {
+        let courseMap: CourseMap[] =
+            _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
+                .filter((c: Object) => !c.hasOwnProperty('Code'))
+                .value() as CourseMap[];
+        this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
