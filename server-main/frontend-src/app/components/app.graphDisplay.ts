@@ -74,6 +74,8 @@ export class graphDisplayComponent {
     }
 
     private _degreeAdded(payload: UndergradDegree): void {
+      console.log(payload);
+
       alert("Help, I've shot myself in the foot");
     }
 
