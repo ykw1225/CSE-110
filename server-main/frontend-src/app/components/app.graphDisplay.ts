@@ -117,21 +117,6 @@ export class graphDisplayComponent {
                 });
             }
         });
-<<<<<<< HEAD
-=======
-    }
-
-    private _clearGraph(): void {
-        this._cy.remove(this._cy.elements());
-
-
-/*
-    let graphJokes = this._getRandomJoke();
-
-    if (this._graphJokeElement) {
-      this._graphJokeElement.remove();
-      this._graphJokeElement = undefined;
->>>>>>> b5d511a653d962a3fc2e2a7afa0d2f25b2729934
     }
 
     private _clearGraph(): void {
@@ -140,28 +125,28 @@ export class graphDisplayComponent {
 
         /*
             let graphJokes = this._getRandomJoke();
-        
+
             if (this._graphJokeElement) {
               this._graphJokeElement.remove();
               this._graphJokeElement = undefined;
             }
-        
+
             let title = $('<h3>')
                             .addClass('grey-text')
                             .addClass('text-darken-2')
                             .html(graphJokes.title);
-        
+
             let subtitle = $('<h5>')
                             .addClass('graph-joke-subtitle')
                             .addClass('grey-text')
                             .addClass('text-lighten-1')
                             .html(graphJokes.subtitle);
-        
+
             this._graphJokeElement = $('<div>')
                                         .addClass('center-align')
                                         .append(title)
                                         .append(subtitle);
-        
+
             $(this._element.nativeElement)
               .prepend(this._graphJokeElement);
               */
@@ -170,13 +155,19 @@ export class graphDisplayComponent {
     /*
       private _getRandomJoke() {
         let randomNumber = Math.floor((Math.random() * 100) % this._emptyGraphJokes.length);
-    
+
         return this._emptyGraphJokes[randomNumber];
       }
       */
 
     private _degreeAdded(payload: UndergradDegree): void {
         console.log(payload);
+        let classes =
+            _.chain(payload)
+                .map(p => _.map(p.requirements, r => r.courses))
+                .value();
+
+        console.log(classes);
 
         alert("Help, I've shot myself in the foot");
     }
