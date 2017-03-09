@@ -54,6 +54,7 @@ var graphDisplayComponent = (function () {
         var _this = this;
         this._pubsubEventService = _pubsubEventService;
         this.courseService = courseService;
+        this._rootNames = [];
         this._pubsubEventService.subscribe(pubsubevent_service_1.Events.CourseChangedEvent, function (p) { return _this._courseChangedAsync(p); });
         this._pubsubEventService.subscribe(pubsubevent_service_1.Events.MultiNodeSelectedEvent, function (p) { return _this.updateMultiNode(p); });
     }
