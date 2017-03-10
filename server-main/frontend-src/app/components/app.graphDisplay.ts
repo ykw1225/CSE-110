@@ -210,7 +210,7 @@ export class graphDisplayComponent {
 
     private _clearGraph(): void {
         this._cy.remove(this._cy.elements());
-        
+
         this._rootNames = [];
         this._fullCourseMap = [];
 
@@ -441,7 +441,7 @@ export class graphDisplayComponent {
                                 description: courseAdding.description,
                                 credits: courseAdding.credits
                             },
-                            renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
+                            //renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
                             classes: "multiNode",
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
@@ -456,7 +456,7 @@ export class graphDisplayComponent {
                                 description: courseAdding.description,
                                 credits: courseAdding.credits
                             },
-                            renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
+                            //renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
                             classes: "node",
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
@@ -467,19 +467,16 @@ export class graphDisplayComponent {
 
         this._cy.add(nodes.concat(edges));
 
-        var leggo = this._cy.layout({
+        this._cy.layout({
             name: 'breadthfirst',
             roots: this._rootNames,
             directed: true,
+            animate: true, // whether to transition the node positions
+            animationDuration: 1000, // duration of animation in ms if enabled
             avoidOverlap: true,
             boundingBox: {x1: 0, y1: 0, w: this._cy.$('node').length*150, h: 2000},
             spacingFactor: 0.1,
-            maximalAdjustments: 80,
-            animate: true, // whether to transition the node positions
-            animationDuration: 1000, // duration of animation in ms if enabled
-            //animationEasing: false, // easing of animation if enabled
-        }).animation({duration: 3000});
-        leggo.progress(1).apply();
+        });
     }
 
     private _updateMultiNode(payload) {
