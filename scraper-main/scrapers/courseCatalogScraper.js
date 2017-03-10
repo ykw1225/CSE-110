@@ -1,10 +1,3 @@
-function Course(department, number, description, prereqs) {
-  this.department = department;
-  this.number = number;
-  this.description = description;
-  this.prereqs = prereqs;
-}
-
 exports.getCourses = function(callback, request, cheerio, url) {
     var courses = [];
     request(url, function(error, response, html) {
@@ -26,10 +19,7 @@ exports.getCourses = function(callback, request, cheerio, url) {
 
 function parse(header, description) {
     //splitting header into name, title and credits
-
-    //console.log("header " + header);
     var headerSplit = header.split('.');
-    //console.log("header split " + headerSplit);
 
     var courseNameSplit = headerSplit[0].match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/);
     //in case null
@@ -43,9 +33,8 @@ function parse(header, description) {
       console.log("No header . split " + header);
       return false;
     }
-    //console.log("header 2" + header);
+
     headerSplit = headerSplit[1].split(' (');
-    //console.log("header split 2" + headerSplit);
 
     var courseTitle = headerSplit[0];
 
@@ -57,12 +46,7 @@ function parse(header, description) {
     if(description){
         var descriptionSplit = description.split(/<strong.*strong>/);
         var description = descriptionSplit[0];
-
-        // Transform the prerequisites text into something useful.
-        if(descriptionSplit.length<2) var prereqs = null;
-        else var prereqs = parsePrereqs(descriptionSplit[1]);
     } else {
-        var description = null;
         var prereqs = null;
     }
 
@@ -72,17 +56,7 @@ function parse(header, description) {
     //split into department and numer
     var nameSplit = courseName.split(' ');
 
-
     //[department, number, title, description, credits, prereqs, coreqs, quarter]
     //array for database insertion ease
     return [nameSplit[0], nameSplit[1], courseTitle, description, credits, null, null, null];
-}
-
-function parsePrereqs(preReqString) {
-    var prereqsList = preReqString.match(/[A-Za-z]{3,4}\s[1-9][0-9A-Z]*/g);
-    var prereqs = [];
-    for(var i in prereqsList) {
-        prereqs.push([prereqsList[i]]);
-    }
-    return prereqs;
 }

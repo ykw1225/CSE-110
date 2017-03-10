@@ -48,6 +48,7 @@ export class CourseService {
     }
 
     public getCourseInfoAsync(department: string, number: string): Promise<Course> {
+        
         return this.http.get(`/api/course/info/${department}/${number}`)
             .map(response => response.json() as Course)
             .toPromise();

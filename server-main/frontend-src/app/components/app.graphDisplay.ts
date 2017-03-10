@@ -92,15 +92,64 @@ export class graphDisplayComponent {
                         'text-shadow-opacity': 0.55
                     }
                 },
+                {
+                    selector: '.degreeNode',
+                    style: {
+                        'border-color': 'blue',
+                        'border-width': 10,
+                    }
+                },
+                {
+                    selector: '.req0',
+                    style: {
+                        'background-color': '#0099ff',
+                    }
+                },
+                {
+                    selector: '.req1',
+                    style: {
+                        'background-color': '#00ff99',
+                    }
+                },
+                {
+                    selector: '.req2',
+                    style: {
+                        'background-color': '#ff9933',
+                    }
+                },
+                {
+                    selector: '.req3',
+                    style: {
+                        'background-color': '#cc66ff',
+                    }
+                },
+                {
+                    selector: '.req4',
+                    style: {
+                        'background-color': '#996633',
+                    }
+                },
+                {
+                    selector: '.req5',
+                    style: {
+                        'background-color': '#ff6600',
+                    }
+                },
+                {
+                    selector: '.req6',
+                    style: {
+                        'background-color': '#3333ff',
+                    }
+                },
             ],
             layout: {
                 name: 'breadthfirst',
+                fit: false,
                 directed: true,
                 animate: true,
                 animationDuration: 500,
             }
         });
-
 
         this._cy.on('tap', event => {
             if (event.cyTarget.hasClass &&
@@ -177,18 +226,120 @@ export class graphDisplayComponent {
       }
       */
 
-    private _degreeAdded(payload: UndergradDegree): void {
+    private async _degreeAdded(payload: UndergradDegree): Promise<void> {
         console.log(payload);
+        let classes =
+            _.chain(payload.requirements)
+                .map(r => r.courses)
+                .flatten()
+                .unique()
+                .value();
 
-        alert("Help, I've shot myself in the foot");
+        console.log(classes);
+
+        for (let course of classes) {
+            //until we can deal with bad courses
+            if(course != "Math 15B" && course != "MAE 8" && course != "MAE 9" && course != "CENG 15" && course != "CSE 95" && course != "Math 20F" && course != "Math 176" && course != "Math 188" && course != "Math 166" && course != "Math 176") {
+                if(!_.find(this._fullCourseMap, c => (c.name == course.toUpperCase()))) {
+                    await this._addCourseMap(course);
+                }
+            }
+        }
+
+        console.log(this._fullCourseMap);
+
+        //checking for invalid classes
+        for (let req of payload.requirements) {
+            if(req.courses_needed != req.courses.length) {
+                var toRemove = [];
+                for(let j = 0; j < req.courses.length; j++) {
+                    if(!_.find(this._fullCourseMap, c => c.name === req.courses[j])) {
+                        toRemove.push(j);
+                    }
+                }
+                while (toRemove.length > 0) {
+                    let j = toRemove.pop();
+                    req.courses.splice(j, 1);
+                }
+            }
+        }
+
+        let i = 0;
+        for (let req of payload.requirements) {
+            console.log(req);
+            if(req.courses_needed >= req.courses.length) {
+                for(var course of req.courses) {
+                    var node = this._cy.getElementById(course);
+                    if(node.isNode()) {
+                        node.addClass("degreeNode");
+                    } else {
+                        let courseAdding = _.find(this._fullCourseMap, c => c.name === course);
+                        if(!courseAdding) continue;
+
+                        let nodes = [];
+                        nodes.push({
+                            data: {
+                                id: course,
+                                name: course,
+                                title: courseAdding.title,
+                                description: courseAdding.description,
+                                credits: courseAdding.credits
+                            },
+                            classes: "degreeNode"
+                        });
+                        this._rootNames.push(course);
+
+                        this._createTree({id: course, name: course}, nodes);
+                    }
+                }
+            } else {
+                console.log("multi req");
+                var reqId = req.courses.join('');
+                var node = this._cy.getElementById(reqId);
+                if(node.isNode()) {
+                    node.addClass("degreeNode");
+                    console.log("no muli");
+                } else {
+                    console.log("Multining");
+                    console.log(req.courses_needed);
+                    for(let j = 0; j < req.courses_needed; j++) {
+                        console.log(j);
+                        let courseName = req.courses[j];
+                        let courseAdding = _.find(this._fullCourseMap, c => c.name === courseName);
+                        if(!courseAdding) continue;
+
+                        let nodes = [];
+                        nodes.push({
+                            data: {
+                                id: reqId + j,
+                                name: courseName,
+                                title: courseAdding.title,
+                                description: courseAdding.description,
+                                credits: courseAdding.credits,
+                                courses: req.courses
+                            },
+                            classes: "degreeNode multiNode req" + i
+                        });
+                        this._rootNames.push(reqId + j);
+                        console.log("multi: " + courseName);
+                        this._createTree({id: reqId + j, name: courseName}, nodes);
+                    }
+                    i++;
+                }
+
+            }
+        }
+
     }
 
-    private async _addCourseMap(payload: Course): Promise<void> {
+    private async _addCourseMap(payload: string): Promise<void> {
+        let ssplit = payload.split(' ');
         let courseMap: CourseMap[] =
-            _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
+            _.chain(await this._courseService.getCourseMapAsync(ssplit[0], ssplit[1]))
                 .filter((c: Object) => !c.hasOwnProperty('Code'))
                 .value() as CourseMap[];
         this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
+        this._fullCourseMap = _.uniq(this._fullCourseMap, false, c => c.name);
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
@@ -207,8 +358,8 @@ export class graphDisplayComponent {
         };
 
         this._fullCourseMap = _.union(this._fullCourseMap, courseMap);
+        this._fullCourseMap = _.uniq(this._fullCourseMap, false, c => c.name);
         this._rootNames.push(rootName);
-
 
         let nodes = [];
         nodes.push({
@@ -226,7 +377,6 @@ export class graphDisplayComponent {
         while (nodeQueue.length > 0) {
 
             let nodeObj = nodeQueue.shift();
-            console.log(nodeObj);
             let node = _.find(this._fullCourseMap, c => c.name === nodeObj.name);
 
             if (node.prereqs) {
@@ -244,7 +394,6 @@ export class graphDisplayComponent {
                         let courseAdding = _.find(this._fullCourseMap, c => c.name === preq[0]);
                         //multi node
 
-                        console.log(courseAdding);
                         nodes.push({
                             data: {
                                 id: preqId,
@@ -283,9 +432,13 @@ export class graphDisplayComponent {
             name: 'breadthfirst',
             roots: this._rootNames,
             directed: true,
+            avoidOverlap: true,
+            boundingBox: {x1: 0, y1: 0, w: this._cy.$('node').length*150, h: 2000},
+            spacingFactor: 0.1,
+            maximalAdjustments: 80,
             animate: true, // whether to transition the node positions
-            animationDuration: 5000, // duration of animation in ms if enabled
-            //animationEasing: true, // easing of animation if enabled
+            animationDuration: 1000, // duration of animation in ms if enabled
+            //animationEasing: false, // easing of animation if enabled
         }).animation({duration: 3000});
         leggo.progress(1).apply();
     }
@@ -296,7 +449,12 @@ export class graphDisplayComponent {
 
         var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
         this.removeTree(rootNode);
-        rootNode.data("name", payload.name);
+
+        let course = _.find(this._fullCourseMap, c => c.name === payload.name);
+        rootNode.data("name", course.name);
+        rootNode.data("title", course.title);
+        rootNode.data("description", course.description);
+        rootNode.data("credits", course.credits);
 
         console.log(rootNode);
         this._createTree(payload, []);
