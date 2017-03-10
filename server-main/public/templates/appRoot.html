@@ -3,13 +3,19 @@
 <div class="container-fluid">
 
     <div class="content row">
-        <graphDisplay id="cy" class="graph col s8"></graphDisplay>
-        <courseCard id="course" class="courseCard"> </courseCard>
-    </div>
+        <div class="col s8 pane">
+            <div class="row">
+                <graphDisplay id="cy" class="graph col s12 white z-depth-2"></graphDisplay>
+            </div>
+        </div>
+        <div class="col s4 pane">
+            <div class="row">
+                <courseCard id="course" class="courseCard col s12 white z-depth-2"></courseCard>
+            </div>
+        </div>
 
-    <toolbar></toolbar>
-</div>
+        <toolbar></toolbar>
 
-<page-footer></page-footer>
+        <!--<page-footer></page-footer>-->
 
-<course-degree-modal></course-degree-modal>
+        <course-degree-modal></course-degree-modal>
