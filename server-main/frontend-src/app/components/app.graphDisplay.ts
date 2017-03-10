@@ -28,6 +28,7 @@ export class graphDisplayComponent {
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
         this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
+        this._pubsubEventService.subscribe(Events.CourseCardEvent, p => this._updateCourseCard(p));
     }
 
     public ngOnInit() {
@@ -170,6 +171,38 @@ export class graphDisplayComponent {
                 this._updateMultiNode({
                     id: event.cyTarget.id(),
                     name: event.cyTarget.data('courses')[1]
+                });
+
+                console.log("Transfering info to course card");
+                this._updateCourseCard({
+                    id: event.cyTarget.id(),
+                    name: event.cyTarget.data('name'),
+                    title: event.cyTarget.data('title'),
+                    description: event.cyTarget.data('description'),
+                    credits: event.cyTarget.data('credits')
+                });
+            }
+            else if (event.cyTarget.hasClass &&
+                event.cyTarget.hasClass('node')) {
+                this._pubsubEventService.publish(Events.CourseCardEvent,
+                    {
+                        id: event.cyTarget.id(),
+                        name: event.cyTarget.data('name'),
+                        title: event.cyTarget.data('title'),
+                        description: event.cyTarget.data('description'),
+                        credits: event.cyTarget.data('credits')
+                    });
+                console.log('tap ' + event.cyTarget.id());
+                console.log(event.cyTarget.data('name'));
+                console.log(event.cyTarget);
+
+                console.log("Transfering info to Course Card");
+                this._updateCourseCard({
+                    id: event.cyTarget.id(),
+                    name: event.cyTarget.data('name'),
+                    title: event.cyTarget.data('title'),
+                    description: event.cyTarget.data('description'),
+                    credits: event.cyTarget.data('credits')
                 });
             }
         });
@@ -424,6 +457,7 @@ export class graphDisplayComponent {
                                 credits: courseAdding.credits
                             },
                             renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
+                            classes: "node",
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
                     }
@@ -463,6 +497,22 @@ export class graphDisplayComponent {
 
         console.log(rootNode);
         this._createTree(payload, []);
+    }
+
+    private _updateCourseCard(payload) {
+        console.log("Updating: ");
+        console.log(this._cy.$('node[id = "' + payload.id + '"]'));
+/*
+        var courseCard = something something ... blah
+
+        let course = _.find(this._fullCourseMap, c => c.name === payload.name);
+        //Basically something like this right?
+        courseCard.data("name", course.name);
+        courseCard.data("title", course.title);
+        courseCard.data("description", course.description);
+        courseCard.data("credits", course.credits);
+*/
+        console.log("Updated card with course info");
     }
 
     private removeTree(rootNode) {

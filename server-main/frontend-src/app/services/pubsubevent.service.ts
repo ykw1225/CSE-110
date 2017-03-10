@@ -6,7 +6,8 @@ export enum Events {
     MultiNodeEvent,
     MultiNodeSelectedEvent,
     DegreeAddedEvent,
-    ClearButtonEvent
+    ClearButtonEvent,
+    CourseCardEvent
 }
 
 @Injectable()
