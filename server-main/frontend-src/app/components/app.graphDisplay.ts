@@ -27,6 +27,7 @@ export class graphDisplayComponent {
         this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
+        this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
     }
 
     public ngOnInit() {
@@ -176,6 +177,9 @@ export class graphDisplayComponent {
 
     private _clearGraph(): void {
         this._cy.remove(this._cy.elements());
+        
+        this._rootNames = [];
+        this._fullCourseMap = [];
 
 
 /*
