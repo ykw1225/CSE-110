@@ -40,10 +40,6 @@ footer{
   transform: translate(-50%, -50%);
 }
 
-.graph{
-  height: 500px;
-}
-
  /*
        * Constants:
        *      RADIUS      = 12.5
@@ -240,14 +236,23 @@ footer{
   animation-fill-mode: forwards;
  }
 
-.courseCard {
-  height: 500px;
-}
-
 .card-content {
   height: 200px;
 }
 
 .pane {
   margin-top: 15px;
+  min-height: 500px !important;
+  height: 97%;
 }
+
+.pane-background {
+  min-height: 500px !important;
+  height: 97%;
+}
+
+.full-div {
+  height: 97%;
+}
+
+html,body { height: 100%; margin: 0px; padding: 0px; }

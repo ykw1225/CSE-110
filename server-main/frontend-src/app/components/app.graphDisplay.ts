@@ -144,11 +144,12 @@ export class graphDisplayComponent {
             ],
             layout: {
                 name: 'breadthfirst',
-                fit: false,
+                fit: true,
                 directed: true,
                 animate: true,
-                animationDuration: 500,
-            }
+                animationDuration: 500
+            },
+            zoom: false
         });
 
         this._cy.on('tap', event => {
