@@ -7,7 +7,7 @@ const NUM_BATCHES = 50;
 
 const getCourseInfoQuery = "SELECT * FROM courses WHERE department = ? AND number = ?";
 const getAllDepartmentsQuery = "SELECT code, name FROM departments";
-const getAllClassesInDepartment = "SELECT * FROM courses WHERE department = ?";
+const getAllClassesInDepartmentQuery = "SELECT * FROM courses WHERE department = ?";
 const getAllCodeListInDepartment = "SELECT code_list FROM departments WHERE code = ?";
 
 const insertCourseQuery = "INSERT INTO courses (department, number, title, description, credits, prereqs, coreqs, quarter) VALUES (?,?,?,?,?,?,?,?)";
@@ -51,7 +51,7 @@ else console.log("inserted");
 
 //recursively getting all relevant nodes
 var getAllPrereqs = function(currCourse, callback) {
-    console.log("curr course: " + currCourse);
+    //console.log("curr course: " + currCourse);
     const params = currCourse.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
         //handle errors
@@ -116,33 +116,9 @@ var getAllPrereqs = function(currCourse, callback) {
 exports.getCourseInfo = function(course, callback) {
     const params = course.split(" ");
     client.execute(getCourseInfoQuery, params, function(err, result) {
-        if (err) {
-            errorType = 1;
-            var errorNode = {
-                Code: 401,
-                name: course,
-                Message: "Error getting course info\n"
-            };
-            callback(errorNode);
-        } else if (!result) {
-            errorType = 2;
-            var errorNode = {
-                Code: 402,
-                name: course,
-                Message: "Data not fetched\n"
-            };
-            callback(errorNode);
-        } else if (!result['rows'].length) {
-            errorType = 3;
-            var errorNode = {
-                Code: 403,
-                name: course,
-                Message: "No results found\n"
-            };
-            callback(errorNode);
-        } else {
+        if (checkQueryResult(err, result, callback)) {
             var name = result['rows'][0]['department'] + " " + result['rows'][0]['number'];
-            console.log("no error in querying " + name);
+            //console.log("no error in querying " + name);
 
             var courseNode = {
                 Code: 200,
@@ -162,8 +138,8 @@ exports.getCourseInfo = function(course, callback) {
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
         if (foundCourses == findingCourses) {
-            console.log("error courses: ");
-            console.log(errorCourses);
+            //console.log("error courses: ");
+            //console.log(errorCourses);
             for (var course of courseMapNodes) {
                 for (var i in course.prereqs) {
                     var toRemove = [];
@@ -202,64 +178,39 @@ exports.getAllDepartments = function(callback) {
 };
 
 exports.getAllClassesInDepartment = function(department, callback) {
-    console.log("getting " + department + " courses");
+    //console.log("getting " + department + " courses");
     var finalResult = [];
     var params = [department];
     client.execute(getAllCodeListInDepartment, params, function(err, result) {
-        if (err) {
-            errorType = 1;
-            var errorNode = {
-                Code: 401,
-                name: params,
-                Message: "Error getting course info\n"
-            };
-            callback(errorNode);
-        } else if (!result) {
-            errorType = 2;
-            var errorNode = {
-                Code: 402,
-                name: params,
-                Message: "Data not fetched\n"
-            };
-            callback(errorNode);
-        } else if (!result['rows'].length) {
-            errorType = 3;
-            var errorNode = {
-                Code: 403,
-                name: params,
-                Message: "No results found\n"
-            };
-            callback(errorNode);
-        } else {
+        if (checkQueryResult(err, result, callback)) {
             var codeList = result["rows"][0]["code_list"];
+            //console.log(codeList);
             //async needed for client execution
             async.each(codeList, function(code, executeCallback) {
                 var param = [code];
-                client.execute(getAllClassesInDepartment, param, function(err2, result2) {
+                client.execute(getAllClassesInDepartmentQuery, param, function(err2, result2) {
                     if (err2) {
                         errorType = 1;
                         var errorNode = {
                             Code: 401,
-                            name: params,
                             Message: "Error getting course info\n"
                         };
                         callback(errorNode);
-                    } else if (!result) {
+                    } else if (!result2) {
                         errorType = 2;
                         var errorNode = {
                             Code: 402,
-                            name: params,
                             Message: "Data not fetched\n"
                         };
                         callback(errorNode);
-                    } else if (!result['rows'].length) {
+                    } else if (!result2['rows'].length) {
                         errorType = 3;
                         var errorNode = {
                             Code: 403,
-                            name: params,
                             Message: "No results found\n"
                         };
-                        callback(errorNode);
+                        //callback(errorNode);
+                        executeCallback();
                     } else {
                         //console.log(result);
                         finalResult = finalResult.concat(result2['rows']);
@@ -380,33 +331,8 @@ exports.insertMajors = function(majors, callback) {
 exports.getDegreesInDepartment = function(department, callback) {
     var params = [department];
     client.execute(getAllDegreesInDeparmtnet, params, function(err, result) {
-        if (err) {
-            errorType = 1;
-            var errorNode = {
-                Code: 401,
-                name: params,
-                Message: "Error getting course info\n"
-            };
-            callback(errorNode);
-        } else if (!result) {
-            errorType = 2;
-            var errorNode = {
-                Code: 402,
-                name: params,
-                Message: "Data not fetched\n"
-            };
-            callback(errorNode);
-        } else if (!result['rows'].length) {
-            errorType = 3;
-            var errorNode = {
-                Code: 403,
-                name: params,
-                Message: "No results found\n"
-            };
-            callback(errorNode);
-        } else {
-            var degrees = result["rows"];
-            callback(degrees);
+        if (checkQueryResult(err, result, callback)) {
+            callback(result["rows"]);
         }
     });
 }
@@ -417,31 +343,7 @@ exports.getDegreesInDepartment = function(department, callback) {
 exports.getDegreeFromCode = function(department, code, callback) {
     var params = [department, code];
     client.execute(getDegreeFromCodeName, params, function(err, result) {
-        if (err) {
-            errorType = 1;
-            var errorNode = {
-                Code: 401,
-                name: params,
-                Message: "Error getting course info\n"
-            };
-            callback(errorNode);
-        } else if (!result) {
-            errorType = 2;
-            var errorNode = {
-                Code: 402,
-                name: params,
-                Message: "Data not fetched\n"
-            };
-            callback(errorNode);
-        } else if (!result['rows'].length) {
-            errorType = 3;
-            var errorNode = {
-                Code: 403,
-                name: params,
-                Message: "No results found\n"
-            };
-            callback(errorNode);
-        } else {
+        if (checkQueryResult(err, result, callback)) {
             callback(result["rows"][0]);
         }
     });
@@ -449,31 +351,7 @@ exports.getDegreeFromCode = function(department, code, callback) {
 
 exports.getDepartmentsFromDegrees = function(callback) {
     client.execute(getDepartmentsFromDegreesQuery, function(err, result) {
-        if (err) {
-            errorType = 1;
-            var errorNode = {
-                Code: 401,
-                name: params,
-                Message: "Error getting course info\n"
-            };
-            callback(errorNode);
-        } else if (!result) {
-            errorType = 2;
-            var errorNode = {
-                Code: 402,
-                name: params,
-                Message: "Data not fetched\n"
-            };
-            callback(errorNode);
-        } else if (!result['rows'].length) {
-            errorType = 3;
-            var errorNode = {
-                Code: 403,
-                name: params,
-                Message: "No results found\n"
-            };
-            callback(errorNode);
-        } else {
+        if (checkQueryResult(err, result, callback)) {
             callback(result["rows"]);
         }
     })
@@ -488,8 +366,38 @@ exports.removeAllCourses = function(callback) {
 exports.removeDepartmentCourses = function(department, callback) {
     var param = [department];
     client.execute(deleteDepartmentFromCoursesQuery, param, function(err, result) {
-        if (err) console.log(err);
-        //console.log(result);
-        callback();
+        if (checkQueryResult(err, result, callback)) {
+            callback();
+        }
     });
 }
+
+/*
+ * Helper function for error handling, return true if no errors
+ */
+function checkQueryResult(err, result, callback) {
+    if (err) {
+        errorType = 1;
+        var errorNode = {
+            Code: 401,
+            Message: "Error getting course info\n"
+        };
+        callback(errorNode);
+    } else if (!result) {
+        errorType = 2;
+        var errorNode = {
+            Code: 402,
+            Message: "Data not fetched\n"
+        };
+        callback(errorNode);
+    } else if (!result['rows'].length) {
+        errorType = 3;
+        var errorNode = {
+            Code: 403,
+            Message: "No results found\n"
+        };
+        callback(errorNode);
+    } else {
+        return true;
+    }
+};

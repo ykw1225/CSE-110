@@ -2,7 +2,7 @@ var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 var database_accessor = require('database-accessor');
-var app     = express();
+var app = express();
 
 var courseLinkScraper = require('./scrapers/courseLinkScraper');
 var courseCatalogScraper = require('./scrapers/courseCatalogScraper');
@@ -11,13 +11,13 @@ var departmentScraper = require('./scrapers/departmentScraper');
 
 //we'll keep adding to this
 var degreeScrapers = {
-    "CSE" : require('./scrapers/degrees/cse')
+    "CSE": require('./scrapers/degrees/cse')
 };
 
 app.listen("3001");
 console.log("Scraping Host Started on Port 3001");
 
-app.get('/scrape/courses', function(req, res){
+app.get('/scrape/courses', function(req, res) {
     console.log("getting courses");
     var allCourses = [];
     var coursesToFind = 0;
@@ -25,19 +25,19 @@ app.get('/scrape/courses', function(req, res){
     var totalCourses = 0;
 
     var databaseCallback = function(message) {
-        console.log("inserted " + totalCourses);
+        console.log("inserted " + totalCourses + " courses");
     }
 
     var prereqCallback = function(courseArray) {
         coursesFound++;
-        if(courseArray){
+        if (courseArray) {
             allCourses.push(courseArray);
             //console.log("to find " + coursesToFind + "\tfound " + coursesFound + " " + courseArray[0] + " " + courseArray[1]);
             //console.log("prereqs: " + courseArray[5]);
         } else {
             //console.log("to find " + coursesToFind + "\tfound " + coursesFound + " null");
         }
-        if(coursesToFind==coursesFound) {
+        if (coursesToFind == coursesFound) {
             database_accessor.insertCourses(allCourses, databaseCallback);
             allCourses = [];
             totalCourses += coursesFound;
@@ -47,7 +47,7 @@ app.get('/scrape/courses', function(req, res){
     }
 
     var coursesCallback = function(courses) {
-        for(var course of courses) {
+        for (var course of courses) {
             coursesToFind++;
             coursePrereqsScraper.getPrereqs(prereqCallback, request, cheerio, course);
         }
@@ -58,11 +58,11 @@ app.get('/scrape/courses', function(req, res){
         var i = 0;
         var id = 0;
         var intervalCallback = function() {
-            if(i == courseLinks.length) {
+            if (i == courseLinks.length) {
                 console.log("DONE");
                 clearInterval(id);
             } else {
-                console.log(i + ": " + courseLinks[i]);
+                console.log((i + 1) + '/' + courseLinks.length + ": " + courseLinks[i]);
                 courseCatalogScraper.getCourses(coursesCallback, request, cheerio, courseLinks[i]);
                 i++;
             }
@@ -79,7 +79,7 @@ app.get('/scrape/courses', function(req, res){
     res.send("check console\n");
 });
 
-app.get('/scrape/departments', function(req,res) {
+app.get('/scrape/departments', function(req, res) {
     console.log("Scraping All Departments");
     var departmentsCallback = function(departments) {
         database_accessor.insertDepartments(departments, function() {
@@ -101,7 +101,7 @@ app.get('/test', function(req, res) {
 /* DEGREE SCRAPERS */
 app.get('/scrape/degree/:department', function(req, res) {
     var dep = req.params.department.toUpperCase();
-    if(!degreeScrapers[dep]) {
+    if (!degreeScrapers[dep]) {
         res.send("Can't scrape that.");
         return;
     }
@@ -119,14 +119,14 @@ app.get('/scrape/degree/:department', function(req, res) {
     res.send("check console\n");
 });
 
-app.delete('/allCourses', function(req, res){
+app.delete('/allCourses', function(req, res) {
     database_accessor.removeAllCourses(function() {
         console.log("Removed All Courses");
     });
     res.send("check console\n");
 });
 
-app.delete('/:department/courses', function(req, res){
+app.delete('/:department/courses', function(req, res) {
     database_accessor.removeDepartmentCourses(req.params.department, function() {
         console.log("Removed " + req.params.department + "'s Courses");
     });

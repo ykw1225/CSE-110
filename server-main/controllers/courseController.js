@@ -31,7 +31,7 @@ exports.init = function(app) {
             };
             response.status(errorNode.Code).send(errorNode.Message);
         } else {
-            console.log("Finding Course Info For " + request.params.department + " " + request.params.coursenumber);
+            console.log("Fetching Course Info For " + request.params.department + " " + request.params.coursenumber);
 
             //calling database
             database_accessor.getCourseInfo(request.params.department.toUpperCase() + ' ' + request.params.coursenumber.toUpperCase(), function(result) {
@@ -69,7 +69,7 @@ exports.init = function(app) {
             };
             response.status(errorNode.Code).send(errorNode.Message);
         } else {
-            console.log("Finding Course Map For " + request.params.department + " " + request.params.coursenumber);
+            console.log("Fetching Course Map For " + request.params.department + " " + request.params.coursenumber);
 
             database_accessor.getCourseMap(request.params.department.toUpperCase() + ' ' + request.params.coursenumber.toUpperCase(), function(result) {
                 // Handle results
@@ -84,7 +84,7 @@ exports.init = function(app) {
     });
 
     app.get('/api/:department/course', function(request, response) {
-        console.log("Finding all courses in " + request.params.department);
+        console.log("Fetching all courses in " + request.params.department);
         database_accessor.getAllClassesInDepartment(request.params.department.toUpperCase(), function(result) {
             //handle error
             if (result.hasOwnProperty('Code')) {
