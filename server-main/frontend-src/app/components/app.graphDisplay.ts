@@ -94,7 +94,7 @@ export class graphDisplayComponent {
             ],
             layout: {
                 name: 'breadthfirst',
-                directed: false
+                directed: true
             }
         });
 
@@ -279,7 +279,7 @@ export class graphDisplayComponent {
         this._cy.layout({
             name: 'breadthfirst',
             roots: this._rootNames,
-            directed: false
+            directed: true
         });
     }
 
