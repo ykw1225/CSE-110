@@ -171,6 +171,8 @@ export class graphDisplayComponent {
                     id: event.cyTarget.id(),
                     name: event.cyTarget.data('courses')[1]
                 });
+            } else if (event.cyTarget) {
+                this._pubsubEventService.publish(Events.NodeSelectedEvent, event.cyTarget.data('course'));
             }
         });
     }
@@ -421,7 +423,8 @@ export class graphDisplayComponent {
                                 name: preqId,
                                 title: courseAdding.title,
                                 description: courseAdding.description,
-                                credits: courseAdding.credits
+                                credits: courseAdding.credits,
+                                course: courseAdding
                             },
                             renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
                         });
