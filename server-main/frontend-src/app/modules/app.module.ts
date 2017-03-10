@@ -8,6 +8,7 @@ import { UndergradDegreeService } from '../services/undergraddegree.service';
 import { DepartmentService } from '../services/department.service';
 import { CourseService } from '../services/course.service';
 import { PubSubEventService } from '../services/pubsubevent.service';
+import { PersistenceService } from '../services/persistence.service';
 
 import { AppComponent } from '../components/app.component';
 import { LeftBarComponent } from '../components/app.leftbar';
@@ -50,7 +51,8 @@ import { CourseDegreeModal } from '../components/app.courseDegreeModal'
         UndergradDegreeService,
         DepartmentService,
         CourseService,
-        PubSubEventService
+        PubSubEventService,
+        PersistenceService
     ]
 })
 export class AppModule {

@@ -22,7 +22,7 @@ export class PersistenceService{
 				 * // assign input to answer;
 				 * if( answer === "y" || answer === "y")
 				 */
-				this.setData(key, data);
+				this.setData(key, JSON.stringify(data));
 			}
 
 			else{
@@ -65,15 +65,8 @@ export class PersistenceService{
 	// To change a single data by given KEY
 	public setData(key: string, data: Object){
 
-		// get the value of the data
-		if(localStorage.getItem(key)){
 			localStorage.setItem(key, JSON.stringify(data));
 			console.log("\tSUCCEED to change [KEY](" + key + ") with [DATA](" + JSON.stringify(data) + ")");
-		}
-
-		// the data corresponding to the KEY is not found
-		else console.log("\tFAILE: to find " + key);
-
 	}
 
 } // end of PersistenceService
