@@ -13,6 +13,7 @@ import * as _ from 'underscore';
     selector: 'graphDisplay',
     templateUrl: '/templates/graphDisplay.html'
 })
+
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
     private _fullCourseMap: CourseMap[] = [];
@@ -253,6 +254,7 @@ export class graphDisplayComponent {
                                 description: courseAdding.description,
                                 credits: courseAdding.credits
                             },
+                            renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
                             classes: "multiNode",
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
@@ -266,7 +268,8 @@ export class graphDisplayComponent {
                                 title: courseAdding.title,
                                 description: courseAdding.description,
                                 credits: courseAdding.credits
-                            }
+                            },
+                            renderedPosition: { x: Math.random()*500, y: Math.random()*800 },
                         });
                         nodeQueue.push({ id: preqId, name: preq[0] });
                     }
