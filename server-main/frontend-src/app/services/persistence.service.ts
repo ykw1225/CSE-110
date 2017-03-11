@@ -12,9 +12,7 @@ export class PersistenceService{
 		if(key !== null && data !== null){
 
 			// check if the data is already existed
-			if(localStorage.getItem(key)){
-				console.log("\tWARNNING: [KEY](" + key + ") is already EXISTED with [DATA](" + localStorage.getItem(key) + ")");
-
+			if(localStorage.getItem(key)) {
 				/*
 				 * // I am not sure if this part is neccessary
 				 * console.log("\t\tREPLACE with new value [y for yes, otherwise no] : ");
@@ -22,16 +20,14 @@ export class PersistenceService{
 				 * // assign input to answer;
 				 * if( answer === "y" || answer === "y")
 				 */
-				this.setData(key, data);
+				this.setData(key, JSON.stringify(data));
 			}
 
 			else{
 				localStorage.setItem(key, JSON.stringify(data));
-				console.log("\tSUCCEED: to add [KEY](" + key + ") with [DATA](" + JSON.stringify(data) + ")");
 			}
 
-		}else console.log("\tERROR: Either [KEY] or [DATA] is INVALID !!!");
-
+		}
 	} // end of saveData
 
 	// To delete a single data from local by given KEY
@@ -65,15 +61,8 @@ export class PersistenceService{
 	// To change a single data by given KEY
 	public setData(key: string, data: Object){
 
-		// get the value of the data
-		if(localStorage.getItem(key)){
 			localStorage.setItem(key, JSON.stringify(data));
 			console.log("\tSUCCEED to change [KEY](" + key + ") with [DATA](" + JSON.stringify(data) + ")");
-		}
-
-		// the data corresponding to the KEY is not found
-		else console.log("\tFAILE: to find " + key);
-
 	}
 
 } // end of PersistenceService

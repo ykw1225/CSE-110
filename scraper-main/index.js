@@ -86,7 +86,13 @@ app.get('/scrape/departments', function(req, res) {
             console.log("Inserted");
         })
     }
-    departmentScraper.getDepartments(departmentsCallback, request);
+
+    var start = function() {
+        departmentScraper.getDepartments(departmentsCallback, request);
+    }
+
+    database_accessor.removeAllDepartments(start);
+
     res.send("check console\n");
 });
 
@@ -115,7 +121,12 @@ app.get('/scrape/degree/:department', function(req, res) {
         database_accessor.insertMajors(majors, databaseCallback);
     }
 
-    degreeScrapers[dep].getMajors(degreeCallback, request, cheerio, database_accessor);
+    var start = function() {
+        degreeScrapers[dep].getMajors(degreeCallback, request, cheerio, database_accessor);
+    }
+
+    database_accessor.removeDepartmentDegrees(dep, start);
+
     res.send("check console\n");
 });
 

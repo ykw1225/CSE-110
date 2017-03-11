@@ -1,12 +1,9 @@
 import { Component, ElementRef } from '@angular/core';
 
-import { UndergradDegreeService } from '../services/undergraddegree.service';
-import { DepartmentService, Department } from '../services/department.service';
+import * as UndergradDegreeService from '../services/undergraddegree.service';
+import * as DepartmentService from '../services/department.service';
 import { CourseService, Course } from '../services/course.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
-
-import * as $ from 'jquery';
-import 'materialize-css';
 
 import * as _ from 'underscore';
 
@@ -15,50 +12,59 @@ import * as _ from 'underscore';
     templateUrl: '/templates/courseDegreeModal.html'
 })
 export class CourseDegreeModal {public colleges: string[];
-    public undergradDegrees: string[];
-    public departments: Department[];
+    public undergradDegrees: UndergradDegreeService.UndergradDegree[];
+    public courseDepartments: DepartmentService.Department[];
+    public degreeDepartments: UndergradDegreeService.Department[];
     public courses: Course[];
 
-    private _courseModel: Course;
-    private _departmentModel: Department;
+    public courseModel: Course;
+    private _courseDepartmentModel: DepartmentService.Department;
+    private _degreeDepartmentModel: UndergradDegreeService.Department;
+    public degreeModel: UndergradDegreeService.UndergradDegree;
 
     private _courseSelect: JQuery;
 
-    public get courseModel() {
-        return this._courseModel;
+    public get courseDepartmentModel() {
+        return this._courseDepartmentModel;
     }
 
-    public set courseModel(value) {
-console.log(value);
-
-        if (this._courseModel !== value) {
-            this._courseModel = value;
-        }
-    }
-
-    public get departmentModel() {
-        return this._departmentModel;
-    }
-
-    public set departmentModel(value) {
-        if (this._departmentModel !== value) {
-            this._departmentModel = value;
+    public set courseDepartmentModel(value) {
+        if (this._courseDepartmentModel !== value) {
+            this._courseDepartmentModel = value;
 
             this.courseService.getCoursesAsync(value.code)
                 .then(r => this.courses = r)
         }
     }
 
-    constructor(
-        private _element: ElementRef,
-        private undergradDegreeService: UndergradDegreeService,
-        private departmentService: DepartmentService,
-        private courseService: CourseService,
-        private pubSubEventService: PubSubEventService) {
-        departmentService.getDepartmentsAsync().then(r => this.departments = r);
+    public get degreeDepartmentModel(): UndergradDegreeService.Department {
+        return this._degreeDepartmentModel;
     }
 
-    private _add(): void {
-        this.pubSubEventService.publish(Events.CourseChangedEvent, this.courseModel);
+    public set degreeDepartmentModel(value) {
+        if (this._degreeDepartmentModel !== value) {
+            this._degreeDepartmentModel = value;
+
+            this.undergradDegreeService.getDegreesAsync("Gary", value.department)
+                .then(r => this.undergradDegrees = r)
+        }
+    }
+
+    constructor(
+        private _element: ElementRef,
+        private undergradDegreeService: UndergradDegreeService.UndergradDegreeService,
+        private departmentService: DepartmentService.DepartmentService,
+        private courseService: CourseService,
+        private pubSubEventService: PubSubEventService) {
+        departmentService.getDepartmentsAsync().then(r => this.courseDepartments = r);
+        undergradDegreeService.getDepartmentsAsync().then(r => this.degreeDepartments = r);
+    }
+
+    private _addCourse(): void {
+        this.pubSubEventService.publish(Events.CourseAddedEvent, this.courseModel);
+    }
+
+    private async _addDegreeAsync(): Promise<void> {
+        this.pubSubEventService.publish(Events.DegreeAddedEvent, await this.undergradDegreeService.getDegreeAsync("Gary", this.degreeDepartmentModel.department, this.degreeModel.number));
     }
 }

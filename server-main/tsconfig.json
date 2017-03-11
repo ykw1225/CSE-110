@@ -3,7 +3,12 @@
         "target": "es5",
         "module": "commonjs",
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
+        "emitDecoratorMetadata": true,
+        "lib": [
+            "es2015",
+            "dom",
+            "es2015.promise"
+        ]
     },
     "include": [
         "frontend-src/**/*.ts",

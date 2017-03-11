@@ -16,10 +16,13 @@ const insertDepartmentQuery = "INSERT INTO departments (code, name, code_list) V
 const insertDegreeQuery = "INSERT INTO degrees (department, number, title, description, requirements) VALUES (?,?,?,?,?)";
 
 const removeAllCoursesQuery = "TRUNCATE courses";
+const removeAllDepartmentsQuery = "TRUNCATE departments";
 //query that deletes row with specific department
-const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
+const deleteCoursesFromDepartmentQuery = "DELETE FROM courses where department = ?";
+//query that deletes row with specific department
+const deleteDegreesFromDepartmentQuery = "DELETE FROM degrees where department = ?";
 //query that finds all degrees with department name, in degrees table
-const getAllDegreesInDeparmtnet = "SELECT number, title FROM degrees where department = ?";
+const getAllDegreesInDepartment = "SELECT number, title FROM degrees where department = ?";
 //query that return specific degree with given number
 const getDegreeFromCodeName = "SELECT * FROM degrees where department = ? and number = ?";
 //query that return all department names in degrees table
@@ -401,3 +404,17 @@ function checkQueryResult(err, result, callback) {
         return true;
     }
 };
+
+exports.removeDepartmentDegrees = function(department, callback) {
+    var param = [department];
+    client.execute(deleteDegreesFromDepartmentQuery, param, function(err, result) {
+        if (err) console.log(err);
+        callback();
+    });
+}
+
+exports.removeAllDepartments = function(callback) {
+    client.execute(removeAllDepartmentsQuery, function(err) {
+        callback();
+    })
+}

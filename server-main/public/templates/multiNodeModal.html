@@ -1,0 +1,13 @@
+<form class="addDialog">
+    <br>
+
+    <div class="row">
+        <md-select placeholder="Course" [(ngModel)]="selectedCourse" name="courseSelect" class="col s12">
+            <md-option *ngFor="let availableCourse of availableCourses" [value]="availableCourse">{{ availableCourse }}</md-option>
+        </md-select>
+    </div>
+
+    <div class="row">
+        <button md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>UPDATE</button>
+    </div>
+</form>

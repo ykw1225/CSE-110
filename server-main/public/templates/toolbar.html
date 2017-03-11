@@ -1,9 +1,8 @@
 <div class="fixed-action-btn">
-    <a class="btn-floating btn-large green z-depth-4" title="Add class or degree" href="#addClassDegreeModal">
+    <a class="btn-floating btn-large indigo z-depth-4" title="Add class or degree" (click)="_addButtonClicked()">
         <i class="large material-icons waves-effect">add</i>
     </a>
     <ul>
-        <li><a class="btn-floating yellow darken-1 waves-effect" title="Clear class list" (click)="_clearGraph()"><i class="material-icons">clear_all</i></a></li>
-        <li><a class="btn-floating red waves-effect" title="Remove class or degree" (click)="_shootSelfInFootAsync()"><i class="material-icons">delete</i></a></li>
+        <li><a class="btn-floating red waves-effect" title="Clear class list" (click)="_clearGraph()"><i class="material-icons">delete</i></a></li>
     </ul>
 </div>

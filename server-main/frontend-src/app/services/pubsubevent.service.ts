@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 
 // These compile to simple numbers in the JS.
 export enum Events {
-    CourseChangedEvent,
+    CourseAddedEvent,
     MultiNodeEvent,
     MultiNodeSelectedEvent,
     DegreeAddedEvent,
-    ClearButtonEvent
+    ClearButtonEvent,
+    CourseCardEvent
 }
 
 @Injectable()
