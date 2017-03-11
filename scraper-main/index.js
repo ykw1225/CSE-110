@@ -115,7 +115,12 @@ app.get('/scrape/degree/:department', function(req, res) {
         database_accessor.insertMajors(majors, databaseCallback);
     }
 
-    degreeScrapers[dep].getMajors(degreeCallback, request, cheerio, database_accessor);
+    var start = function() {
+        degreeScrapers[dep].getMajors(degreeCallback, request, cheerio, database_accessor);
+    }
+
+    database_accessor.removeDepartmentDegrees(dep, start);
+
     res.send("check console\n");
 });
 

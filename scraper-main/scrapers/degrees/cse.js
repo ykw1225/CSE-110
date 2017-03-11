@@ -7,11 +7,41 @@ var emptyReq = {
     credits_needed: null
 };
 
-var getElectives = function(cheerio, electiveElement) {
-    return [];
+var getElectives = function($, cheerio, mathUDCourses) {
+    var electives = []
+    var url = "http://ucsd.edu/catalog/curric/CSE-ug.html";
+
+    /* all upper div math & ece courses except for a select few */
+    electives = electives.concat(mathUDCourses);
+    //electives = electives.concat(eeUDCourses);
+
+    /* get the rest of the courses*/
+    var classPar = $("#content").find('h5:contains("Cognitive Science")');
+    electives = electives.concat(findClasses("COGS", classPar));
+
+    classPar = $("#content").find('h5:contains("Economics")');
+    electives = electives.concat(findClasses("ECON", classPar));
+
+    classPar = $("#content").find('h5:contains("Linguistics")');
+    electives = electives.concat(findClasses("LIGN", classPar));
+
+    classPar = classPar.nextAll().slice(1,2);
+    var tmpEng = findClasses("ENG", classPar);
+    electives = electives.concat(tmpEng.slice(0,2));
+
+    classPar = $("#content").find('h5:contains("Music")');
+    electives = electives.concat(findClasses("MUS", classPar));
+
+    classPar = $("#content").find('h5:contains("Psychology")');
+    electives = electives.concat(findClasses("PSYC", classPar));
+
+    classPar = $("#content").find('h5:contains("Rady School of Management")');
+    electives = electives.concat(findClasses("MGT", classPar));
+
+    return electives;
 }
 
-var databaseCallback = function(callback, request, cheerio, cseUDCourses) {
+var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUDCourses, eeUDCourses) {
     var majors = [];
     var url = "http://ucsd.edu/catalog/curric/CSE-ug.html";
 
@@ -25,7 +55,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses) {
 
         var requirements = [];
         //have to get technical electives
-        var technicalElectives = getElectives(cheerio, $(".program-overview-subhead-2")[4]);
+        var technicalElectives = getElectives($, cheerio, mathUDCourses);
 
         var major = ["CSE", "26", "Computer Science", "", {}];
 
@@ -170,7 +200,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses) {
         requirements.push(currReq);
         currReq = JSON.parse(JSON.stringify(emptyReq));
 
-        var TEs = cseUDCourses.concat(technicalElectives);
+        var TEs = cseUDCourses.concat(technicalElectives.concat(eeUDCourses));
         currReq.type = "Technical Electives";
         currReq.courses = TEs;
         currReq.courses_needed = 2;
@@ -342,7 +372,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses) {
         //ELECTIVES
         currReq = JSON.parse(JSON.stringify(emptyReq));
         currReq.type = "Electives";
-        currReq.courses = cseUDCourses;
+        currReq.courses = cseUDCourses.concat(eeUDCourses);
         currReq.courses_needed = 7;
 
         requirements.push(currReq);
@@ -369,14 +399,80 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses) {
     });
 }
 
+var findClasses = function(currClassName, classPar) {
+    var regParseClasses = /(\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}|\d{3}[A-Z]|\d{3})/g;
+    var classes = classPar.next().text().match(regParseClasses);
+    var allClasses = []
+
+    for (var a = 0; a < classes.length; a++) {
+
+        var search = classes[a].includes("-");
+        if (search) {
+            var tmp = parseClasses(currClassName, classes[a]);
+            allClasses = allClasses.concat(tmp);
+        } else {
+            allClasses.push(currClassName + " " + classes[a])
+        }
+
+    }
+
+    return allClasses;
+}
+
+var parseClasses = function(className, classStr){
+    var regMatchClassNum = /\d{1,3}/;
+    var regMatchClassLetters = /[A-Z]/g;
+    var classNum = classStr.match(regMatchClassNum)[0];
+    var letters = classStr.match(regMatchClassLetters);
+
+    for (var i = 0; i < letters.length; i++) {
+        letters[i] = className + " " + classNum + letters[i];
+    }
+
+    return letters;
+}
+
 exports.getMajors = function(callback, request, cheerio, database_accessor) {
+    var i = 0;
+    var numCourses = 3;
+    var cseCourseList = [];
+    var mathCoursesList = [];
+    var eceCoursesList = [];
     database_accessor.getAllClassesInDepartment("CSE", function(courses) {
-        var courseList = [];
         for(var course of courses) {
             var courseNumber = course.number.match(/[0-9]*/);
             var courseNumberInt = parseInt(courseNumber[0]);
-            if(courseNumberInt >= 100 && courseNumberInt < 200) courseList.push(course.department + " " + course.number);
+            if(courseNumberInt >= 100 && courseNumberInt < 200)
+                cseCourseList.push(course.department + " " + course.number);
         }
-        databaseCallback(callback, request, cheerio, courseList);
+        i++;
+        if(i == numCourses) {
+            databaseCallback(callback, request, cheerio, cseCourseList, mathCoursesList, eceCoursesList);
+        }
     })
+    database_accessor.getAllClassesInDepartment("MATH", function(courses) {
+        for(var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if(courseNumberInt >= 100 && courseNumberInt < 200 && courseNumberInt != 168)
+                mathCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if(i == numCourses) {
+            databaseCallback(callback, request, cheerio, cseCourseList, mathCoursesList, eceCoursesList);
+        }
+    })
+    database_accessor.getAllClassesInDepartment("ECE", function(courses) {
+        for(var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if(courseNumberInt >= 100 && courseNumberInt < 195)
+                eceCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if(i == numCourses) {
+            databaseCallback(callback, request, cheerio, cseCourseList, mathCoursesList, eceCoursesList);
+        }
+    })
+
 };

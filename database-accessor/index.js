@@ -17,7 +17,9 @@ const insertDegreeQuery = "INSERT INTO degrees (department, number, title, descr
 
 const removeAllCoursesQuery = "TRUNCATE courses";
 //query that deletes row with specific department
-const deleteDepartmentFromCoursesQuery = "DELETE FROM courses where department = ?";
+const deleteCoursesFromDepartmentQuery = "DELETE FROM courses where department = ?";
+//query that deletes row with specific department
+const deleteDegreesFromDepartmentQuery = "DELETE FROM degrees where department = ?";
 //query that finds all degrees with department name, in degrees table
 const getAllDegreesInDeparmtnet = "SELECT number, title FROM degrees where department = ?";
 //query that return specific degree with given number
@@ -487,9 +489,17 @@ exports.removeAllCourses = function(callback) {
 
 exports.removeDepartmentCourses = function(department, callback) {
     var param = [department];
-    client.execute(deleteDepartmentFromCoursesQuery, param, function(err, result) {
+    client.execute(deleteCoursesFromDepartmentQuery, param, function(err, result) {
         if (err) console.log(err);
         //console.log(result);
+        callback();
+    });
+}
+
+exports.removeDepartmentDegrees = function(department, callback) {
+    var param = [department];
+    client.execute(deleteDegreesFromDepartmentQuery, param, function(err, result) {
+        if (err) console.log(err);
         callback();
     });
 }
