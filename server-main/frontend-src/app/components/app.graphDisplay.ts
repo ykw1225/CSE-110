@@ -52,7 +52,7 @@ export class graphDisplayComponent {
     public set rootNames(value) {
         this._rootNamesLoaded = true;
         this._persistenceService.setData("RootNames", value);
-        
+
         this._rootNames = value;
     }
 
@@ -321,24 +321,21 @@ export class graphDisplayComponent {
       */
 
     private async _degreeAdded(payload: UndergradDegreeInfo): Promise<void> {
-        console.log(payload);
         let classes =
             _.chain(payload.requirements)
                 .map(r => r.courses)
                 .flatten()
                 .unique()
                 .value();
-
-        console.log(classes);
-
-        
+                
+        /*
         let promises = _.chain(classes)
                         .filter(course => !_.find(this.fullCourseMap, c => (c.name == course.toUpperCase())))
                         .map(c => this._addCourseMap(c))
                         .value();
 
         await Promise.all(promises);
-        
+
 
 /*
         for (let course of classes) {
@@ -350,8 +347,6 @@ export class graphDisplayComponent {
             }
         }
         */
-
-        console.log(this.fullCourseMap);
 
         //checking for invalid classes
         for (let req of payload.requirements) {
@@ -371,7 +366,6 @@ export class graphDisplayComponent {
 
         let i = 0;
         for (let req of payload.requirements) {
-            console.log(req);
             if(req.courses_needed >= req.courses.length) {
                 for(var course of req.courses) {
                     var node = this._cy.getElementById(course);
@@ -399,17 +393,12 @@ export class graphDisplayComponent {
                     }
                 }
             } else {
-                console.log("multi req");
                 var reqId = req.courses.join('');
                 var node = this._cy.getElementById(reqId);
                 if(node.isNode()) {
                     node.addClass("degreeNode");
-                    console.log("no muli");
                 } else {
-                    console.log("Multining");
-                    console.log(req.courses_needed);
                     for(let j = 0; j < req.courses_needed; j++) {
-                        console.log(j);
                         let courseName = req.courses[j];
                         let courseAdding = _.find(this.fullCourseMap, c => c.name === courseName);
                         if(!courseAdding) continue;
@@ -428,7 +417,6 @@ export class graphDisplayComponent {
                         });
                         this.rootNames.push(reqId + j);
                         this.rootNames = this.rootNames;
-                        console.log("multi: " + courseName);
                         this._createTree({id: reqId + j, name: courseName}, nodes);
                     }
                     i++;
@@ -555,9 +543,6 @@ export class graphDisplayComponent {
     }
 
     private _updateMultiNode(payload) {
-        console.log("updating: ");
-        console.log(this._cy.$('node[id = "' + payload.id + '"]'));
-
         var rootNode = this._cy.$('node[id = "' + payload.id + '"]');
         this.removeTree(rootNode);
 
@@ -567,7 +552,6 @@ export class graphDisplayComponent {
         rootNode.data("description", course.description);
         rootNode.data("credits", course.credits);
 
-        console.log(rootNode);
         this._createTree(payload, []);
     }
 
