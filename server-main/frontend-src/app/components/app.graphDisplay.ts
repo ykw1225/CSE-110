@@ -1,4 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
+import { MdDialog } from '@angular/material';
+
+import { MultiNodeModal } from './app.multiNodeModal';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
 import { UndergradDegreeService, UndergradDegreeInfo } from '../services/undergraddegree.service';
@@ -62,7 +65,8 @@ export class graphDisplayComponent {
     constructor(private _pubsubEventService: PubSubEventService,
         private _courseService: CourseService,
         private _undergradDegreeService: UndergradDegreeService,
-        private _persistenceService: PersistenceService) {
+        private _persistenceService: PersistenceService,
+        private _dialog: MdDialog) {
         this._pubsubEventService.subscribe(Events.CourseAddedEvent, p => this._courseChangedAsync(p));
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
@@ -205,11 +209,15 @@ export class graphDisplayComponent {
                 console.log(event.cyTarget.data('courses'));
                 console.log(event.cyTarget);
 
-                console.log("updating multi node for testing");
-                //just for testing
-                this._updateMultiNode({
-                    id: event.cyTarget.id(),
-                    name: event.cyTarget.data('courses')[1]
+                let dialog = this._dialog.open(MultiNodeModal);
+                dialog.componentInstance.availableCourses = event.cyTarget.data('courses');
+                dialog.componentInstance.selectedCourse = event.cyTarget.data('name');
+
+                dialog.afterClosed().subscribe(() => {
+                    this._updateMultiNode({
+                        id: event.cyTarget.id(),
+                        name: dialog.componentInstance.selectedCourse
+                    });
                 });
 
                 console.log("Transfering info to course card");

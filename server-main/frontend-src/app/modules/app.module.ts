@@ -17,7 +17,8 @@ import { NavComponent } from '../components/app.nav';
 import { ToolbarComponent } from '../components/app.toolbar';
 import { courseCardComponent } from '../components/app.courseCard';
 import { CardContainerComponent } from '../components/app.cardContainer';
-import { CourseDegreeModal } from '../components/app.courseDegreeModal'
+import { CourseDegreeModal } from '../components/app.courseDegreeModal';
+import { MultiNodeModal } from '../components/app.multiNodeModal';
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { CourseDegreeModal } from '../components/app.courseDegreeModal'
         MaterialModule
     ],
     entryComponents: [
-        CourseDegreeModal
+        CourseDegreeModal,
+        MultiNodeModal
     ],
     declarations: [
         AppComponent,
@@ -36,7 +38,8 @@ import { CourseDegreeModal } from '../components/app.courseDegreeModal'
         ToolbarComponent,
         courseCardComponent,
         CardContainerComponent,
-        CourseDegreeModal
+        CourseDegreeModal,
+        MultiNodeModal
     ],
     bootstrap: [
         AppComponent
