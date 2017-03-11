@@ -337,7 +337,11 @@ export class graphDisplayComponent {
                         .map(c => this._addCourseMap(c))
                         .value();
 
-        await Promise.all(promises);
+        try {
+            await Promise.all(promises);
+        } catch (e) {
+            console.log(e);
+        }
         
 
 /*
@@ -454,30 +458,34 @@ export class graphDisplayComponent {
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
-        let rootName = payload.department + " " + payload.number;
-        let courseMap: CourseMap[] =
-            _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
-                .filter((c: Object) => !c.hasOwnProperty('Code'))
-                .value() as CourseMap[];
+        try {
+            let rootName = payload.department + " " + payload.number;
+            let courseMap: CourseMap[] =
+                _.chain(await this._courseService.getCourseMapAsync(payload.department, payload.number))
+                    .filter((c: Object) => !c.hasOwnProperty('Code'))
+                    .value() as CourseMap[];
 
-        let data = {
-            id: rootName,
-            name: rootName,
-            description: courseMap[0].description,
-            credits: courseMap[0].credits,
-            title: courseMap[0].title
-        };
+            let data = {
+                id: rootName,
+                name: rootName,
+                description: courseMap[0].description,
+                credits: courseMap[0].credits,
+                title: courseMap[0].title
+            };
 
-        this.fullCourseMap = _.union(this.fullCourseMap, courseMap);
-        this.fullCourseMap = _.uniq(this.fullCourseMap, false, c => c.name);
-        this.rootNames.push(rootName);
-        this.rootNames = this.rootNames;
+            this.fullCourseMap = _.union(this.fullCourseMap, courseMap);
+            this.fullCourseMap = _.uniq(this.fullCourseMap, false, c => c.name);
+            this.rootNames.push(rootName);
+            this.rootNames = this.rootNames;
 
-        let nodes = [];
-        nodes.push({
-            data: data
-        });
-        this._createTree(data, nodes);
+            let nodes = [];
+            nodes.push({
+                data: data
+            });
+            this._createTree(data, nodes);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     private _createTree(root, nodes: any[]) {
