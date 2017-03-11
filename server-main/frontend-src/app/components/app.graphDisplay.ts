@@ -24,7 +24,7 @@ export class graphDisplayComponent {
 
     public get fullCourseMap() {
         if (!this._fullCourseMapLoaded) {
-            this._fullCourseMap = this._persistenceService.getData("FullCourseMap") || [];
+            this._fullCourseMap = [];// this._persistenceService.getData("FullCourseMap") || [];
 
             this._fullCourseMapLoaded = true;
         }
@@ -34,14 +34,14 @@ export class graphDisplayComponent {
 
     public set fullCourseMap(value) {
         this._fullCourseMapLoaded = true;
-        this._persistenceService.setData("FullCourseMap", value);
+        //this._persistenceService.setData("FullCourseMap", value);
 
         this._fullCourseMap = value;
     }
 
     public get rootNames() {
         if (!this._rootNamesLoaded) {
-            this._rootNames = this._persistenceService.getData("RootNames") || [];
+            this._rootNames = []; //this._persistenceService.getData("RootNames") || [];
 
             this._rootNamesLoaded = true;
         }
@@ -51,7 +51,7 @@ export class graphDisplayComponent {
 
     public set rootNames(value) {
         this._rootNamesLoaded = true;
-        this._persistenceService.setData("RootNames", value);
+        //this._persistenceService.setData("RootNames", value);
 
         this._rootNames = value;
     }
