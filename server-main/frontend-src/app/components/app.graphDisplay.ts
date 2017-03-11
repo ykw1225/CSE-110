@@ -1,6 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 import { MdDialog } from '@angular/material';
 
+import { CourseDegreeModal } from './app.courseDegreeModal';
 import { MultiNodeModal } from './app.multiNodeModal';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
@@ -71,6 +72,10 @@ export class graphDisplayComponent {
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
         this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
+    }
+
+    private _showCourseDegreeModal() {
+        this._dialog.open(CourseDegreeModal);
     }
 
     public ngOnInit() {
