@@ -331,6 +331,15 @@ export class graphDisplayComponent {
 
         console.log(classes);
 
+        /*
+        let promises = _.chain(classes)
+                        .filter(course => !_.find(this.fullCourseMap, c => (c.name == course.toUpperCase())))
+                        .map(c => this._addCourseMap(c))
+                        .value();
+
+        await Promise.all(promises);
+        */
+
         for (let course of classes) {
             //until we can deal with bad courses
             if(course != "Math 15B" && course != "MAE 8" && course != "MAE 9" && course != "CENG 15" && course != "CSE 95" && course != "Math 20F" && course != "Math 176" && course != "Math 188" && course != "Math 166" && course != "Math 176") {
@@ -429,13 +438,17 @@ export class graphDisplayComponent {
     }
 
     private async _addCourseMap(payload: string): Promise<void> {
-        let ssplit = payload.split(' ');
-        let courseMap: CourseMap[] =
-            _.chain(await this._courseService.getCourseMapAsync(ssplit[0], ssplit[1]))
-                .filter((c: Object) => !c.hasOwnProperty('Code'))
-                .value() as CourseMap[];
-        this.fullCourseMap = _.union(this.fullCourseMap, courseMap);
-        this.fullCourseMap = _.uniq(this.fullCourseMap, false, c => c.name);
+        try {
+            let ssplit = payload.split(' ');
+            let courseMap: CourseMap[] =
+                _.chain(await this._courseService.getCourseMapAsync(ssplit[0], ssplit[1]))
+                    .filter((c: Object) => !c.hasOwnProperty('Code'))
+                    .value() as CourseMap[];
+            this.fullCourseMap = _.union(this.fullCourseMap, courseMap);
+            this.fullCourseMap = _.uniq(this.fullCourseMap, false, c => c.name);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     private async _courseChangedAsync(payload: Course): Promise<void> {
