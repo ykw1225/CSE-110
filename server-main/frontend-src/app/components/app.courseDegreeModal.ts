@@ -5,9 +5,6 @@ import { DepartmentService, Department } from '../services/department.service';
 import { CourseService, Course } from '../services/course.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
 
-import * as $ from 'jquery';
-import 'materialize-css';
-
 import * as _ from 'underscore';
 
 @Component({

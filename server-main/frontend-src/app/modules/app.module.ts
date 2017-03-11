@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+import { MaterialModule } from '@angular/material';
 
 import { CollegeService } from '../services/college.service';
 import { UndergradDegreeService } from '../services/undergraddegree.service';
@@ -27,7 +28,11 @@ import { CourseDegreeModal } from '../components/app.courseDegreeModal'
     imports: [
         BrowserModule,
         HttpModule,
-        FormsModule
+        FormsModule,
+        MaterialModule
+    ],
+    entryComponents: [
+        CourseDegreeModal
     ],
     declarations: [
         AppComponent,

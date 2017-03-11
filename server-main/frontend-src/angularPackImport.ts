@@ -21,6 +21,9 @@ System.config({
         '@angular/http': {
             main: 'bundles/http.umd.min.js',
         },
+        '@angular/material': {
+            main: 'bundles/material.umd.js',
+        },
         '@angular/forms': {
             main: 'bundles/forms.umd.min.js',
         },

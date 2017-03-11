@@ -1,43 +1,21 @@
-<modal modalID="addClassDegreeModal">
-    <div class="modal-content">
+<form class="addDialog">
     <div class="row">
-        <div class="input-field col s12" class="department">
-            <select [(ngModel)]="departmentModel" style="display: inline">
-                <option value="" disabled selected>Choose your option</option>
-                <option *ngFor="let department of departments" [ngValue]="department">{{ department.name }}</option>
-            </select>
-            <label>Department</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12" class="course">
-            <select [(ngModel)]="courseModel" style="display: inline">
-                <option value="" disabled selected>Choose your option</option>
-                <option *ngFor="let course of courses" [ngValue]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
-            </select>
-            <label>Course</label>
-        </div>
-    </div>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" (click)="_add()">Agree</a>
+        <md-select placeholder="Department" [(ngModel)]="departmentModel" name="department" class="col s12">
+            <md-option *ngFor="let department of departments" [value]="department">
+                {{ department.name }}
+            </md-option>
+        </md-select>
     </div>
 
-    <!--<div class="row">
-        <div class="col-md-12">
-            <label for="departmentSelect">Select Department</label>
-            <select class="selectpicker" data-width="100%" title="Nothing Selected" id="departmentSelect" [(ngModel)]="departmentModel">
-                <option *ngFor="let department of departments" [value]="department.code">{{ department.name }}</option>
-            </select>
-        </div>
-    </div>
-    
     <div class="row">
-        <div class="col-md-12">
-            <label for="courseSelector">Select Course</label>
-            <select class="selectpicker" data-width="100%" title="Nothing Selected" data-live-search="true" id="courseSelector" [(ngModel)]="courseModel">
-                <option *ngFor="let course of courses" [value]="course">{{ course.department }} {{ course.number }}: {{ course.title }}</option>
-            </select>
-        </div>
-    </div>-->
-</modal>
+        <md-select placeholder="Course" [(ngModel)]="courseModel" name="course" class="col s12">
+            <md-option *ngFor="let course of courses" [value]="course">
+                {{ course.department }} {{ course.number }}: {{ course.title }}
+            </md-option>
+        </md-select>
+    </div>
+
+    <div class="row">
+        <button (click)="_add()" md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>Add</button>
+    </div>
+</form>
