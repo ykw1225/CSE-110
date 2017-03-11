@@ -86,7 +86,13 @@ app.get('/scrape/departments', function(req,res) {
             console.log("Inserted");
         })
     }
-    departmentScraper.getDepartments(departmentsCallback, request);
+
+    var start = function() {
+        departmentScraper.getDepartments(departmentsCallback, request);
+    }
+
+    database_accessor.removeAllDepartments(start);
+
     res.send("check console\n");
 });
 

@@ -16,12 +16,13 @@ const insertDepartmentQuery = "INSERT INTO departments (code, name, code_list) V
 const insertDegreeQuery = "INSERT INTO degrees (department, number, title, description, requirements) VALUES (?,?,?,?,?)";
 
 const removeAllCoursesQuery = "TRUNCATE courses";
+const removeAllDepartmentsQuery = "TRUNCATE departments";
 //query that deletes row with specific department
 const deleteCoursesFromDepartmentQuery = "DELETE FROM courses where department = ?";
 //query that deletes row with specific department
 const deleteDegreesFromDepartmentQuery = "DELETE FROM degrees where department = ?";
 //query that finds all degrees with department name, in degrees table
-const getAllDegreesInDeparmtnet = "SELECT number, title FROM degrees where department = ?";
+const getAllDegreesInDepartment = "SELECT number, title FROM degrees where department = ?";
 //query that return specific degree with given number
 const getDegreeFromCodeName = "SELECT * FROM degrees where department = ? and number = ?";
 //query that return all department names in degrees table
@@ -381,7 +382,7 @@ exports.insertMajors = function(majors, callback) {
  */
 exports.getDegreesInDepartment = function(department, callback) {
     var params = [department];
-    client.execute(getAllDegreesInDeparmtnet, params, function(err, result) {
+    client.execute(getAllDegreesInDepartment, params, function(err, result) {
         if (err) {
             errorType = 1;
             var errorNode = {
@@ -502,4 +503,10 @@ exports.removeDepartmentDegrees = function(department, callback) {
         if (err) console.log(err);
         callback();
     });
+}
+
+exports.removeAllDepartments = function(callback) {
+    client.execute(removeAllDepartmentsQuery, function(err) {
+        callback();
+    })
 }
