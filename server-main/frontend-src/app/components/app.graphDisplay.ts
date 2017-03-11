@@ -225,36 +225,23 @@ export class graphDisplayComponent {
                 });
 
                 console.log("Transfering info to course card");
-                this._updateCourseCard({
-                    id: event.cyTarget.id(),
-                    name: event.cyTarget.data('name'),
-                    title: event.cyTarget.data('title'),
-                    description: event.cyTarget.data('description'),
-                    credits: event.cyTarget.data('credits')
-                });
             }
             else if (event.cyTarget.isNode()) {
-                this._pubsubEventService.publish(Events.CourseCardEvent,
-                    {
-                        id: event.cyTarget.id(),
-                        name: event.cyTarget.data('name'),
-                        title: event.cyTarget.data('title'),
-                        description: event.cyTarget.data('description'),
-                        credits: event.cyTarget.data('credits')
-                    });
                 console.log('tap ' + event.cyTarget.id());
                 console.log(event.cyTarget.data('name'));
                 console.log(event.cyTarget);
 
                 console.log("Transfering info to Course Card");
-                this._updateCourseCard({
+            }
+
+            this._pubsubEventService.publish(Events.CourseCardEvent,
+                {
                     id: event.cyTarget.id(),
                     name: event.cyTarget.data('name'),
                     title: event.cyTarget.data('title'),
                     description: event.cyTarget.data('description'),
                     credits: event.cyTarget.data('credits')
                 });
-            }
         });
 
         this.rootNames.forEach(rn => {
@@ -282,45 +269,45 @@ export class graphDisplayComponent {
         this.fullCourseMap = [];
 
 
-/*
-    let graphJokes = this._getRandomJoke();
-
-    if (this._graphJokeElement) {
-      this._graphJokeElement.remove();
-      this._graphJokeElement = undefined;
-    }
-
-    private _clearGraph(): void {
-        this._cy.remove(this._cy.elements());
-
-
         /*
             let graphJokes = this._getRandomJoke();
-
+        
             if (this._graphJokeElement) {
               this._graphJokeElement.remove();
               this._graphJokeElement = undefined;
             }
-
-            let title = $('<h3>')
-                            .addClass('grey-text')
-                            .addClass('text-darken-2')
-                            .html(graphJokes.title);
-
-            let subtitle = $('<h5>')
-                            .addClass('graph-joke-subtitle')
-                            .addClass('grey-text')
-                            .addClass('text-lighten-1')
-                            .html(graphJokes.subtitle);
-
-            this._graphJokeElement = $('<div>')
-                                        .addClass('center-align')
-                                        .append(title)
-                                        .append(subtitle);
-
-            $(this._element.nativeElement)
-              .prepend(this._graphJokeElement);
-              */
+        
+            private _clearGraph(): void {
+                this._cy.remove(this._cy.elements());
+        
+        
+                /*
+                    let graphJokes = this._getRandomJoke();
+        
+                    if (this._graphJokeElement) {
+                      this._graphJokeElement.remove();
+                      this._graphJokeElement = undefined;
+                    }
+        
+                    let title = $('<h3>')
+                                    .addClass('grey-text')
+                                    .addClass('text-darken-2')
+                                    .html(graphJokes.title);
+        
+                    let subtitle = $('<h5>')
+                                    .addClass('graph-joke-subtitle')
+                                    .addClass('grey-text')
+                                    .addClass('text-lighten-1')
+                                    .html(graphJokes.subtitle);
+        
+                    this._graphJokeElement = $('<div>')
+                                                .addClass('center-align')
+                                                .append(title)
+                                                .append(subtitle);
+        
+                    $(this._element.nativeElement)
+                      .prepend(this._graphJokeElement);
+                      */
     }
 
     /*
@@ -354,20 +341,20 @@ export class graphDisplayComponent {
 
         for (let course of classes) {
             //until we can deal with bad courses
-            if(course != "Math 15B" && course != "MAE 8" && course != "MAE 9" && course != "CENG 15" && course != "CSE 95" && course != "Math 20F" && course != "Math 176" && course != "Math 188" && course != "Math 166" && course != "Math 176") {
-                if(!_.find(this.fullCourseMap, c => (c.name == course.toUpperCase()))) {
+            if (course != "Math 15B" && course != "MAE 8" && course != "MAE 9" && course != "CENG 15" && course != "CSE 95" && course != "Math 20F" && course != "Math 176" && course != "Math 188" && course != "Math 166" && course != "Math 176") {
+                if (!_.find(this.fullCourseMap, c => (c.name == course.toUpperCase()))) {
                     await this._addCourseMap(course);
                 }
             }
         }
-        
+
 
         //checking for invalid classes
         for (let req of payload.requirements) {
-            if(req.courses_needed != req.courses.length) {
+            if (req.courses_needed != req.courses.length) {
                 var toRemove = [];
-                for(let j = 0; j < req.courses.length; j++) {
-                    if(!_.find(this.fullCourseMap, c => c.name === req.courses[j])) {
+                for (let j = 0; j < req.courses.length; j++) {
+                    if (!_.find(this.fullCourseMap, c => c.name === req.courses[j])) {
                         toRemove.push(j);
                     }
                 }
@@ -380,14 +367,14 @@ export class graphDisplayComponent {
 
         let i = 0;
         for (let req of payload.requirements) {
-            if(req.courses_needed >= req.courses.length) {
-                for(var course of req.courses) {
+            if (req.courses_needed >= req.courses.length) {
+                for (var course of req.courses) {
                     var node = this._cy.getElementById(course);
-                    if(node.isNode()) {
+                    if (node.isNode()) {
                         node.addClass("degreeNode");
                     } else {
                         let courseAdding = _.find(this.fullCourseMap, c => c.name === course);
-                        if(!courseAdding) continue;
+                        if (!courseAdding) continue;
 
                         let nodes = [];
                         nodes.push({
@@ -403,19 +390,19 @@ export class graphDisplayComponent {
                         this.rootNames.push(course);
                         this.rootNames = this.rootNames;
 
-                        this._createTree({id: course, name: course}, nodes);
+                        this._createTree({ id: course, name: course }, nodes);
                     }
                 }
             } else {
                 var reqId = req.courses.join('');
                 var node = this._cy.getElementById(reqId);
-                if(node.isNode()) {
+                if (node.isNode()) {
                     node.addClass("degreeNode");
                 } else {
-                    for(let j = 0; j < req.courses_needed; j++) {
+                    for (let j = 0; j < req.courses_needed; j++) {
                         let courseName = req.courses[j];
                         let courseAdding = _.find(this.fullCourseMap, c => c.name === courseName);
-                        if(!courseAdding) continue;
+                        if (!courseAdding) continue;
 
                         let nodes = [];
                         nodes.push({
@@ -431,7 +418,7 @@ export class graphDisplayComponent {
                         });
                         this.rootNames.push(reqId + j);
                         this.rootNames = this.rootNames;
-                        this._createTree({id: reqId + j, name: courseName}, nodes);
+                        this._createTree({ id: reqId + j, name: courseName }, nodes);
                     }
                     i++;
                 }
@@ -555,7 +542,7 @@ export class graphDisplayComponent {
             animate: true, // whether to transition the node positions
             animationDuration: 1000, // duration of animation in ms if enabled
             avoidOverlap: true,
-            boundingBox: {x1: 0, y1: 0, w: this._cy.$('node').length*150, h: 2000},
+            boundingBox: { x1: 0, y1: 0, w: this._cy.$('node').length * 150, h: 2000 },
             spacingFactor: 0.1,
         });
     }
@@ -582,16 +569,16 @@ export class graphDisplayComponent {
     }) {
         console.log("Updating: ");
         console.log(this._cy.$('node[id = "' + payload.id + '"]'));
-/*
-        var courseCard = something something ... blah
-
-        let course = _.find(this._fullCourseMap, c => c.name === payload.name);
-        //Basically something like this right?
-        courseCard.data("name", course.name);
-        courseCard.data("title", course.title);
-        courseCard.data("description", course.description);
-        courseCard.data("credits", course.credits);
-*/
+        /*
+                var courseCard = something something ... blah
+        
+                let course = _.find(this._fullCourseMap, c => c.name === payload.name);
+                //Basically something like this right?
+                courseCard.data("name", course.name);
+                courseCard.data("title", course.title);
+                courseCard.data("description", course.description);
+                courseCard.data("credits", course.credits);
+        */
         console.log("Updated card with course info");
 
         //this._pubsubEventService.publish(Events.CourseCardEvent, payload);
