@@ -71,7 +71,6 @@ export class graphDisplayComponent {
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
         this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
-        this._pubsubEventService.subscribe(Events.CourseCardEvent, p => this._updateCourseCard(p));
     }
 
     public ngOnInit() {
@@ -229,8 +228,7 @@ export class graphDisplayComponent {
                     credits: event.cyTarget.data('credits')
                 });
             }
-            else if (event.cyTarget.hasClass &&
-                event.cyTarget.hasClass('node')) {
+            else if (event.cyTarget.isNode()) {
                 this._pubsubEventService.publish(Events.CourseCardEvent,
                     {
                         id: event.cyTarget.id(),
@@ -570,7 +568,13 @@ export class graphDisplayComponent {
         this._createTree(payload, []);
     }
 
-    private _updateCourseCard(payload) {
+    private _updateCourseCard(payload: {
+        id: string,
+        name: string,
+        title: string,
+        description: string,
+        credits: number
+    }) {
         console.log("Updating: ");
         console.log(this._cy.$('node[id = "' + payload.id + '"]'));
 /*
@@ -584,6 +588,8 @@ export class graphDisplayComponent {
         courseCard.data("credits", course.credits);
 */
         console.log("Updated card with course info");
+
+        //this._pubsubEventService.publish(Events.CourseCardEvent, payload);
     }
 
     private removeTree(rootNode) {

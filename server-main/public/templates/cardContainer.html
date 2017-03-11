@@ -1,2 +1,16 @@
-<div class = "card-container">
+<div class="row" *ngFor="let card of cards">
+    <md-card class="example-card">
+        <md-card-header>
+            <md-card-title>{{ card.name }} ({{ card.credits }})</md-card-title>
+            <md-card-subtitle>{{ card.title }}</md-card-subtitle>
+        </md-card-header>
+        <md-card-content>
+            <p>
+                {{ card.description }}
+            </p>
+        </md-card-content>
+        <md-card-actions>
+            <button md-button>HIDE</button>
+        </md-card-actions>
+    </md-card>
 </div>
