@@ -333,7 +333,7 @@ exports.insertMajors = function(majors, callback) {
  */
 exports.getDegreesInDepartment = function(department, callback) {
     var params = [department];
-    client.execute(getAllDegreesInDeparmtnet, params, function(err, result) {
+    client.execute(getAllDegreesInDepartment, params, function(err, result) {
         if (checkQueryResult(err, result, callback)) {
             callback(result["rows"]);
         }
