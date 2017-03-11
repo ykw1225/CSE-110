@@ -1,6 +1,8 @@
 <md-tab-group>
     <md-tab label="Add Course">
         <form class="addDialog">
+            <br>
+
             <div class="row">
                 <md-select placeholder="Department" [(ngModel)]="courseDepartmentModel" name="courseDepartment" class="col s12">
                     <md-option *ngFor="let courseDepartment of courseDepartments" [value]="courseDepartment">
@@ -24,6 +26,8 @@
     </md-tab>
     <md-tab label="Add Degree">
         <form class="addDialog">
+            <br>
+
             <div class="row">
                 <md-select placeholder="Department" [(ngModel)]="degreeDepartmentModel" name="degreeDepartment" class="col s12">
                     <md-option *ngFor="let degreeDepartment of degreeDepartments" [value]="degreeDepartment">
