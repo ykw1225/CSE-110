@@ -22,9 +22,9 @@ const deleteCoursesFromDepartmentQuery = "DELETE FROM courses where department =
 //query that deletes row with specific department
 const deleteDegreesFromDepartmentQuery = "DELETE FROM degrees where department = ?";
 //query that finds all degrees with department name, in degrees table
-const getAllDegreesInDepartment = "SELECT number, title FROM degrees where department = ?";
+const getAllDegreesInDepartmentQuery = "SELECT number, title FROM degrees where department = ?";
 //query that return specific degree with given number
-const getDegreeFromCodeName = "SELECT * FROM degrees where department = ? and number = ?";
+const getDegreeFromCodeNameQuery = "SELECT * FROM degrees where department = ? and number = ?";
 //query that return all department names in degrees table
 const getDepartmentsFromDegreesQuery = "SELECT DISTINCT department from degrees";
 
@@ -141,10 +141,10 @@ exports.getCourseInfo = function(course, callback) {
 exports.getCourseMap = function(course, callback) {
     var courseMapCallback = function() {
         if (foundCourses == findingCourses) {
-            //console.log("error courses: ");
-            //console.log(errorCourses);
             for (var course of courseMapNodes) {
+                var pToRemove = [];
                 for (var i in course.prereqs) {
+                    console.log(i);
                     var toRemove = [];
                     for (var j in course.prereqs[i]) {
                         if (errorCourses.indexOf(course.prereqs[i][j]) > -1) {
@@ -152,13 +152,17 @@ exports.getCourseMap = function(course, callback) {
                         }
                     }
                     if (course.prereqs[i].length == toRemove.length) {
-                        course.prereqs.splice(i, 1);
+                        pToRemove.push(i);
                     } else {
                         while (toRemove.length > 0) {
                             var j = toRemove.pop();
                             course.prereqs[i].splice(j, 1);
                         }
                     }
+                }
+                while (pToRemove.length > 0) {
+                    var i = pToRemove.pop();
+                    course.prereqs.splice(i, 1);
                 }
             }
             callback(courseMapNodes);
@@ -300,18 +304,6 @@ exports.insertDepartments = function(departments, callback) {
 
 /*insert an array of majors*/
 exports.insertMajors = function(majors, callback) {
-    var major = [
-        "CS",
-        "25",
-        "CE",
-        "desc", [{
-            type: "yes",
-            courses: ["CSE 20", "CSE 21"],
-            courses_needed: 0,
-            credits_needed: 4
-        }]
-    ];
-
     const queries = [];
     for (var major of majors) {
         queries.push({ query: insertDegreeQuery, params: major });
@@ -319,13 +311,6 @@ exports.insertMajors = function(majors, callback) {
     client.batch(queries, { prepare: true }, function(err, result) {
         callback("inserted");
     });
-    /*
-    client.execute(insertDegreeQuery, major, {prepare:true}, function(err) {
-        if(err) console.log(err);
-        else console.log("worked");
-        callback("TRIED");
-    })*/
-    //callback("can't insert yet");
 };
 
 /*
@@ -333,7 +318,7 @@ exports.insertMajors = function(majors, callback) {
  */
 exports.getDegreesInDepartment = function(department, callback) {
     var params = [department];
-    client.execute(getAllDegreesInDepartment, params, function(err, result) {
+    client.execute(getAllDegreesInDepartmentQuery, params, function(err, result) {
         if (checkQueryResult(err, result, callback)) {
             callback(result["rows"]);
         }
@@ -345,7 +330,7 @@ exports.getDegreesInDepartment = function(department, callback) {
  */
 exports.getDegreeFromCode = function(department, code, callback) {
     var params = [department, code];
-    client.execute(getDegreeFromCodeName, params, function(err, result) {
+    client.execute(getDegreeFromCodeNameQuery, params, function(err, result) {
         if (checkQueryResult(err, result, callback)) {
             callback(result["rows"][0]);
         }
