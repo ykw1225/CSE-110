@@ -331,15 +331,16 @@ export class graphDisplayComponent {
 
         console.log(classes);
 
-        /*
+        
         let promises = _.chain(classes)
                         .filter(course => !_.find(this.fullCourseMap, c => (c.name == course.toUpperCase())))
                         .map(c => this._addCourseMap(c))
                         .value();
 
         await Promise.all(promises);
-        */
+        
 
+/*
         for (let course of classes) {
             //until we can deal with bad courses
             if(course != "Math 15B" && course != "MAE 8" && course != "MAE 9" && course != "CENG 15" && course != "CSE 95" && course != "Math 20F" && course != "Math 176" && course != "Math 188" && course != "Math 166" && course != "Math 176") {
@@ -348,6 +349,7 @@ export class graphDisplayComponent {
                 }
             }
         }
+        */
 
         console.log(this.fullCourseMap);
 
