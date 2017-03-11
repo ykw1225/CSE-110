@@ -1,21 +1,29 @@
-<form class="addDialog">
-    <div class="row">
-        <md-select placeholder="Department" [(ngModel)]="departmentModel" name="department" class="col s12">
-            <md-option *ngFor="let department of departments" [value]="department">
-                {{ department.name }}
-            </md-option>
-        </md-select>
-    </div>
+<md-tab-group>
+    <md-tab label="Add Course">
+        <form class="addDialog">
+            <div class="row">
+                <md-select placeholder="Department" [(ngModel)]="departmentModel" name="department" class="col s12">
+                    <md-option *ngFor="let department of departments" [value]="department">
+                        {{ department.name }}
+                    </md-option>
+                </md-select>
+            </div>
 
-    <div class="row">
-        <md-select placeholder="Course" [(ngModel)]="courseModel" name="course" class="col s12">
-            <md-option *ngFor="let course of courses" [value]="course">
-                {{ course.department }} {{ course.number }}: {{ course.title }}
-            </md-option>
-        </md-select>
-    </div>
+            <div class="row">
+                <md-select placeholder="Course" [(ngModel)]="courseModel" name="course" class="col s12">
+                    <md-option *ngFor="let course of courses" [value]="course">
+                        {{ course.department }} {{ course.number }}: {{ course.title }}
+                    </md-option>
+                </md-select>
+            </div>
 
-    <div class="row">
-        <button (click)="_add()" md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>Add</button>
-    </div>
-</form>
+            <div class="row">
+                <button (click)="_add()" md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>Add</button>
+            </div>
+        </form>
+    </md-tab>
+    <md-tab label="Add Degree">
+        <form class="addDialog">
+        </form>
+    </md-tab>
+</md-tab-group>

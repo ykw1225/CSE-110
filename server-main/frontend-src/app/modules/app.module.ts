@@ -43,7 +43,6 @@ import { CourseDegreeModal } from '../components/app.courseDegreeModal'
         PageFooterComponent,
         ToolbarComponent,
         courseCardComponent,
-        ModalComponent,
         TabsComponent,
         CardContainerComponent,
         CourseDegreeModal

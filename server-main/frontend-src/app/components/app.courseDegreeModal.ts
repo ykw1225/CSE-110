@@ -26,8 +26,6 @@ export class CourseDegreeModal {public colleges: string[];
     }
 
     public set courseModel(value) {
-console.log(value);
-
         if (this._courseModel !== value) {
             this._courseModel = value;
         }
