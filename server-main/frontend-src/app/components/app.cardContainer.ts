@@ -19,6 +19,7 @@ export class CardContainerComponent {
 
     constructor(pubsub: PubSubEventService, private _element: ElementRef) {
         pubsub.subscribe(Events.CourseCardEvent, p => this._addCourseCard(p));
+        pubsub.subscribe(Events.ClearButtonEvent, () => this.cards = []);
     }
 
     private _addCourseCard(payload: {
@@ -29,7 +30,7 @@ export class CardContainerComponent {
         credits: number
     }) {
         if (!_.find(this.cards, c => c.name === payload.name))
-            this.cards.push(payload);
+            this.cards.unshift(payload);
     }
 
     private _closeCard(card) {

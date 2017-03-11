@@ -26,6 +26,8 @@ export class graphDisplayComponent {
     private _rootNamesLoaded: boolean;
     private _rootNames: string[] = [];
 
+    public hasAddedClass: boolean = false;
+
     public get fullCourseMap() {
         if (!this._fullCourseMapLoaded) {
             this._fullCourseMap = [];// this._persistenceService.getData("FullCourseMap") || [];
@@ -39,6 +41,9 @@ export class graphDisplayComponent {
     public set fullCourseMap(value) {
         this._fullCourseMapLoaded = true;
         //this._persistenceService.setData("FullCourseMap", value);
+
+        if (this._fullCourseMap.length > 0)
+            this.hasAddedClass = true;
 
         this._fullCourseMap = value;
     }
