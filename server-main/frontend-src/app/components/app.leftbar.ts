@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CollegeService } from '../services/college.service';
-import { UndergradDegreeService, UndergradDegree } from '../services/undergraddegree.service';
+import { UndergradDegreeService, UndergradDegreeInfo } from '../services/undergraddegree.service';
 import { DepartmentService, Department } from '../services/department.service';
 import { CourseService, Course } from '../services/course.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
@@ -29,7 +29,7 @@ export class LeftBarComponent {
             this._courseModel = value;
 
             // We don't know who is listening, but tell them we did a thing.
-            this.pubSubEventService.publish(Events.CourseChangedEvent, value);
+            this.pubSubEventService.publish(Events.CourseAddedEvent, value);
         }
     }
 

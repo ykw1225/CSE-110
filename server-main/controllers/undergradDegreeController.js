@@ -6,20 +6,6 @@ var database_accessor = require('database-accessor');
 var letters = /^[A-Za-z]+$/;
 
 exports.init = function(app) {
-    app.get('/api/undergrad/:college/degree', function(request, response) {
-        response.send([
-            'degree1',
-            'degree2'
-        ]);
-    });
-
-    app.get('/api/undergrad/:college/minor', function(request, response) {
-        response.send([
-            'minor1',
-            'minor2'
-        ]);
-    });
-
     /*
      * return list of degrees with given department (not considering colleges yet)
      */
@@ -66,7 +52,7 @@ exports.init = function(app) {
     /*
      * Get all departments that has degree info in db
      */
-    app.get('/api/degree/departments', function(request, response) {
+    app.get('/api/undergrad/department', function(request, response) {
         console.log('Finding all departments names with degree programs in db');
         database_accessor.getDepartmentsFromDegrees(function(result) {
             //handle error

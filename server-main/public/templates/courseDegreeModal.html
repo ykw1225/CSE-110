@@ -2,9 +2,9 @@
     <md-tab label="Add Course">
         <form class="addDialog">
             <div class="row">
-                <md-select placeholder="Department" [(ngModel)]="departmentModel" name="department" class="col s12">
-                    <md-option *ngFor="let department of departments" [value]="department">
-                        {{ department.name }}
+                <md-select placeholder="Department" [(ngModel)]="courseDepartmentModel" name="courseDepartment" class="col s12">
+                    <md-option *ngFor="let courseDepartment of courseDepartments" [value]="courseDepartment">
+                        {{ courseDepartment.name }}
                     </md-option>
                 </md-select>
             </div>
@@ -18,12 +18,31 @@
             </div>
 
             <div class="row">
-                <button (click)="_add()" md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>Add</button>
+                <button (click)="_addCourse()" md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>Add</button>
             </div>
         </form>
     </md-tab>
     <md-tab label="Add Degree">
         <form class="addDialog">
+            <div class="row">
+                <md-select placeholder="Department" [(ngModel)]="degreeDepartmentModel" name="degreeDepartment" class="col s12">
+                    <md-option *ngFor="let degreeDepartment of degreeDepartments" [value]="degreeDepartment">
+                        {{ degreeDepartment.department }}
+                    </md-option>
+                </md-select>
+            </div>
+
+            <div class="row">
+                <md-select placeholder="Degree" [(ngModel)]="degreeModel" name="degree" class="col s12">
+                    <md-option *ngFor="let undergradDegree of undergradDegrees" [value]="undergradDegree">
+                        {{ undergradDegree.title }}
+                    </md-option>
+                </md-select>
+            </div>
+
+            <div class="row">
+                <button (click)="_addDegreeAsync()" md-button class="col offset-s8 s4 indigo white-text" md-dialog-close>Add</button>
+            </div>
         </form>
     </md-tab>
 </md-tab-group>

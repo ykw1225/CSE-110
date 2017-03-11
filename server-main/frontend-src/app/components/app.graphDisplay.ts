@@ -1,7 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 
 import { Course, CourseMap, CourseService } from '../services/course.service';
-import { UndergradDegreeService, UndergradDegree } from '../services/undergraddegree.service';
+import { UndergradDegreeService, UndergradDegreeInfo } from '../services/undergraddegree.service';
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
 import { PersistenceService } from '../services/persistence.service';
 
@@ -63,7 +63,7 @@ export class graphDisplayComponent {
         private _courseService: CourseService,
         private _undergradDegreeService: UndergradDegreeService,
         private _persistenceService: PersistenceService) {
-        this._pubsubEventService.subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
+        this._pubsubEventService.subscribe(Events.CourseAddedEvent, p => this._courseChangedAsync(p));
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
         this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
@@ -320,7 +320,7 @@ export class graphDisplayComponent {
       }
       */
 
-    private async _degreeAdded(payload: UndergradDegree): Promise<void> {
+    private async _degreeAdded(payload: UndergradDegreeInfo): Promise<void> {
         console.log(payload);
         let classes =
             _.chain(payload.requirements)
