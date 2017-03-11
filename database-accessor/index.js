@@ -144,7 +144,6 @@ exports.getCourseMap = function(course, callback) {
             for (var course of courseMapNodes) {
                 var pToRemove = [];
                 for (var i in course.prereqs) {
-                    console.log(i);
                     var toRemove = [];
                     for (var j in course.prereqs[i]) {
                         if (errorCourses.indexOf(course.prereqs[i][j]) > -1) {

@@ -331,25 +331,11 @@ export class graphDisplayComponent {
                 .unique()
                 .value();
 
-        /*
-        let promises = _.chain(classes)
-                        .filter(course => !_.find(this.fullCourseMap, c => (c.name == course.toUpperCase())))
-                        .map(c => this._addCourseMap(c))
-                        .value();
-
-        try {
-            await Promise.all(promises);
-        } catch (e) {
-            console.log(e);
-        }*/
-
-
         for (let course of classes) {
             if(!_.find(this.fullCourseMap, c => (c.name == course.toUpperCase()))) {
                 await this._addCourseMap(course);
             }
         }
-
 
         //checking for invalid classes
         for (let req of payload.requirements) {
@@ -496,6 +482,9 @@ export class graphDisplayComponent {
                             target: preqId
                         }
                     });
+
+                    let preqNode = this._cy.getElementById(preqId);
+                    if(preqNode.isNode()) continue;
 
                     if (preq.length > 1) {
                         let courseAdding = _.find(this.fullCourseMap, c => c.name === preq[0]);
