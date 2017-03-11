@@ -327,7 +327,8 @@ export class graphDisplayComponent {
                 .flatten()
                 .unique()
                 .value();
-             
+
+        /*
         let promises = _.chain(classes)
                         .filter(course => !_.find(this.fullCourseMap, c => (c.name == course.toUpperCase())))
                         .map(c => this._addCourseMap(c))
@@ -337,9 +338,9 @@ export class graphDisplayComponent {
             await Promise.all(promises);
         } catch (e) {
             console.log(e);
-        }
+        }*/
 
-/*
+
         for (let course of classes) {
             //until we can deal with bad courses
             if(course != "Math 15B" && course != "MAE 8" && course != "MAE 9" && course != "CENG 15" && course != "CSE 95" && course != "Math 20F" && course != "Math 176" && course != "Math 188" && course != "Math 166" && course != "Math 176") {
@@ -348,7 +349,7 @@ export class graphDisplayComponent {
                 }
             }
         }
-        */
+        
 
         //checking for invalid classes
         for (let req of payload.requirements) {
@@ -538,7 +539,7 @@ export class graphDisplayComponent {
 
         this._cy.layout({
             name: 'breadthfirst',
-            roots: this.rootNames,
+            //roots: this.rootNames,
             directed: true,
             animate: true, // whether to transition the node positions
             animationDuration: 1000, // duration of animation in ms if enabled
