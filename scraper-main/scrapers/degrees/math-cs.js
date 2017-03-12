@@ -116,9 +116,8 @@ exports.getMajors = function(callback, request, cheerio) {
 
         major[4] = requirements;
         majors.push(major);
+        callback(majors)
     });
-
-    callback(majors)
 }
 
 var grabText = function(elem) {
