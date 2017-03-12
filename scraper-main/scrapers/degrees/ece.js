@@ -43,7 +43,10 @@ exports.getMajors = function(callback, request, cheerio) {
 
         var requirements = [];
         var desc = $('h2:contains("The Undergraduate Programs")').next().next().text();
+
         major[3] = desc;
+
+        console.log(desc);
 
         var lowDivTbl = $('h4:contains("Lower-Division Requirements")').first().nextAll("p");
         for (var index = 0; index < 5; index++) {
