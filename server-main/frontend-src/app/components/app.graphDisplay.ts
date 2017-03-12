@@ -263,6 +263,10 @@ export class graphDisplayComponent {
     }
 
     private async _degreeAdded(payload: UndergradDegreeInfo): Promise<void> {
+        setTimeout(() => {
+            this._updateLayout
+        }, 30000);
+
         let classes =
             _.chain(payload.requirements)
                 .map(r => r.courses)
@@ -272,7 +276,11 @@ export class graphDisplayComponent {
 
         for (let course of classes) {
             if (!_.find(this.fullCourseMap, c => (c.name == course.toUpperCase()))) {
-                await this._addCourseMap(course);
+                try {
+                    await this._addCourseMap(course);
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
 
@@ -396,6 +404,8 @@ export class graphDisplayComponent {
                 data: data
             });
             this._createTree(data, nodes);
+
+            this._updateLayout();
         } catch (e) {
             console.log(e);
         }
@@ -466,8 +476,6 @@ export class graphDisplayComponent {
 
         this._cy.add(nodes.concat(edges));
         this._persistenceService.setData("Cy", this._cy.elements().jsons());
-
-        this._updateLayout();
     }
 
     private _updateLayout() {
@@ -494,6 +502,7 @@ export class graphDisplayComponent {
         rootNode.data("credits", course.credits);
 
         this._createTree(payload, []);
+        this._updateLayout();
     }
 
     private _updateCourseCard(payload: {
