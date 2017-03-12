@@ -25,9 +25,9 @@ var getElectives = function($, cheerio, mathUDCourses) {
     classPar = $("#content").find('h5:contains("Linguistics")');
     electives = electives.concat(findClasses("LIGN", classPar));
 
-    classPar = classPar.nextAll().slice(1,2);
+    classPar = classPar.nextAll().slice(1, 2);
     var tmpEng = findClasses("ENG", classPar);
-    electives = electives.concat(tmpEng.slice(0,2));
+    electives = electives.concat(tmpEng.slice(0, 2));
 
     classPar = $("#content").find('h5:contains("Music")');
     electives = electives.concat(findClasses("MUS", classPar));
@@ -68,11 +68,11 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         var text = p.text();
 
         // skips 2 paragraphs to get to lower div requrements
-        for(var i=0;i<2;i++) {
+        for (var i = 0; i < 2; i++) {
             p = p.next();
             text += "\n\n" + p.text();
         }
-        major[3] = text;    //set description
+        major[3] = text; //set description
 
         // skips lower div title & defn & goes to the list of requirements
         var ol = p.next().next().next();
@@ -93,19 +93,19 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         // changes emptyReq to a json string object & parses it - to make a deep copy and not assign by reference
         var currReq = JSON.parse(JSON.stringify(emptyReq));
         //9 courses in this req
-        for(var i=0;i<9;i++){
+        for (var i = 0; i < 9; i++) {
             var or = false;
             var course = req1s.match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/)[0];
-            if(req1s.indexOf("or")==1) {
+            if (req1s.indexOf("or") == 1) {
                 or = true;
                 currReq.courses.push(course);
                 requirements.push(currReq);
                 currReq = JSON.parse(JSON.stringify(emptyReq));
             }
             req1s = req1text.split(course)[1];
-            if(!or) {
-                if(req1s.indexOf("or")==1) {
-                    if(currReq.courses_needed > 0) requirements.push(currReq);
+            if (!or) {
+                if (req1s.indexOf("or") == 1) {
+                    if (currReq.courses_needed > 0) requirements.push(currReq);
                     currReq = JSON.parse(JSON.stringify(emptyReq));
                     currReq.courses.push(course);
                     currReq.courses_needed = 1;
@@ -158,19 +158,19 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         var req1text = req1.text();
 
         var req1s = req1text;
-        for(var i = 0; i < 8; i++) {
+        for (var i = 0; i < 8; i++) {
             var or = false;
             var course = req1s.match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/)[0];
-            if(req1s.indexOf("or")==1 && i > 0) {   //the word core also has or at index 1
+            if (req1s.indexOf("or") == 1 && i > 0) { //the word core also has or at index 1
                 or = true;
                 currReq.courses.push(course);
                 requirements.push(currReq);
                 currReq = JSON.parse(JSON.stringify(emptyReq));
             }
             req1s = req1text.split(course)[1];
-            if(!or) {
-                if(req1s.indexOf("or")==1) {
-                    if(currReq.courses_needed > 0) requirements.push(currReq);
+            if (!or) {
+                if (req1s.indexOf("or") == 1) {
+                    if (currReq.courses_needed > 0) requirements.push(currReq);
                     currReq = JSON.parse(JSON.stringify(emptyReq));
                     currReq.courses.push(course);
                     currReq.courses_needed = 1;
@@ -183,7 +183,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
 
         //two for loops because the cse department hates me
         //(they don't put department name in front of course number)
-        for(var i = 0; i < 6; i++) {
+        for (var i = 0; i < 6; i++) {
             var course = req1s.match(/[0-9][0-9A-Z]*/)[0];
             currReq.courses.push("CSE " + course);
             currReq.courses_needed += 1;
@@ -207,11 +207,11 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
 
         requirements.push(currReq);
 
-        console.log("requirements: ");
-        for(var req of requirements) {
-            console.log(req);
-        }
-        console.log("done requirements.");
+        //console.log("requirements: ");
+        // for(var req of requirements) {
+        //     console.log(req);
+        // }
+        //console.log("done requirements: CS");
 
         major[4] = requirements;
         majors.push(major);
@@ -232,12 +232,12 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         text = p.text();
 
         // grabs next three paragraphs
-        for(i=0; i < paragraphs; i++) {
+        for (i = 0; i < paragraphs; i++) {
             p = p.next();
             text += "\n\n" + p.text();
         }
 
-        major[3] = text;    //set description
+        major[3] = text; //set description
 
         // skips lower div title & defn & goes to the list of requirements
         ol = p.next().next().next();
@@ -259,20 +259,20 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         // changes emptyReq to a json string object & parses it
         currReq = JSON.parse(JSON.stringify(emptyReq));
         //9 courses in this req
-        for(var i=0;i< courseCountFirstReq;i++){
+        for (var i = 0; i < courseCountFirstReq; i++) {
             or = false;
             course = req1s.match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/)[0];
 
-            if(req1s.indexOf("or")==1) {
+            if (req1s.indexOf("or") == 1) {
                 or = true;
                 currReq.courses.push(course);
                 requirements.push(currReq);
                 currReq = JSON.parse(JSON.stringify(emptyReq));
             }
             req1s = req1text.split(course)[1];
-            if(!or) {
-                if(req1s.indexOf("or")==1) {
-                    if(currReq.courses_needed > 0) requirements.push(currReq);
+            if (!or) {
+                if (req1s.indexOf("or") == 1) {
+                    if (currReq.courses_needed > 0) requirements.push(currReq);
                     currReq = JSON.parse(JSON.stringify(emptyReq));
                     currReq.courses.push(course);
                     currReq.courses_needed = 1;
@@ -304,7 +304,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         req4 = req3.next();
         currReq.courses = req4.text().match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/g);
         // grabs only first 3 requirements since those are the only ones that matter
-        currReq.courses = currReq.courses.slice(0,3)
+        currReq.courses = currReq.courses.slice(0, 3)
         currReq.courses_needed = currReq.courses.length;
         requirements.push(currReq);
 
@@ -312,7 +312,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         currReq = JSON.parse(JSON.stringify(emptyReq));
         req5 = req4.next();
         currReq.courses = req5.text().match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/g);
-        console.log(currReq.courses);
+        // console.log(currReq.courses);
         currReq.courses_needed = currReq.courses.length;
         requirements.push(currReq);
         currReq = JSON.parse(JSON.stringify(emptyReq));
@@ -325,23 +325,23 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
 
         req1 = olchildren.first();
         req1text = req1.text();
-        console.log(req1text)
+        // console.log(req1text)
 
         req1s = req1text;
         // since only first 6 w/ course names in front of it
-        for(var i = 0; i < 6; i++) {
+        for (var i = 0; i < 6; i++) {
             or = false;
             course = req1s.match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/)[0];
-            if(req1s.indexOf("or")==1 && i > 0) {   //the word core also has or at index 1
+            if (req1s.indexOf("or") == 1 && i > 0) { //the word core also has or at index 1
                 or = true;
                 currReq.courses.push(course);
                 requirements.push(currReq);
                 currReq = JSON.parse(JSON.stringify(emptyReq));
             }
             req1s = req1text.split(course)[1];
-            if(!or) {
-                if(req1s.indexOf("or")==1) {
-                    if(currReq.courses_needed > 0) requirements.push(currReq);
+            if (!or) {
+                if (req1s.indexOf("or") == 1) {
+                    if (currReq.courses_needed > 0) requirements.push(currReq);
                     currReq = JSON.parse(JSON.stringify(emptyReq));
                     currReq.courses.push(course);
                     currReq.courses_needed = 1;
@@ -354,7 +354,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
 
         //two for loops because the cse department hates me
         //(they don't put department name in front of course number)
-        for(var i = 0; i < 4; i++) {
+        for (var i = 0; i < 4; i++) {
             course = req1s.match(/[0-9][0-9A-Z]*/)[0];
             currReq.courses.push("CSE " + course);
             currReq.courses_needed += 1;
@@ -366,7 +366,7 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         req2 = req1.next();
         currReq.courses = req2.text().match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/g);
         currReq.courses_needed = currReq.courses.length;
-        console.log(currReq);
+        // console.log(currReq);
         requirements.push(currReq);
 
         //ELECTIVES
@@ -386,11 +386,11 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
         requirements.push(currReq);
 
 
-        console.log("requirements for CE: ");
-        for(var req of requirements) {
-        console.log(req);
-        }
-        console.log("done requirements. CE");
+        // console.log("requirements for CE: ");
+        // for(var req of requirements) {
+        // console.log(req);
+        // }
+        //console.log("done requirements: CE");
 
         major[4] = requirements;
         majors.push(major);
@@ -419,7 +419,7 @@ var findClasses = function(currClassName, classPar) {
     return allClasses;
 }
 
-var parseClasses = function(className, classStr){
+var parseClasses = function(className, classStr) {
     var regMatchClassNum = /\d{1,3}/;
     var regMatchClassLetters = /[A-Z]/g;
     var classNum = classStr.match(regMatchClassNum)[0];
@@ -439,38 +439,38 @@ exports.getMajors = function(callback, request, cheerio, database_accessor) {
     var mathCoursesList = [];
     var eceCoursesList = [];
     database_accessor.getAllClassesInDepartment("CSE", function(courses) {
-        for(var course of courses) {
+        for (var course of courses) {
             var courseNumber = course.number.match(/[0-9]*/);
             var courseNumberInt = parseInt(courseNumber[0]);
-            if(courseNumberInt >= 100 && courseNumberInt < 200)
+            if (courseNumberInt >= 100 && courseNumberInt < 200)
                 cseCourseList.push(course.department + " " + course.number);
         }
         i++;
-        if(i == numCourses) {
+        if (i == numCourses) {
             databaseCallback(callback, request, cheerio, cseCourseList, mathCoursesList, eceCoursesList);
         }
     })
     database_accessor.getAllClassesInDepartment("MATH", function(courses) {
-        for(var course of courses) {
+        for (var course of courses) {
             var courseNumber = course.number.match(/[0-9]*/);
             var courseNumberInt = parseInt(courseNumber[0]);
-            if(courseNumberInt >= 100 && courseNumberInt < 200 && courseNumberInt != 168)
+            if (courseNumberInt >= 100 && courseNumberInt < 200 && courseNumberInt != 168)
                 mathCoursesList.push(course.department + " " + course.number);
         }
         i++;
-        if(i == numCourses) {
+        if (i == numCourses) {
             databaseCallback(callback, request, cheerio, cseCourseList, mathCoursesList, eceCoursesList);
         }
     })
     database_accessor.getAllClassesInDepartment("ECE", function(courses) {
-        for(var course of courses) {
+        for (var course of courses) {
             var courseNumber = course.number.match(/[0-9]*/);
             var courseNumberInt = parseInt(courseNumber[0]);
-            if(courseNumberInt >= 100 && courseNumberInt < 195)
+            if (courseNumberInt >= 100 && courseNumberInt < 195)
                 eceCoursesList.push(course.department + " " + course.number);
         }
         i++;
-        if(i == numCourses) {
+        if (i == numCourses) {
             databaseCallback(callback, request, cheerio, cseCourseList, mathCoursesList, eceCoursesList);
         }
     })

@@ -24,13 +24,13 @@ function parse(header, description) {
     var courseNameSplit = headerSplit[0].match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/);
     //in case null
     if(!courseNameSplit) {
-      console.log("course name didn't work " + header);
+      //console.log("course name didn't work " + header);
       return false;
     }
     var courseName = courseNameSplit[0];
 
     if(!headerSplit[1]){
-      console.log("No header . split " + header);
+      //console.log("No header . split " + header);
       return false;
     }
 
