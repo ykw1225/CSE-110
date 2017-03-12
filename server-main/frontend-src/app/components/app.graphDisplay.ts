@@ -18,7 +18,6 @@ import * as _ from 'underscore';
     selector: 'graphDisplay',
     templateUrl: '/templates/graphDisplay.html'
 })
-
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
     private _fullCourseMapLoaded: boolean;
@@ -30,7 +29,7 @@ export class graphDisplayComponent {
 
     public get fullCourseMap() {
         if (!this._fullCourseMapLoaded) {
-            this._fullCourseMap = [];// this._persistenceService.getData("FullCourseMap") || [];
+            this._fullCourseMap = this._persistenceService.getData("FullCourseMap") || [];
 
             this._fullCourseMapLoaded = true;
         }
@@ -40,7 +39,7 @@ export class graphDisplayComponent {
 
     public set fullCourseMap(value) {
         this._fullCourseMapLoaded = true;
-        //this._persistenceService.setData("FullCourseMap", value);
+        this._persistenceService.setData("FullCourseMap", value);
 
         if (this._fullCourseMap.length > 0)
             this.hasAddedClass = true;
@@ -50,7 +49,7 @@ export class graphDisplayComponent {
 
     public get rootNames() {
         if (!this._rootNamesLoaded) {
-            this._rootNames = []; //this._persistenceService.getData("RootNames") || [];
+            this._rootNames = this._persistenceService.getData("RootNames") || [];
 
             this._rootNamesLoaded = true;
         }
@@ -60,14 +59,11 @@ export class graphDisplayComponent {
 
     public set rootNames(value) {
         this._rootNamesLoaded = true;
-        //this._persistenceService.setData("RootNames", value);
+        this._persistenceService.setData("RootNames", value);
 
         this._rootNames = value;
     }
 
-    /*constructor(pubsubEventService: PubSubEventService, private courseService: CourseService) {
-        subscribe(Events.CourseChangedEvent, p => this._courseChangedAsync(p));
-    }*/
     constructor(private _pubsubEventService: PubSubEventService,
         private _courseService: CourseService,
         private _undergradDegreeService: UndergradDegreeService,
@@ -231,40 +227,31 @@ export class graphDisplayComponent {
 
                 console.log("Transfering info to course card");
             }
-            else if (event.cyTarget.isNode()) {
+
+            if (event.cyTarget.isNode()) {
                 console.log('tap ' + event.cyTarget.id());
                 console.log(event.cyTarget.data('name'));
                 console.log(event.cyTarget);
 
                 console.log("Transfering info to Course Card");
-            }
 
-            this._pubsubEventService.publish(Events.CourseCardEvent,
-                {
-                    id: event.cyTarget.id(),
-                    name: event.cyTarget.data('name'),
-                    title: event.cyTarget.data('title'),
-                    description: event.cyTarget.data('description'),
-                    credits: event.cyTarget.data('credits')
-                });
+                this._pubsubEventService.publish(Events.CourseCardEvent,
+                    {
+                        id: event.cyTarget.id(),
+                        name: event.cyTarget.data('name'),
+                        title: event.cyTarget.data('title'),
+                        description: event.cyTarget.data('description'),
+                        credits: event.cyTarget.data('credits')
+                    });
+            }
         });
 
-        this.rootNames.forEach(rn => {
-            let currentCourse = _.find(this.fullCourseMap, c => c.name === rn);
-            let data = {
-                id: rn,
-                name: rn,
-                description: currentCourse.description,
-                credits: currentCourse.credits,
-                title: currentCourse.title
-            }
+        let cyData = this._persistenceService.getData("Cy");
+        if (cyData) {
+            this._cy.add(cyData);
 
-            let nodes = [];
-            nodes.push({
-                data: data
-            });
-            this._createTree(data, nodes);
-        });
+            this._updateLayout();
+        }
     }
 
     private _clearGraph(): void {
@@ -272,56 +259,8 @@ export class graphDisplayComponent {
 
         this.rootNames = [];
         this.fullCourseMap = [];
-
-
-        /*
-            let graphJokes = this._getRandomJoke();
-
-            if (this._graphJokeElement) {
-              this._graphJokeElement.remove();
-              this._graphJokeElement = undefined;
-            }
-
-            private _clearGraph(): void {
-                this._cy.remove(this._cy.elements());
-
-
-                /*
-                    let graphJokes = this._getRandomJoke();
-
-                    if (this._graphJokeElement) {
-                      this._graphJokeElement.remove();
-                      this._graphJokeElement = undefined;
-                    }
-
-                    let title = $('<h3>')
-                                    .addClass('grey-text')
-                                    .addClass('text-darken-2')
-                                    .html(graphJokes.title);
-
-                    let subtitle = $('<h5>')
-                                    .addClass('graph-joke-subtitle')
-                                    .addClass('grey-text')
-                                    .addClass('text-lighten-1')
-                                    .html(graphJokes.subtitle);
-
-                    this._graphJokeElement = $('<div>')
-                                                .addClass('center-align')
-                                                .append(title)
-                                                .append(subtitle);
-
-                    $(this._element.nativeElement)
-                      .prepend(this._graphJokeElement);
-                      */
+        this._persistenceService.deleteData("Cy");
     }
-
-    /*
-      private _getRandomJoke() {
-        let randomNumber = Math.floor((Math.random() * 100) % this._emptyGraphJokes.length);
-
-        return this._emptyGraphJokes[randomNumber];
-      }
-      */
 
     private async _degreeAdded(payload: UndergradDegreeInfo): Promise<void> {
         let classes =
@@ -332,7 +271,7 @@ export class graphDisplayComponent {
                 .value();
 
         for (let course of classes) {
-            if(!_.find(this.fullCourseMap, c => (c.name == course.toUpperCase()))) {
+            if (!_.find(this.fullCourseMap, c => (c.name == course.toUpperCase()))) {
                 await this._addCourseMap(course);
             }
         }
@@ -414,6 +353,7 @@ export class graphDisplayComponent {
             }
         }
 
+        this._updateLayout();
     }
 
     private async _addCourseMap(payload: string): Promise<void> {
@@ -484,7 +424,7 @@ export class graphDisplayComponent {
                     });
 
                     let preqNode = this._cy.getElementById(preqId);
-                    if(preqNode.isNode()) continue;
+                    if (preqNode.isNode()) continue;
 
                     if (preq.length > 1) {
                         let courseAdding = _.find(this.fullCourseMap, c => c.name === preq[0]);
@@ -525,7 +465,12 @@ export class graphDisplayComponent {
         }
 
         this._cy.add(nodes.concat(edges));
+        this._persistenceService.setData("Cy", this._cy.elements().jsons());
 
+        this._updateLayout();
+    }
+
+    private _updateLayout() {
         this._cy.layout({
             name: 'breadthfirst',
             roots: this.rootNames,
