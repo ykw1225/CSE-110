@@ -25,8 +25,6 @@ export class graphDisplayComponent {
     private _rootNamesLoaded: boolean;
     private _rootNames: string[] = [];
 
-    public hasAddedClass: boolean = false;
-
     public get fullCourseMap() {
         if (!this._fullCourseMapLoaded) {
             this._fullCourseMap = this._persistenceService.getData("FullCourseMap") || [];
@@ -40,9 +38,6 @@ export class graphDisplayComponent {
     public set fullCourseMap(value) {
         this._fullCourseMapLoaded = true;
         this._persistenceService.setData("FullCourseMap", value);
-
-        if (this._fullCourseMap.length > 0)
-            this.hasAddedClass = true;
 
         this._fullCourseMap = value;
     }
@@ -73,10 +68,6 @@ export class graphDisplayComponent {
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
         this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
-    }
-
-    private _showCourseDegreeModal() {
-        this._dialog.open(CourseDegreeModal);
     }
 
     public ngOnInit() {
