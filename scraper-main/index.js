@@ -11,7 +11,9 @@ var departmentScraper = require('./scrapers/departmentScraper');
 
 //we'll keep adding to this
 var degreeScrapers = {
-    "CSE": require('./scrapers/degrees/cse')
+    "CSE": require('./scrapers/degrees/cse'),
+    "ECE": require('./scrapers/degrees/ece'),
+    "MATH": require('./scrapers/degrees/math')
 };
 
 app.listen("3001");

@@ -1,5 +1,13 @@
 "use strict";
 
+var regMatchDash  = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
+var regMatch = /[A-Za-z]{3,4}\s\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
+var regMatchClassNum = /\d{1,3}/;
+var regMatchClassLetters = /[A-Z]/g;
+var regMatchClassName = /[A-Za-z]{3,4}/;
+var regParseOr = /[A-Za-z]{3,4}(\s\d{2}A|\s\d{2})/g;
+var regParseAll = /([A-Z]{3}|[0-9]{2,3}[A-Z]|[0-9]{2,3})/g;
+
 function NewReq (courses, courses_needed) {
     this.type = ""
     this.courses = courses;
@@ -28,17 +36,10 @@ exports.getMajors = function(callback, request, cheerio) {
     var majors = [];
     var url = "http://www.ucsd.edu/catalog/curric/ECE-ug.html";
 
-    var major = ["EC27", "Electrical Engineering", "", "", {}];
+    var major = ["ECE", "27", "Electrical Engineering", "", {}];
 
     request(url, function(error, response, html) {
         var $ = cheerio.load(html);
-        var regMatchDash  = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
-        var regMatch = /[A-Za-z]{3,4}\s\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
-        var regMatchClassNum = /\d{1,3}/;
-        var regMatchClassLetters = /[A-Z]/g;
-        var regMatchClassName = /[A-Za-z]{3,4}/;
-        var regParseOr = /[A-Za-z]{3,4}(\s\d{2}A|\s\d{2})/g;
-        var regParseAll = /([A-Z]{3}|[0-9]{2,3}[A-Z]|[0-9]{2,3})/g;
 
         var requirements = [];
 
@@ -84,6 +85,8 @@ exports.getMajors = function(callback, request, cheerio) {
 
         major[4] = requirements;
         majors.push(major);
+
+        callback(majors);
     });
 }
 
