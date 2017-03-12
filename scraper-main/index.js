@@ -107,6 +107,7 @@ app.get('/test', function(req, res) {
 /* DEGREE SCRAPERS */
 app.get('/scrape/degree/:department', function(req, res) {
     var dep = req.params.department.toUpperCase();
+    console.log('Scraping degree in department ' + dep);
     if (!degreeScrapers[dep]) {
         res.send("Can't scrape that.");
         return;
@@ -117,7 +118,7 @@ app.get('/scrape/degree/:department', function(req, res) {
     }
 
     var degreeCallback = function(majors) {
-        console.log(majors);
+        //console.log(majors);
         database_accessor.insertMajors(majors, databaseCallback);
     }
 
