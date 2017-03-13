@@ -178,8 +178,9 @@ exports.getCourseMap = function(course, callback) {
 
 exports.getAllDepartments = function(callback) {
     client.execute(getAllDepartmentsQuery, function(err, result) {
-        if (err) console.log(err);
-        callback(result["rows"]);
+        if (checkQueryResult(err, result, callback)) {
+            callback(result["rows"]);
+        }
     });
 };
 
@@ -258,7 +259,14 @@ exports.insertCourses = function(courses, callback) {
     if (queries.length) {
         for (var batchQuery of queries) {
             client.batch(batchQuery, { prepare: true }, function(err, result) {
-                if (err) console.log(err);
+                if (err) //console.log(err);
+                    if (err) {
+                        errorType = 1;
+                        var errorNode = {
+                            Code: 401,
+                            Message: "Error getting course info\n"
+                        };
+                    }
                 insertionCallback();
             });
         }
@@ -292,7 +300,13 @@ exports.insertDepartments = function(departments, callback) {
     if (queries.length) {
         for (var batchQuery of queries) {
             client.batch(batchQuery, { prepare: true }, function(err, result) {
-                if (err) console.log(err);
+                if (err) {
+                    errorType = 1;
+                    var errorNode = {
+                        Code: 401,
+                        Message: "Error getting course info\n"
+                    };
+                }
                 insertionCallback();
             });
         }
@@ -392,8 +406,9 @@ function checkQueryResult(err, result, callback) {
 exports.removeDepartmentDegrees = function(department, callback) {
     var param = [department];
     client.execute(deleteDegreesFromDepartmentQuery, param, function(err, result) {
-        if (err) console.log(err);
-        callback();
+        if (checkQueryResult(err, result, callback)) {
+            callback();
+        }
     });
 }
 
