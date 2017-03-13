@@ -1,9 +1,9 @@
 exports.getCourses = function(callback, request, cheerio, url) {
     var courses = [];
     request(url, function(error, response, html) {
-        if(!error) {
+        if (!error) {
             var $ = cheerio.load(html);
-            $('.course-name').each(function (index, element) {
+            $('.course-name').each(function(index, element) {
                 var $element = $(element);
                 // The "next" element contains text talking about prereqs.
                 var course = parse($element.html(), $element.next().html());
@@ -12,7 +12,7 @@ exports.getCourses = function(callback, request, cheerio, url) {
             });
         }
 
-        if(!courses.length) console.log("no courses in " + url);
+        if (!courses.length) console.log("no courses in " + url);
         callback(courses);
     });
 }
@@ -23,15 +23,15 @@ function parse(header, description) {
 
     var courseNameSplit = headerSplit[0].match(/[A-Za-z]{2,4}\s[0-9][0-9A-Z]*/);
     //in case null
-    if(!courseNameSplit) {
-      //console.log("course name didn't work " + header);
-      return false;
+    if (!courseNameSplit) {
+        //console.log("course name didn't work " + header);
+        return false;
     }
     var courseName = courseNameSplit[0];
 
-    if(!headerSplit[1]){
-      //console.log("No header . split " + header);
-      return false;
+    if (!headerSplit[1]) {
+        //console.log("No header . split " + header);
+        return false;
     }
 
     headerSplit = headerSplit[1].split(' (');
@@ -43,7 +43,7 @@ function parse(header, description) {
 
     //IF 2013 IS IN THE CREDITS ARRAY, THEN IT MEANS IT CAN BE BE ANY VALUE BETWEEN THE INDICES
 
-    if(description){
+    if (description) {
         var descriptionSplit = description.split(/<strong.*strong>/);
         var description = descriptionSplit[0];
     } else {

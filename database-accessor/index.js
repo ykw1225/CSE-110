@@ -259,14 +259,14 @@ exports.insertCourses = function(courses, callback) {
     if (queries.length) {
         for (var batchQuery of queries) {
             client.batch(batchQuery, { prepare: true }, function(err, result) {
-                if (err) //console.log(err);
-                    if (err) {
-                        errorType = 1;
-                        var errorNode = {
-                            Code: 401,
-                            Message: "Error getting course info\n"
-                        };
-                    }
+                //if (err) console.log(err);
+                if (err) {
+                    errorType = 1;
+                    var errorNode = {
+                        Code: 401,
+                        Message: "Error getting course info\n"
+                    };
+                }
                 insertionCallback();
             });
         }
@@ -406,9 +406,15 @@ function checkQueryResult(err, result, callback) {
 exports.removeDepartmentDegrees = function(department, callback) {
     var param = [department];
     client.execute(deleteDegreesFromDepartmentQuery, param, function(err, result) {
-        if (checkQueryResult(err, result, callback)) {
+        if (err) {
+            errorType = 1;
+            var errorNode = {
+                Code: 401,
+                Message: "Error getting course info\n"
+            };
             callback();
         }
+        callback()
     });
 }
 
