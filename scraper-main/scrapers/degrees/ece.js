@@ -70,7 +70,6 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
     var majors = [];
     var url = "http://www.ucsd.edu/catalog/curric/ECE-ug.html";
 
-    console.log(eceCoursesList);
     var major = ["ECE", "27", "Electrical Engineering", "", {}];
 
     request(url, function(error, response, html) {
@@ -80,8 +79,6 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
         var desc = $('h2:contains("The Undergraduate Programs")').next().next().text();
 
         major[3] = desc;
-
-        //console.log(desc);
 
         var lowDivTbl = $('h4:contains("Lower-Division Requirements")').first().nextAll("p");
         for (var index = 0; index < 5; index++) {
@@ -110,7 +107,6 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
         var udivTbl_2 = udivTbl.nextAll("ol").first().text();
         var udivTbl_2 = parseCommas(udivTbl_2);
         udivTbl_2.pop();
-        //console.log(udivTbl_2);
         requirements.push(new NewReq(udivTbl_2.slice(0, 2), -1));
         requirements.push(new NewReq(udivTbl_2.splice(2), 1));
 
