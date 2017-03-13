@@ -1,18 +1,18 @@
 "use strict";
 
-var regMatchDash  = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
+var regMatchDash = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
 var regMatch = /[A-Za-z]{3,4}\s\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
 var regMatchClassNum = /\d{1,3}/;
 var regMatchClassLetters = /[A-Z]/g;
 var regMatchClassName = /[A-Za-z]{3,4}/;
 var regParseOr = /[A-Za-z]{3,4}(\s\d{2}A|\s\d{2})/g;
-var regParseAll =/(Economics|Econ|Math|Chem|(\d{1,3}[A-Z]\-[A-Z]|[A-Z]{2,4}|[0-9]{1,3}[A-Z]+|[0-9]{1,3}))/g;
+var regParseAll = /(Economics|Econ|Math|Chem|(\d{1,3}[A-Z]\-[A-Z]|[A-Z]{2,4}|[0-9]{1,3}[A-Z]+|[0-9]{1,3}))/g;
 var tmpStr = "";
 
-function NewReq (courses, courses_needed) {
+function NewReq(courses, courses_needed) {
     this.type = ""
     this.courses = courses;
-    if (courses_needed == -1){
+    if (courses_needed == -1) {
         this.courses_needed = courses.length;
     } else {
         this.courses_needed = courses_needed;
@@ -28,7 +28,7 @@ var getTE = function($, cheerio, mathCoursesList, eceCoursesList, physCoursesLis
     // gets math not included
     var teHeader = $('p:contains("Mathematics")').first();
     var mathNotIncluded = parseCommas(teHeader.next().text());
-    mathNotIncluded.splice(1,1);
+    mathNotIncluded.splice(1, 1);
     TEs = TEs.concat(removeClassesNotInc(mathCoursesList, mathNotIncluded));
 
     // gets all the cs not included
@@ -36,10 +36,10 @@ var getTE = function($, cheerio, mathCoursesList, eceCoursesList, physCoursesLis
     tmpStr = teHeader_1.text();
     var cseNotIncluded = parseCommas(teHeader_1.text());
     var tmpArr_1 = parseClasses(cseNotIncluded[5]);
-    cseNotIncluded.splice(5,1,tmpArr_1[0], tmpArr_1[1]);
-    cseNotIncluded.splice(9,1);
-    cseNotIncluded.splice(10,1);
-    cseNotIncluded.splice(11,1);
+    cseNotIncluded.splice(5, 1, tmpArr_1[0], tmpArr_1[1]);
+    cseNotIncluded.splice(9, 1);
+    cseNotIncluded.splice(10, 1);
+    cseNotIncluded.splice(11, 1);
     TEs = TEs.concat(removeClassesNotInc(cseCoursesList, cseNotIncluded));
 
     // gets MAE not included
@@ -76,19 +76,19 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
 
         major[3] = desc;
 
-        console.log(desc);
+        //console.log(desc);
 
         var lowDivTbl = $('h4:contains("Lower-Division Requirements")').first().nextAll("p");
         for (var index = 0; index < 5; index++) {
             var classes = []
             if (index == 1) {
                 var physLD = lowDivTbl.eq(index).text().match(regMatch);
-                physLD = physLD.slice(0,1);
+                physLD = physLD.slice(0, 1);
                 classes = parseClasses(physLD[0]);
             } else if (index == 0) {
                 // replace 18 with 20F
                 classes = parseClasses(lowDivTbl.eq(index).text());
-            } else if (index == 4){
+            } else if (index == 4) {
                 var eceLD = lowDivTbl.eq(index).text();
                 classes = parseCommas(eceLD);
             } else {
@@ -99,13 +99,13 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
 
         var udivTbl = $('h4:contains("Upper-Division Requirements")').first()
         var udivTbl_1 = udivTbl.nextAll("h5").first();
-        requirements.push(new NewReq(parseCommas(udivTbl_1.next().next().text()).splice(0,6), -1));
+        requirements.push(new NewReq(parseCommas(udivTbl_1.next().next().text()).splice(0, 6), -1));
 
         var udivTbl_2 = udivTbl.nextAll("ol").first().text();
         var udivTbl_2 = parseCommas(udivTbl_2);
         udivTbl_2.pop();
-        console.log(udivTbl_2);
-        requirements.push(new NewReq(udivTbl_2.slice(0,2), -1));
+        //console.log(udivTbl_2);
+        requirements.push(new NewReq(udivTbl_2.slice(0, 2), -1));
         requirements.push(new NewReq(udivTbl_2.splice(2), 1));
 
         /* depth requirement - Communication Systems */
@@ -142,7 +142,7 @@ var parseCommas = function(classStr) {
     return classes;
 }
 
-var parseClasses = function(classStr){
+var parseClasses = function(classStr) {
     var className = classStr.match(regMatchClassName)[0].toUpperCase();
     var thisClassStr = classStr.match(regMatchDash);
     var classNum;
@@ -167,10 +167,10 @@ var parseClasses = function(classStr){
 }
 
 function removeClassesNotInc(sourceArr, deleteArr) {
-    for(var del = 0; del < deleteArr.length; del++) {
+    for (var del = 0; del < deleteArr.length; del++) {
         var delInd = sourceArr.indexOf(deleteArr[del]);
         if (delInd != -1) {
-            sourceArr.splice(delInd,1);
+            sourceArr.splice(delInd, 1);
         }
     }
     return sourceArr;
