@@ -88,6 +88,7 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
             } else if (index == 0) {
                 // replace 18 with 20F
                 classes = parseClasses(lowDivTbl.eq(index).text());
+                classes.push("MATH 20F");
             } else if (index == 4) {
                 var eceLD = lowDivTbl.eq(index).text();
                 classes = parseCommas(eceLD);
@@ -114,7 +115,8 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
 
         /* get electives */
         var techElectives = getTE($, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
-        requirements.concat(new NewReq(techElectives, 4));
+        requirements = requirements.concat(new NewReq(techElectives, 4));
+
         /*
         requirements.concat(getPE());
         */
@@ -218,6 +220,8 @@ exports.getMajors = function(callback, request, cheerio, database_accessor) {
         }
         i++;
         if (i == numCourses) {
+            console.log(eceCoursesList);
+            console.log("REACHED");
             databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
         }
     })
