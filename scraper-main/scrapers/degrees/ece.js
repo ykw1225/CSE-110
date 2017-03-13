@@ -7,6 +7,7 @@ var regMatchClassLetters = /[A-Z]/g;
 var regMatchClassName = /[A-Za-z]{3,4}/;
 var regParseOr = /[A-Za-z]{3,4}(\s\d{2}A|\s\d{2})/g;
 var regParseAll =/(Economics|Econ|Math|Chem|(\d{1,3}[A-Z]\-[A-Z]|[A-Z]{2,4}|[0-9]{1,3}[A-Z]+|[0-9]{1,3}))/g;
+var tmpStr = "";
 
 function NewReq (courses, courses_needed) {
     this.type = ""
@@ -21,6 +22,7 @@ function NewReq (courses, courses_needed) {
 
 var getTE = function($, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList) {
     var TEs = [];
+
     TEs = TEs.concat(eceCoursesList);
     TEs = TEs.concat(physCoursesList);
     // gets math not included
@@ -126,13 +128,15 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
 
 var parseCommas = function(classStr) {
     var str = classStr.match(regParseAll);
-    var name = str[0];
+    var name = str[0].toUpperCase();
     var classes = []
     for (var ind = 1; ind < str.length; ind++) {
         if (str[ind].match(/[0-9]/) != null) {
             classes.push(name + " " + str[ind]);
         } else {
-            name = str[ind];
+            if (classStr != tmpStr) {
+                name = str[ind].toUpperCase();
+            }
         }
     }
     return classes;
