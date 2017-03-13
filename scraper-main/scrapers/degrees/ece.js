@@ -6,7 +6,7 @@ var regMatchClassNum = /\d{1,3}/;
 var regMatchClassLetters = /[A-Z]/g;
 var regMatchClassName = /[A-Za-z]{3,4}/;
 var regParseOr = /[A-Za-z]{3,4}(\s\d{2}A|\s\d{2})/g;
-var regParseAll = /([A-Z]{3}|[0-9]{2,3}[A-Z]|[0-9]{2,3})/g;
+var regParseAll =/(Economics|Econ|Math|Chem|(\d{1,3}[A-Z]\-[A-Z]|[A-Z]{2,4}|[0-9]{1,3}[A-Z]+|[0-9]{1,3}))/g;
 
 function NewReq (courses, courses_needed) {
     this.type = ""
@@ -19,8 +19,36 @@ function NewReq (courses, courses_needed) {
     this.credits_needed = null;
 }
 
-var getTE = function($, cheerio) {
+var getTE = function($, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList) {
     var TEs = [];
+    TEs = TEs.concat(eceCoursesList);
+    TEs = TEs.concat(physCoursesList);
+    // gets math not included
+    var teHeader = $('p:contains("Mathematics")').first();
+    var mathNotIncluded = parseCommas(teHeader.next().text());
+    mathNotIncluded.splice(1,1);
+    TEs = TEs.concat(removeClassesNotInc(mathCoursesList, mathNotIncluded));
+
+    // gets all the cs not included
+    var teHeader_1 = teHeader.nextAll().eq(6);
+    tmpStr = teHeader_1.text();
+    var cseNotIncluded = parseCommas(teHeader_1.text());
+    var tmpArr_1 = parseClasses(cseNotIncluded[5]);
+    cseNotIncluded.splice(5,1,tmpArr_1[0], tmpArr_1[1]);
+    cseNotIncluded.splice(9,1);
+    cseNotIncluded.splice(10,1);
+    cseNotIncluded.splice(11,1);
+    TEs = TEs.concat(removeClassesNotInc(cseCoursesList, cseNotIncluded));
+
+    // gets MAE not included
+    var teHeader_2 = teHeader.nextAll().eq(10);
+    var maeNotIncluded = parseCommas(teHeader_2.text());
+    TEs = TEs.concat(removeClassesNotInc(maeCoursesList, maeNotIncluded));
+
+    // gets BILD
+    var teHeader_3 = teHeader.nextAll().eq(3);
+    var bildIncluded = parseCommas(teHeader_3.text());
+    TEs = TEs.concat(bildIncluded);
 
     return TEs;
 }
@@ -31,7 +59,7 @@ var getPE = function($, cheerio) {
     return PEs;
 }
 
-exports.getMajors = function(callback, request, cheerio) {
+var databaseCallback = function(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList) {
 
     var majors = [];
     var url = "http://www.ucsd.edu/catalog/curric/ECE-ug.html";
@@ -83,8 +111,9 @@ exports.getMajors = function(callback, request, cheerio) {
         requirements.push(new NewReq(parseCommas(udivTbl.text()), -1));
 
         /* get electives */
+        var techElectives = getTE($, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
+        requirements.concat(new NewReq(techElectives, 4));
         /*
-        requirements.concat(getTE());
         requirements.concat(getPE());
         */
 
@@ -132,3 +161,84 @@ var parseClasses = function(classStr){
 
     return letters;
 }
+
+function removeClassesNotInc(sourceArr, deleteArr) {
+    for(var del = 0; del < deleteArr.length; del++) {
+        var delInd = sourceArr.indexOf(deleteArr[del]);
+        if (delInd != -1) {
+            sourceArr.splice(delInd,1);
+        }
+    }
+    return sourceArr;
+
+}
+
+exports.getMajors = function(callback, request, cheerio, database_accessor) {
+    var i = 0;
+    var numCourses = 5;
+    var cseCoursesList = [];
+    var physCoursesList = [];
+    var eceCoursesList = [];
+    var mathCoursesList = [];
+    var maeCoursesList = [];
+    database_accessor.getAllClassesInDepartment("CSE", function(courses) {
+        for (var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if (courseNumberInt >= 100 && courseNumberInt < 200)
+                cseCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if (i == numCourses) {
+            databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
+        }
+    })
+    database_accessor.getAllClassesInDepartment("PHYS", function(courses) {
+        for (var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if (courseNumberInt >= 100 && courseNumberInt < 200)
+                physCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if (i == numCourses) {
+            databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
+        }
+    })
+    database_accessor.getAllClassesInDepartment("ECE", function(courses) {
+        for (var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if (courseNumberInt >= 100 && courseNumberInt < 200)
+                eceCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if (i == numCourses) {
+            databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
+        }
+    })
+    database_accessor.getAllClassesInDepartment("MAE", function(courses) {
+        for (var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if (courseNumberInt >= 100 && courseNumberInt < 200)
+                eceCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if (i == numCourses) {
+            databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
+        }
+    })
+    database_accessor.getAllClassesInDepartment("MATH", function(courses) {
+        for (var course of courses) {
+            var courseNumber = course.number.match(/[0-9]*/);
+            var courseNumberInt = parseInt(courseNumber[0]);
+            if (courseNumberInt >= 100 && courseNumberInt < 200)
+                mathCoursesList.push(course.department + " " + course.number);
+        }
+        i++;
+        if (i == numCourses) {
+            databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
+        }
+    })
+};
