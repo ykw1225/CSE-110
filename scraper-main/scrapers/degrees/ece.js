@@ -66,6 +66,7 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
     var majors = [];
     var url = "http://www.ucsd.edu/catalog/curric/ECE-ug.html";
 
+    console.log(eceCoursesList);
     var major = ["ECE", "27", "Electrical Engineering", "", {}];
 
     request(url, function(error, response, html) {
@@ -188,12 +189,16 @@ exports.getMajors = function(callback, request, cheerio, database_accessor) {
     var mathCoursesList = [];
     var maeCoursesList = [];
     database_accessor.getAllClassesInDepartment("CSE", function(courses) {
+        console.log("REACHEd");
         for (var course of courses) {
             var courseNumber = course.number.match(/[0-9]*/);
             var courseNumberInt = parseInt(courseNumber[0]);
             if (courseNumberInt >= 100 && courseNumberInt < 200)
                 cseCoursesList.push(course.department + " " + course.number);
+
+        console.log("REACHED");
         }
+        console.log("afterForLoop");
         i++;
         if (i == numCourses) {
             databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
@@ -220,8 +225,6 @@ exports.getMajors = function(callback, request, cheerio, database_accessor) {
         }
         i++;
         if (i == numCourses) {
-            console.log(eceCoursesList);
-            console.log("REACHED");
             databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
         }
     })
