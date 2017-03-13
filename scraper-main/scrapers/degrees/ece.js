@@ -4,8 +4,8 @@ var regMatchDash = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
 var regMatch = /[A-Za-z]{3,4}\s\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
 var regMatchClassNum = /\d{1,3}/;
 var regMatchClassLetters = /[A-Z]/g;
-var regMatchClassName = /[A-Za-z]{3,4}/;
-var regParseOr = /[A-Za-z]{3,4}(\s\d{2}A|\s\d{2})/g;
+var regMatchClassName = /[A-Za-z]{2,4}/;
+var regParseOr = /[A-Za-z]{2,4}(\s\d{2}A|\s\d{2})/g;
 var regParseAll = /(Economics|Econ|Math|Chem|(\d{1,3}[A-Z]\-[A-Z]|[A-Z]{2,4}|[0-9]{1,3}[A-Z]+|[0-9]{1,3}))/g;
 var tmpStr = "";
 
@@ -50,6 +50,10 @@ var getTE = function($, cheerio, mathCoursesList, eceCoursesList, physCoursesLis
     // gets BILD
     var teHeader_3 = teHeader.nextAll().eq(3);
     var bildIncluded = parseCommas(teHeader_3.text());
+    var tmpClass = parseClasses(bildIncluded[bildIncluded.length-1]);
+    bildIncluded.pop();
+    bildIncluded = bildIncluded.concat(tmpClass);
+
     TEs = TEs.concat(bildIncluded);
 
     return TEs;
@@ -189,16 +193,13 @@ exports.getMajors = function(callback, request, cheerio, database_accessor) {
     var mathCoursesList = [];
     var maeCoursesList = [];
     database_accessor.getAllClassesInDepartment("CSE", function(courses) {
-        console.log("REACHEd");
+
         for (var course of courses) {
             var courseNumber = course.number.match(/[0-9]*/);
             var courseNumberInt = parseInt(courseNumber[0]);
             if (courseNumberInt >= 100 && courseNumberInt < 200)
                 cseCoursesList.push(course.department + " " + course.number);
-
-        console.log("REACHED");
         }
-        console.log("afterForLoop");
         i++;
         if (i == numCourses) {
             databaseCallback(callback, request, cheerio, mathCoursesList, eceCoursesList, physCoursesList, cseCoursesList, maeCoursesList);
