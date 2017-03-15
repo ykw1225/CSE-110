@@ -7,7 +7,7 @@ import * as _ from 'underscore';
 
 @Component({
     selector: 'card-container',
-    templateUrl: '/templates/cardContainer.html'
+    templateUrl: '../templates/cardContainer.html'
 })
 export class CardContainerComponent {
     public cards: {

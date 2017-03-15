@@ -10,7 +10,7 @@ import 'materialize-css';
 
 @Component({
     selector: 'toolbar',
-    templateUrl: '/templates/toolbar.html'
+    templateUrl: '../templates/toolbar.html'
 })
 export class ToolbarComponent {
     constructor(private _pubsubEventService: PubSubEventService, private _undergradDegreeService: UndergradDegreeService, private _dialog: MdDialog) {

@@ -9,7 +9,7 @@ import * as _ from 'underscore';
 
 @Component({
     selector: 'course-degree-modal',
-    templateUrl: '/templates/courseDegreeModal.html'
+    templateUrl: '../templates/courseDegreeModal.html'
 })
 export class CourseDegreeModal {public colleges: string[];
     public undergradDegrees: UndergradDegreeService.UndergradDegree[];

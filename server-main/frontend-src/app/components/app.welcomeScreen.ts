@@ -8,7 +8,7 @@ import { PersistenceService } from '../services/persistence.service';
 
 @Component({
     selector: 'welcomeScreen',
-    templateUrl: '/templates/welcomeScreen.html'
+    templateUrl: '../templates/welcomeScreen.html'
 })
 export class WelcomeScreenComponent {
     public showWelcomeScreen: boolean = true;
