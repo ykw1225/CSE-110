@@ -38,7 +38,7 @@ export class CourseService {
     }
 
     public getCoursesAsync(department: string): Promise<Course[]> {
-        return this.http.get(`/api/${department}/course`)
+        return this.http.get(`api/${department}/course`)
             .map(response => response.json() as Course[][])
             .map(c => _.chain(c)
                         .flatten()
@@ -49,13 +49,13 @@ export class CourseService {
 
     public getCourseInfoAsync(department: string, number: string): Promise<Course> {
         
-        return this.http.get(`/api/course/info/${department}/${number}`)
+        return this.http.get(`api/course/info/${department}/${number}`)
             .map(response => response.json() as Course)
             .toPromise();
     }
 
     public getCourseMapAsync(department: string, number: string): Promise<Array<CourseMap | ErrorNode>> {
-        return this.http.get(`/api/course/map/${department}/${number}`)
+        return this.http.get(`api/course/map/${department}/${number}`)
             .map(response => { return response.json() as CourseMap[] })
             .toPromise();
     }

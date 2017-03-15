@@ -16,7 +16,7 @@ import * as _ from 'underscore';
 
 @Component({
     selector: 'graphDisplay',
-    templateUrl: '/templates/graphDisplay.html'
+    templateUrl: './templates/graphDisplay.html'
 })
 export class graphDisplayComponent {
     private _cy: Cy.Instance;
