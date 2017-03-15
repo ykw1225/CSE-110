@@ -145,44 +145,44 @@ export class graphDisplayComponent {
                 {
                     selector: '.degreeNode',
                     style: {
-                        'border-color': 'blue',
-                        'border-width': 10,
+                        'border-color': '#070101',
+                        'border-width': 8,
                     }
                 },
                 {
                     selector: '.req0',
                     style: {
-                        'background-color': '#0099ff',
+                        'background-color': '#9de093',
                     }
                 },
                 {
                     selector: '.req1',
                     style: {
-                        'background-color': '#00ff99',
+                        'background-color': '#6cdae7',
                     }
                 },
                 {
                     selector: '.req2',
                     style: {
-                        'background-color': '#ff9933',
+                        'background-color': '#5d96ff',
                     }
                 },
                 {
                     selector: '.req3',
                     style: {
-                        'background-color': '#cc66ff',
+                        'background-color': '#9a5dff',
                     }
                 },
                 {
                     selector: '.req4',
                     style: {
-                        'background-color': '#996633',
+                        'background-color': '#ff5df2',
                     }
                 },
                 {
                     selector: '.req5',
                     style: {
-                        'background-color': '#ff6600',
+                        'background-color': '#ffb97b',
                     }
                 },
                 {
