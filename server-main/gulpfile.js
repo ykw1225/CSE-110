@@ -2,20 +2,14 @@
 
 let gulp = require('gulp');
 
-let webpack = require('gulp-webpack');
 let sourcemaps = require('gulp-sourcemaps');
-let typescript = require('gulp-typescript');
-let using = require('gulp-using');
-let watch = require('gulp-watch');
 let uglify = require('gulp-uglify');
-
-let tsconfig = require('./tsconfig.json');
+let watch = require('gulp-watch');
+let webpack = require('gulp-webpack');
 
 function compileTypeScript() {
     return gulp.src("./frontend-src")
-        //.pipe(using())
         .pipe(sourcemaps.init())
-        //.pipe(typescript(tsconfig.compilerOptions))
         .pipe(webpack({
             entry: {
                 app: './frontend-src/main.ts',
@@ -33,7 +27,7 @@ function compileTypeScript() {
             }
         }))
         .pipe(sourcemaps.write())
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('public'));
 }
 
