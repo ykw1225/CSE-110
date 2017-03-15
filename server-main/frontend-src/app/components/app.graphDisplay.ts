@@ -25,8 +25,6 @@ export class graphDisplayComponent {
     private _rootNamesLoaded: boolean;
     private _rootNames: string[] = [];
 
-    public hasAddedClass: boolean = false;
-
     public get fullCourseMap() {
         if (!this._fullCourseMapLoaded) {
             this._fullCourseMap = this._persistenceService.getData("FullCourseMap") || [];
@@ -40,9 +38,6 @@ export class graphDisplayComponent {
     public set fullCourseMap(value) {
         this._fullCourseMapLoaded = true;
         this._persistenceService.setData("FullCourseMap", value);
-
-        if (this._fullCourseMap.length > 0)
-            this.hasAddedClass = true;
 
         this._fullCourseMap = value;
     }
@@ -73,10 +68,6 @@ export class graphDisplayComponent {
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
         this._pubsubEventService.subscribe(Events.ClearButtonEvent, p => this._clearGraph());
-    }
-
-    private _showCourseDegreeModal() {
-        this._dialog.open(CourseDegreeModal);
     }
 
     public ngOnInit() {
@@ -210,9 +201,6 @@ export class graphDisplayComponent {
                         id: event.cyTarget.id(),
                         courses: event.cyTarget.data('courses')
                     });
-                console.log('tap ' + event.cyTarget.id());
-                console.log(event.cyTarget.data('courses'));
-                console.log(event.cyTarget);
 
                 let dialog = this._dialog.open(MultiNodeModal);
                 dialog.componentInstance.availableCourses = event.cyTarget.data('courses');
@@ -225,16 +213,9 @@ export class graphDisplayComponent {
                     });
                 });
 
-                console.log("Transfering info to course card");
             }
 
             if (event.cyTarget.isNode()) {
-                console.log('tap ' + event.cyTarget.id());
-                console.log(event.cyTarget.data('name'));
-                console.log(event.cyTarget);
-
-                console.log("Transfering info to Course Card");
-
                 this._pubsubEventService.publish(Events.CourseCardEvent,
                     {
                         id: event.cyTarget.id(),
@@ -279,7 +260,7 @@ export class graphDisplayComponent {
                 try {
                     await this._addCourseMap(course);
                 } catch (e) {
-                    console.log(e);
+                    
                 }
             }
         }
@@ -374,7 +355,7 @@ export class graphDisplayComponent {
             this.fullCourseMap = _.union(this.fullCourseMap, courseMap);
             this.fullCourseMap = _.uniq(this.fullCourseMap, false, c => c.name);
         } catch (e) {
-            console.log(e);
+            
         }
     }
 
@@ -407,7 +388,7 @@ export class graphDisplayComponent {
 
             this._updateLayout();
         } catch (e) {
-            console.log(e);
+            
         }
     }
 
@@ -512,8 +493,6 @@ export class graphDisplayComponent {
         description: string,
         credits: number
     }) {
-        console.log("Updating: ");
-        console.log(this._cy.$('node[id = "' + payload.id + '"]'));
         /*
                 var courseCard = something something ... blah
 
@@ -524,7 +503,7 @@ export class graphDisplayComponent {
                 courseCard.data("description", course.description);
                 courseCard.data("credits", course.credits);
         */
-        console.log("Updated card with course info");
+        
 
         //this._pubsubEventService.publish(Events.CourseCardEvent, payload);
     }

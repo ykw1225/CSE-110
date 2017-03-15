@@ -1,5 +1,12 @@
 "use strict";
 
+var regMatchDash  = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
+var regMatchClassNum = /\d{1,3}/;
+var regMatchClassLetters = /[A-Z]/g;
+var regMatchClassName = /[A-Za-z]{3,4}/;
+var regParseOr = /[A-Za-z]{3,4}(\s\d{2,3}[A-Z]|\s\d{2,3})/g;
+var regParseAll = /([A-Z]{3}|[0-9]{2,3}[A-Z]|[0-9]{2,3})/g;
+
 var NewReq = function(courses, courses_needed) {
     this.type = ""
     this.courses = courses;
@@ -18,16 +25,10 @@ exports.getMajors = function(callback, request, cheerio) {
     var majors = [];
     var url = "https://www.math.ucsd.edu/programs/undergraduate/bs_math_comp_science.php";
 
-    var major = ["MA30", "", "Mathematics-Computer Science", "", {}];
+    var major = ["MATH", "30", "Mathematics-Computer Science", "", {}];
 
     request(url, function(error, response, html) {
         var $ = cheerio.load(html);
-        var regMatchDash  = /\d{1,3}([[A-Z]{1,2}-)*[A-Z]{1,2}/g;
-        var regMatchClassNum = /\d{1,3}/;
-        var regMatchClassLetters = /[A-Z]/g;
-        var regMatchClassName = /[A-Za-z]{3,4}/;
-        var regParseOr = /[A-Za-z]{3,4}(\s\d{2,3}[A-Z]|\s\d{2,3})/g;
-        var regParseAll = /([A-Z]{3}|[0-9]{2,3}[A-Z]|[0-9]{2,3})/g;
 
         var requirements = [];
 
@@ -58,7 +59,7 @@ exports.getMajors = function(callback, request, cheerio) {
         lowDiv_5 = grabText(lowDiv_5).match(regParseOr);
         requirements.push(new NewReq(lowDiv_5, 1));
 
-        lowDiv_6 = currDiv.next();
+        var lowDiv_6 = currDiv.next();
         lowDiv_6 = grabText(lowDiv_6).match(regParseOr);
         requirements.push(new NewReq(lowDiv_6, 1));
 
@@ -138,7 +139,7 @@ var parseClasses = function(classStr){
     }
 
     if (letters != null) {
-        for (i = 0; i < letters.length; i++) {
+        for (var i = 0; i < letters.length; i++) {
             letters[i] = className + " " + classNum + letters[i];
         }
     } else {

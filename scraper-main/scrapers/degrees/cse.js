@@ -45,7 +45,6 @@ var databaseCallback = function(callback, request, cheerio, cseUDCourses, mathUD
     var majors = [];
     var url = "http://ucsd.edu/catalog/curric/CSE-ug.html";
 
-
     // variable meanings
     var paragraphs = 3;
     var courseCountFirstReq = 9

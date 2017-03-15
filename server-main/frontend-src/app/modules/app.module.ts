@@ -19,6 +19,7 @@ import { courseCardComponent } from '../components/app.courseCard';
 import { CardContainerComponent } from '../components/app.cardContainer';
 import { CourseDegreeModal } from '../components/app.courseDegreeModal';
 import { MultiNodeModal } from '../components/app.multiNodeModal';
+import { WelcomeScreenComponent } from '../components/app.welcomeScreen';
 
 @NgModule({
     imports: [
@@ -39,7 +40,8 @@ import { MultiNodeModal } from '../components/app.multiNodeModal';
         courseCardComponent,
         CardContainerComponent,
         CourseDegreeModal,
-        MultiNodeModal
+        MultiNodeModal,
+        WelcomeScreenComponent
     ],
     bootstrap: [
         AppComponent
