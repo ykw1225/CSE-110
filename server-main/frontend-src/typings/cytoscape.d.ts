@@ -4287,7 +4287,14 @@ declare namespace Cy {
         ready?: () => void;
         /** Called on 'layoutstop' */
         stop?: () => void;
-        roots?: string[]
+        roots?: string[];
+        directed?: boolean;
+        animate?: boolean;
+        animationDuration?: number;
+        avoidOverlap?: boolean;
+        boundingBox?: any;
+        spacingFactor?: number|string;
+        fit?: boolean;
     }
 
     /**
@@ -4411,7 +4418,7 @@ declare namespace Cy {
         /** [default: false] put depths in concentric circles if true, put depths top down if false */
         circle?: boolean
         /** [default: 1.75] positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap) */
-        spacingFactor?: number;
+        spacingFactor?: number|string;
         /** [default: true]  prevents node overlap, may overflow boundingBox if not enough space */
         avoidOverlap?: boolean;
         /** [default: undefined]  the roots of the trees */

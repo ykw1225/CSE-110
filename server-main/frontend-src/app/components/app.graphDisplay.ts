@@ -189,8 +189,7 @@ export class graphDisplayComponent {
                 directed: true,
                 animate: true,
                 animationDuration: 500
-            },
-            zoom: false
+            }
         });
 
         this._cy.on('tap', event => {
