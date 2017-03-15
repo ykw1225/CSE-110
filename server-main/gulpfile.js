@@ -27,7 +27,7 @@ function compileTypeScript() {
             }
         }))
         .pipe(sourcemaps.write())
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest('public'));
 }
 
