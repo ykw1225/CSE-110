@@ -40,6 +40,7 @@ $ sudo apt-get install -y cassandra
 ~~~~
 5. Reboot the server
 ### Install Node.js
+Adapted from https://nodejs.org/en/download/package-manager/
 1. Add the Node.js repository
 ~~~~
 $ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
