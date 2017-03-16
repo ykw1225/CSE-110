@@ -13,13 +13,6 @@ export class PersistenceService{
 
 			// check if the data is already existed
 			if(localStorage.getItem(key)) {
-				/*
-				 * // I am not sure if this part is neccessary
-				 * 
-				 * var answer;
-				 * // assign input to answer;
-				 * if( answer === "y" || answer === "y")
-				 */
 				this.setData(key, JSON.stringify(data));
 			}
 
@@ -36,33 +29,28 @@ export class PersistenceService{
 		// remove the data
 		if(localStorage.getItem(key)){
 			localStorage.removeItem(key);
-			
+
 		}
 
 		// the data corresponding to the KEY is not found
-		
+
 
 	} // end of deleteData
 
 	// To get a single data from local by given KEY
 	public getData(key: string){
-
 		// get the value of the data
 		if(localStorage.getItem(key)){
-
 			return JSON.parse(localStorage.getItem(key));
 		}
 
 		// the data corresponding to the KEY is not found
 		
-
 	} // end of getData
 
 	// To change a single data by given KEY
 	public setData(key: string, data: Object){
-
-			localStorage.setItem(key, JSON.stringify(data));
-			
+		localStorage.setItem(key, JSON.stringify(data));
 	}
 
 } // end of PersistenceService
