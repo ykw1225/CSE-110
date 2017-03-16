@@ -229,7 +229,7 @@ export class graphDisplayComponent {
         if (cyData) {
             this._cy.add(cyData);
 
-            this._updateLayout();
+            this._updateLayoutRoots();
         }
     }
 
@@ -242,10 +242,6 @@ export class graphDisplayComponent {
     }
 
     private async _degreeAdded(payload: UndergradDegreeInfo): Promise<void> {
-        setTimeout(() => {
-            this._updateLayout
-        }, 30000);
-
         let classes =
             _.chain(payload.requirements)
                 .map(r => r.courses)
@@ -340,7 +336,7 @@ export class graphDisplayComponent {
             }
         }
 
-        this._updateLayout();
+        this._updateLayoutNoRoots();
     }
 
     private async _addCourseMap(payload: string): Promise<void> {
@@ -384,7 +380,7 @@ export class graphDisplayComponent {
             });
             this._createTree(data, nodes);
 
-            this._updateLayout();
+            this._updateLayoutRoots();
         } catch (e) {
 
         }
@@ -457,10 +453,23 @@ export class graphDisplayComponent {
         this._persistenceService.setData("Cy", this._cy.elements().jsons());
     }
 
-    private _updateLayout() {
+    private _updateLayoutRoots() {
         this._cy.layout({
             name: 'breadthfirst',
             roots: this.rootNames,
+            directed: true,
+            animate: true, // whether to transition the node positions
+            animationDuration: 1000, // duration of animation in ms if enabled
+            avoidOverlap: true,
+            boundingBox: { x1: 0, y1: 0, w: this._cy.$('node').length * 150, h: 2000 },
+            spacingFactor: 0.1,
+        });
+    }
+
+    private _updateLayoutNoRoots() {
+        this._cy.layout({
+            name: 'breadthfirst',
+            //roots: this.rootNames,
             directed: true,
             animate: true, // whether to transition the node positions
             animationDuration: 1000, // duration of animation in ms if enabled
@@ -481,7 +490,7 @@ export class graphDisplayComponent {
         rootNode.data("credits", course.credits);
 
         this._createTree(payload, []);
-        this._updateLayout();
+        this._updateLayoutRoots();
     }
 
     private removeTree(rootNode) {
