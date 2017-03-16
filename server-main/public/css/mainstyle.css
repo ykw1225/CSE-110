@@ -1349,3 +1349,9 @@ html,body { height: 100%; margin: 0px; padding: 0px; }
   flex-direction: column;
   justify-content: center;
 }
+
+@media (max-width: 600px) {
+    .hide-s {
+        display: hidden;
+    }
+}

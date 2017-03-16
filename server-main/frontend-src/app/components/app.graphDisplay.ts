@@ -9,8 +9,6 @@ import { UndergradDegreeService, UndergradDegreeInfo } from '../services/undergr
 import { PubSubEventService, Events } from '../services/pubsubevent.service';
 import { PersistenceService } from '../services/persistence.service';
 
-import * as $ from 'jquery';
-
 import * as cytoscape from 'cytoscape';
 import * as _ from 'underscore';
 
@@ -63,7 +61,8 @@ export class graphDisplayComponent {
         private _courseService: CourseService,
         private _undergradDegreeService: UndergradDegreeService,
         private _persistenceService: PersistenceService,
-        private _dialog: MdDialog) {
+        private _dialog: MdDialog,
+        private _element: ElementRef) {
         this._pubsubEventService.subscribe(Events.CourseAddedEvent, p => this._courseChangedAsync(p));
         this._pubsubEventService.subscribe(Events.MultiNodeSelectedEvent, p => this._updateMultiNode(p));
         this._pubsubEventService.subscribe(Events.DegreeAddedEvent, payload => this._degreeAdded(payload))
@@ -72,7 +71,7 @@ export class graphDisplayComponent {
 
     public ngOnInit() {
         this._cy = cytoscape({
-            container: document.getElementById('cy'),
+            container: this._element.nativeElement,
             style: [
                 {
                     selector: 'node',
@@ -483,28 +482,6 @@ export class graphDisplayComponent {
 
         this._createTree(payload, []);
         this._updateLayout();
-    }
-
-    private _updateCourseCard(payload: {
-        id: string,
-        name: string,
-        title: string,
-        description: string,
-        credits: number
-    }) {
-        /*
-                var courseCard = something something ... blah
-
-                let course = _.find(this._fullCourseMap, c => c.name === payload.name);
-                //Basically something like this right?
-                courseCard.data("name", course.name);
-                courseCard.data("title", course.title);
-                courseCard.data("description", course.description);
-                courseCard.data("credits", course.credits);
-        */
-        
-
-        //this._pubsubEventService.publish(Events.CourseCardEvent, payload);
     }
 
     private removeTree(rootNode) {
