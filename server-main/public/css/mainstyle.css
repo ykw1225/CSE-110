@@ -1355,3 +1355,9 @@ html,body { height: 100%; margin: 0px; padding: 0px; }
         display: hidden;
     }
 }
+
+@media (max-width: 600px) {
+    .addDialog {
+        min-width: 300px;
+    }
+}
