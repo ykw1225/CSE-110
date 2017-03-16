@@ -11,13 +11,18 @@
 * Kit Wong - Algorithm Specialist
 * Jon Lee - Software Architect
 
+## User Requirements
+
 ## Running the Server Locally
+
 ### Server Requirements
 * Ubuntu 16.04.02 LTS 64 Bit
+* 
 ### Install the Prerequisites
 ~~~~
 $ sudo apt-get install -y git curl
 ~~~~
+
 ### Install Cassandra
 Loosely based off of this [DataStax]( http://docs.datastax.com/en/cassandra/3.0/cassandra/install/installDeb.html
  "DataStax") tutorial.
@@ -38,7 +43,8 @@ $ curl -L https://debian.datastax.com/debian/repo_key | sudo apt-key add -
 $ sudo apt-get update
 $ sudo apt-get install -y cassandra
 ~~~~
-5. Reboot the server
+5. Reboot your computer
+
 ### Install Node.js
 Adapted from https://nodejs.org/en/download/package-manager/
 1. Add the Node.js repository
@@ -54,6 +60,7 @@ $ sudo apt-get install -y nodejs
 ~~~~
 $ sudo npm install -g gulp
 ~~~~
+
 ### Download the Source Code Repository
 1. Change to your home directory
 ~~~~
@@ -67,14 +74,16 @@ $ git clone https://git.ucsd.edu/ccrutchf/team34-cse110.git
 ~~~~
 $ cd ~/team34-cse110
 ~~~~
+
 ### Setup the Database
 1. Add the tables to cassandra
 ~~~
 $ cd ~/team34-cse110/database_queries
-$ csql
-csql> SOURCE 'Cassandra Starter.cql'
-csql> exit
+$ cqlsh
+cqlsh> SOURCE 'Cassandra Starter.cql'
+cqlsh> exit
 ~~~
+
 ### Scrape the Courses, Departments, and Degrees
 The following will be done in two terminals `1>` will be used to denote the first while `2>` will be used to denote the second.
 1. Change to the sraper-main directory
@@ -89,6 +98,7 @@ The following will be done in two terminals `1>` will be used to denote the firs
 ~~~~
 1> npm start
 ~~~~
+
 4. Scrape the courses.  Wait for `DONE` to be displayed in the first console.  This will be a longer running process.  Expect it to take between five and ten minutes.
 ~~~~
 2> curl http://localhost:3001/scrape/courses
@@ -105,6 +115,7 @@ The following will be done in two terminals `1>` will be used to denote the firs
 2> curl http://localhost:3001/scrape/degree/math
 2> curl http://localhost:3001/scrape/degree/mus
 ~~~~
+
 ### Start the Main Website
 1. Open the main website's source directory
 ~~~~
@@ -119,7 +130,13 @@ $ npm install
 $ gulp
 ~~~~
 4. Open `http://localhost:3000` in Chrome.
+
+## Known Issues
+
 ## Contact Information
 * **Chris Crutchfield** - Project Manager and Technical Support
- * **Email** - ccrutchf@ucsd.edu
- * **Cell Phone Number** - (619) 847-1226
+* **Email** - ccrutchf@ucsd.edu
+* **Cell Phone Number** - (619) 847-1226
+* **Raghav Kansal** - Database Specialist and Technical Support
+* **Email** - rkansal@ucsd.edu
+* **Cell Phone Number** - (858) 699-1480
