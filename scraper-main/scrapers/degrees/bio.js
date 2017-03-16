@@ -22,7 +22,7 @@ var databaseCallback = function(callback, request, cheerio, bioUDCourses) {
     var url = "https://biology.ucsd.edu/education/undergrad/maj-min/majors/bioinformatics.html";
 
     //TODO: FIND OUT CS CODE
-    var major = ["BE28", "Bioinformatics", "", "", {}];
+    var major = ["BE", "28", "Bioinformatics", "", {}];
 
     request(url, function(error, response, html) {
 
