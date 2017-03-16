@@ -1351,12 +1351,6 @@ html,body { height: 100%; margin: 0px; padding: 0px; }
 }
 
 @media (max-width: 600px) {
-    .hide-s {
-        display: hidden;
-    }
-}
-
-@media (max-width: 600px) {
     .addDialog {
         min-width: 300px;
     }
