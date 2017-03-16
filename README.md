@@ -114,9 +114,9 @@ $ cd ~/team34-cse110/server-main
 $ npm install
 ~~~~
 3. Build the frontend bundles.  This process can take up to a minute and a half.
-~~~~
+~~~
 $ gulp
-~~~~
+~~~
 4. Open `http://localhost:3000` in Chrome.
 ## Contact Information
 * **Chris Crutchfield** - Project Manager and Technical Support
