@@ -258,7 +258,7 @@ export class graphDisplayComponent {
                 try {
                     await this._addCourseMap(course);
                 } catch (e) {
-                    
+
                 }
             }
         }
@@ -353,7 +353,7 @@ export class graphDisplayComponent {
             this.fullCourseMap = _.union(this.fullCourseMap, courseMap);
             this.fullCourseMap = _.uniq(this.fullCourseMap, false, c => c.name);
         } catch (e) {
-            
+
         }
     }
 
@@ -386,7 +386,7 @@ export class graphDisplayComponent {
 
             this._updateLayout();
         } catch (e) {
-            
+
         }
     }
 

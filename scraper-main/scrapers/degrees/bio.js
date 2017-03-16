@@ -21,8 +21,7 @@ var databaseCallback = function(callback, request, cheerio, bioUDCourses) {
     var majors = [];
     var url = "https://biology.ucsd.edu/education/undergrad/maj-min/majors/bioinformatics.html";
 
-    //TODO: FIND OUT CS CODE
-    var major = ["BE28", "Bioinformatics", "", "", {}];
+    var major = ["BIO", "28", "Bioinformatics", "", {}];
 
     request(url, function(error, response, html) {
 
@@ -55,8 +54,6 @@ var databaseCallback = function(callback, request, cheerio, bioUDCourses) {
         electives = electives.concat(electiveOpt);
         requirements.push(new NewReq(electives, 1));
 
-
-
         requirements.push(new NewReq(upperDivs, -1));
 
         major[4] = requirements;
@@ -74,11 +71,11 @@ function parseCommas (classStr) {
         if (str[ind].match(/[0-9]/) != null) {
             var strClass = name + " " + str[ind];
 
-            if (strClass == "MATH 18")
-            strClass = "MATH 20F";
+            if (strClass == "MATH 20F")
+                strClass = "MATH 18";
 
-            if (!(classes.includes(strClass)))
-            classes.push(strClass);
+            if (classes.indexOf(strClass) < 0)
+                classes.push(strClass);
 
         } else {
             name = str[ind].toUpperCase();
