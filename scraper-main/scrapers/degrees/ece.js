@@ -88,9 +88,9 @@ var databaseCallback = function(callback, request, cheerio, mathCoursesList, ece
                 physLD = physLD.slice(0, 1);
                 classes = parseClasses(physLD[0]);
             } else if (index == 0) {
-                // replace 18 with 20F
+                // replace 20F with 18
                 classes = parseClasses(lowDivTbl.eq(index).text());
-                classes.push("MATH 20F");
+                classes.push("MATH 18");
             } else if (index == 4) {
                 var eceLD = lowDivTbl.eq(index).text();
                 classes = parseCommas(eceLD);
