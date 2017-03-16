@@ -1,8 +1,8 @@
 <div class="row" *ngFor="let card of cards">
     <md-card class="example-card">
         <md-card-header>
-            <md-card-title>{{ card.name }} ({{ card.credits }})</md-card-title>
-            <md-card-subtitle>{{ card.title }}</md-card-subtitle>
+            <md-card-title><span [innerHtml]="card.name"></span> <span *ngIf="card.credits">({{ card.credits }})</span></md-card-title>
+            <md-card-subtitle [innerHtml]="card.title"></md-card-subtitle>
         </md-card-header>
         <md-card-content>
             <br>
