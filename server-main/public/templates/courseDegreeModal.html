@@ -5,8 +5,7 @@
 
             <div class="row">
                 <md-select placeholder="Department" [(ngModel)]="courseDepartmentModel" name="courseDepartment" class="col s12">
-                    <md-option *ngFor="let courseDepartment of courseDepartments" [value]="courseDepartment">
-                        {{ courseDepartment.name }}
+                    <md-option *ngFor="let courseDepartment of courseDepartments" [value]="courseDepartment" [innerHtml]="courseDepartment.name">
                     </md-option>
                 </md-select>
             </div>
@@ -14,7 +13,7 @@
             <div class="row">
                 <md-select placeholder="Course" [(ngModel)]="courseModel" name="course" class="col s12">
                     <md-option *ngFor="let course of courses" [value]="course">
-                        {{ course.department }} {{ course.number }}: {{ course.title }}
+                        {{ course.department }} {{ course.number }}: <span [innerHtml]="course.title"></span>
                     </md-option>
                 </md-select>
             </div>
@@ -30,16 +29,14 @@
 
             <div class="row">
                 <md-select placeholder="Department" [(ngModel)]="degreeDepartmentModel" name="degreeDepartment" class="col s12">
-                    <md-option *ngFor="let degreeDepartment of degreeDepartments" [value]="degreeDepartment">
-                        {{ degreeDepartment.department }}
+                    <md-option *ngFor="let degreeDepartment of degreeDepartments" [value]="degreeDepartment" [innerHtml]="degreeDepartment.department">
                     </md-option>
                 </md-select>
             </div>
 
             <div class="row">
                 <md-select placeholder="Degree" [(ngModel)]="degreeModel" name="degree" class="col s12">
-                    <md-option *ngFor="let undergradDegree of undergradDegrees" [value]="undergradDegree">
-                        {{ undergradDegree.title }}
+                    <md-option *ngFor="let undergradDegree of undergradDegrees" [value]="undergradDegree" [innerHtml]="undergradDegree.title">
                     </md-option>
                 </md-select>
             </div>

@@ -35,20 +35,20 @@ export class UndergradDegreeService {
     }
 
     public getDegreesAsync(college: string, department: string): Promise<UndergradDegree[]> {
-        return this.http.get(`/api/undergrad/${college}/degree/${department}`)
+        return this.http.get(`api/undergrad/${college}/degree/${department}`)
             .map(response => response.json() as UndergradDegree[])
             .map(data => data.sort())
             .toPromise();
     }
 
     public getDegreeAsync(college: string, department: string, degreeCode: string): Promise<UndergradDegreeInfo> {
-        return this.http.get(`/api/undergrad/${college}/degree/${department}/${degreeCode}`)
+        return this.http.get(`api/undergrad/${college}/degree/${department}/${degreeCode}`)
             .map(response => response.json() as UndergradDegreeInfo)
             .toPromise();
     }
 
     public getDepartmentsAsync(): Promise<Department[]> {
-        return this.http.get('/api/undergrad/department')
+        return this.http.get('api/undergrad/department')
             .map(response => response.json() as Department[])
             .toPromise();
     }

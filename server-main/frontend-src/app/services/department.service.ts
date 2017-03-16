@@ -18,7 +18,7 @@ export class DepartmentService {
     } 
 
     public getDepartmentsAsync(): Promise<Department[]> {
-        return this.http.get('/api/department')
+        return this.http.get('api/department')
             .map(response => response.json() as Department[])
             .map(data => data.map(e => {
                 e.code = e.code.toUpperCase();
