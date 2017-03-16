@@ -11,6 +11,18 @@
 * Kit Wong - Algorithm Specialist
 * Jon Lee - Software Architect
 
+## Definitions
+* **Course Map** - A graph representing the selected course and all of the prerequisites in tree form.  The selected course is at the root with the prerequisites being children and decedents.
+* **Course Card** - A [material design card](https://material.io/guidelines/components/cards.html "material design card") which contains the department code, course number, number of credits, course title, and course description.
+* **Course Graph** - See course map
+* **Multinode** - A graph node which represents a requriement or elective.  Allows a user to select the option they wish to use to fullfill it.
+* **Requirement** - The requirement to take a class.  Can have different classes which can fulfill.
+
+## Angular2 and MVC
+Angular2 is a framework which has its roots in MVC.  Unfortunately its view and controller go by different names.  The updated names are:
+* **View** - Template
+* **Controller** - Component
+
 ## User Requirements
 
 ## Running the Server Locally
@@ -129,14 +141,22 @@ $ npm install
 ~~~~
 $ gulp
 ~~~~
-4. Open `http://localhost:3000` in Chrome.
+4. Start the website.
+~~~~
+$ npm start
+~~~~
+5. Open `http://localhost:3000` in Chrome.
 
 ## Known Issues
+* If your machine looses network connection during a scrape, it will incorrectly report that classes cannot be found.  To address this, reexecute the scrape.
 
 ## Contact Information
+
+### Primary
 * **Chris Crutchfield** - Project Manager and Technical Support
 * **Email** - ccrutchf@ucsd.edu
 * **Cell Phone Number** - (619) 847-1226
+### Secondary
 * **Raghav Kansal** - Database Specialist and Technical Support
 * **Email** - rkansal@ucsd.edu
 * **Cell Phone Number** - (858) 699-1480
