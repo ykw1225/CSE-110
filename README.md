@@ -22,9 +22,7 @@ $ sudo apt-get install -y git curl
 Loosely based off of this [DataStax]( http://docs.datastax.com/en/cassandra/3.0/cassandra/install/installDeb.html
  "DataStax") tutorial.
 1. Install the prerequisites
-```
-$ sudo apt-get install -y openjdk-8-jre
-```
+        $ sudo apt-get install -y openjdk-8-jre
 2. Add the DataStax repository
 ```
 $ echo "deb http://debian.datastax.com/community stable main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
